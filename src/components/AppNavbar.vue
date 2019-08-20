@@ -3,10 +3,23 @@
     <div class="container">
       <a class="navbar-brand" href="index.html">conduit</a>
       <ul class="nav navbar-nav pull-xs-right">
+
+
+        <!-- Tasks-->
+        <li class="nav-item">
+          <router-link to="/tasks" class="nav-link">
+            <i class="ion-gear-a">Tasks</i>
+          </router-link>
+        </li>
+
+        <!-- Home -->
         <li class="nav-item">
           <!-- Add "active" class when you're on that page" -->
           <a class="nav-link active" href="">Home</a>
         </li>
+
+
+
         <li v-if="username" class="nav-item">
           <router-link class="nav-link" to="/editor">
             <i class="ion-compose"></i>&nbsp;New Article

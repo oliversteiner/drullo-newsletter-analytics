@@ -19,5 +19,3 @@ import AppNavbar from '@/components/AppNavbar.vue';
 })
 export default class App extends Vue {}
 </script>
-
-<style></style>

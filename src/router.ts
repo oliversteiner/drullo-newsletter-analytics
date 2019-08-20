@@ -11,6 +11,14 @@ export default new Router({
       name: 'home',
       component: Home,
     },
+
+    {
+      path: '/tasks',
+      name: 'tasks',
+      component: () => import('@/views/Tasks/Tasks.vue'),
+    },
+
+      // -------------------------- //
     {
       path: '/login',
       name: 'login',

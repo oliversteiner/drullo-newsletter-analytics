@@ -21,11 +21,7 @@
             </ul>
           </div>
 
-          <ArticlePreview
-            v-for="article in feed"
-            :article="article"
-            :key="article.slug"
-          ></ArticlePreview>
+          <ArticlePreview v-for="article in feed" :article="article" :key="article.slug"></ArticlePreview>
         </div>
 
         <div class="col-md-3">
@@ -50,9 +46,9 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
-import ArticlePreview from '@/components/article/ArticlePreview.vue';
-import articles from '@/store/modules/articles';
+import { Vue, Component } from 'vue-property-decorator'
+import ArticlePreview from '@/components/article/ArticlePreview.vue'
+import articles from '@/store/modules/articles'
 
 @Component({
   components: {
@@ -61,11 +57,11 @@ import articles from '@/store/modules/articles';
 })
 export default class Home extends Vue {
   get feed() {
-    return articles.feed;
+    return articles.feed
   }
 
   async created() {
-    await articles.refreshFeed('global');
+    await articles.refreshFeed('global')
   }
 }
 </script>
