@@ -4,6 +4,14 @@
 based on Vuidget -  Vue.js embeddable widget
 ### Supporting Vue-Router and Vuex!
 
+## Vuex and Typescript
+https://championswimmer.in/vuex-module-decorators/
+https://github.com/coding-blocks-archives/realworld-vue-typescript/blob/master/src/main.ts
+
+
+## Using ESLint and Prettier in a TypeScript Project
+https://dev.to/robertcoopercode/using-eslint-and-prettier-in-a-typescript-project-53jb
+
 ![alt text](https://github.com/DJanoskova/Vuidget/blob/master/src/assets/img/logo.png)
 
 ## **[Vuidget — How to create an embeddable Vue.js widget with vue-custom-element](https://medium.com/@info_53938/vuidget-how-to-create-an-embeddable-vue-js-widget-with-vue-custom-element-674bdcb96b97)** @ Medium

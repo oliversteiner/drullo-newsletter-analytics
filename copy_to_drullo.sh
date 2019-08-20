@@ -28,5 +28,7 @@ if test -f "$FILE"; then
     echo "done."
 fi
 echo '------------------------'
-echo ''
+cd ${DRULLO}
+drush cr
 open ${URL}
+echo ''

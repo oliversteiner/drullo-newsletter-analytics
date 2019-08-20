@@ -1,43 +1,23 @@
 <template>
   <div id="app">
-    <!-- access root props via $root -->
-    <h1 style="text-align: center" v-if="$root.title">{{ $root.title }}</h1>
-
-    <at-menu mode="horizontal" :active-name="activeTab" @on-select="switchTab">
-      <at-menu-item name="list">
-        <i class="icon icon-list"></i>
-        List
-      </at-menu-item>
-      <at-menu-item name="edit">
-        <i class="icon icon-plus-square"></i>
-        Add new
-      </at-menu-item>
-    </at-menu>
-    <br>
-    <router-view />
+    <AppNavbar></AppNavbar>
+    <router-view></router-view>
+    <AppFooter></AppFooter>
   </div>
 </template>
 
-<script>
-export default {
-  props: ['title'],
-  data () {
-    return {
-      activeTab: ''
-    }
+<script lang="ts">
+import { Vue, Component } from 'vue-property-decorator';
+import AppFooter from '@/components/AppFooter.vue';
+import AppNavbar from '@/components/AppNavbar.vue';
+
+@Component({
+  components: {
+    AppFooter,
+    AppNavbar,
   },
-  created () {
-    this.activeTab = this.$route.name
-  },
-  methods: {
-    switchTab (tab) {
-      this.$router.push({ name: tab })
-    }
-  },
-  watch: {
-    '$route.name' () {
-      this.activeTab = this.$route.name
-    }
-  }
-}
+})
+export default class App extends Vue {}
 </script>
+
+<style></style>
