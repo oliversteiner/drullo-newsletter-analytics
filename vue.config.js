@@ -3,13 +3,12 @@ module.exports = {
   configureWebpack: {
     plugins: [
       new webpack.optimize.LimitChunkCountPlugin({
-        maxChunks: 1
-      })
-    ]
+        maxChunks: 1,
+      }),
+    ],
   },
-  chainWebpack:
-    config => {
-      config.optimization.delete('splitChunks')
-    },
-  filenameHashing: false
+  chainWebpack: config => {
+    config.optimization.delete('splitChunks')
+  },
+  filenameHashing: false,
 }
