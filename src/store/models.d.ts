@@ -4,15 +4,32 @@ export interface TasksResponse {
 }
 
 export interface Task {
-    task_id: number;
-    task_title: string;
+    id: number;
+    title: string;
+    created:number;
+    done: boolean;
+    active: boolean;
     number: number;
     part_of: number;
     group: string;
-    message_id: number;
-    message_title: string;
-    range_from: number;
-    range_to: number;
+    message: Message;
+    range: Range;
+    related:string;
+}
+
+export interface Range {
+    from: number;
+    to: number;
+}
+
+export interface Message {
+    id: number;
+    title: string;
+}
+
+export interface TaskRelated{
+    related:string;
+    message: Message;
 }
 
 

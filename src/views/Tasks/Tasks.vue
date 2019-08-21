@@ -1,32 +1,34 @@
 <template>
-    <div class="Tasks">
-        <h1>Tasks</h1>
-        <pre v-text="$attrs"/>
-        <pre v-text="tasklist"/>
+  <div class="Tasks">
+    <h1>Tasks</h1>
+    <!-- <pre v-text="$attrs"/>-->
 
-        <ul>
-            <li v-for="task in tasklist">
-                {{task}}
-            </li>
-        </ul>
-    </div>
+    <TaskRelatedItem v-for="relatedItem in relatedItemList"
+                 :relatedItem="relatedItem"
+                 :key="relatedItem.related"
+                 :uuid="relatedItem.related" >
+    </TaskRelatedItem>
+  </div>
 </template>
 
 <script lang="ts">
-    import {Vue, Component} from 'vue-property-decorator'
-    import tasks from '@/store/modules/tasks'
+import { Vue, Component } from 'vue-property-decorator'
+import tasks from '@/store/modules/tasks'
+import TaskRelatedItem from "@/components/task/TaskRelatedItem.vue"
 
-    @Component({
-        components: {},
-    })
-    export default class Tasks extends Vue {
-        get tasklist() {
-            return tasks.taskList
-        }
+@Component({
+  components: {
+    TaskRelatedItem,
+  },
+})
+export default class Tasks extends Vue {
+  get relatedItemList() {
+    return tasks.relatedList
+  }
 
-        async created() {
-            await tasks.refreshTasklist();
-        }
 
-    }
+  async created() {
+    await tasks.refreshTasklist()
+  }
+}
 </script>
