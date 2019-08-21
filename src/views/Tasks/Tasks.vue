@@ -1,5 +1,5 @@
 <template>
-  <div class="Tasks">
+  <div class="tasks">
     <h1>Tasks</h1>
     <!-- <pre v-text="$attrs"/>-->
 
@@ -14,7 +14,7 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
 import tasks from '@/store/modules/tasks'
-import TaskRelatedItem from "@/components/task/TaskRelatedItem.vue"
+import TaskRelatedItem from "@/components/taskRelatedItem/TaskRelatedItem.vue"
 
 @Component({
   components: {
@@ -32,3 +32,8 @@ export default class Tasks extends Vue {
   }
 }
 </script>
+
+
+<style lang="scss">
+  @import "Tasks";
+</style>

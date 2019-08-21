@@ -18,3 +18,7 @@
 
     }
 </script>
+
+<style lang="scss">
+    @import "TaskItem";
+</style>
