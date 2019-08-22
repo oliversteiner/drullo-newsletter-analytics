@@ -4,6 +4,7 @@ import * as api from '@/store/api'
 import {Task, TaskRelated} from '@/store/models'
 import * as moment from 'moment';
 import 'moment/locale/de-ch';
+import {TaskStatus, TaskStatusMessage} from "@/enums";
 moment.locale('de');
 
 @Module({
@@ -88,20 +89,3 @@ class TasksModule extends VuexModule {
 export default getModule(TasksModule)
 
 
-export enum TaskStatus {
-    DEFAULT = 'default',
-    WAITING = 'waiting',
-    WORKING = 'working',
-    DONE = 'done',
-    WARNING = 'warning',
-    ERROR = 'error',
-}
-
-export enum TaskStatusMessage {
-    DEFAULT = 'bereit',
-    WAITING = 'wartet...',
-    WORKING = 'wird ausgeführt...',
-    DONE = 'beendet',
-    WARNING = 'beendet mit Fehlern',
-    ERROR = 'nicht ausgeführt',
-}

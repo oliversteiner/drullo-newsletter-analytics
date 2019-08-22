@@ -1,5 +1,5 @@
-import {TaskStatus, TaskStatusMessage} from "@/store/modules/tasks";
 import {Moment} from "moment";
+import {TaskStatus, TaskStatusMessage} from "@/enums";
 
 export interface TasksResponse {
     tasks?: (Task)[] | null;
@@ -38,6 +38,9 @@ export interface TaskRelated{
     related:string;
     message: Message;
 }
+
+
+
 
 
 // ------------------------- //

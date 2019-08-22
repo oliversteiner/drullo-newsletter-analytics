@@ -13,17 +13,41 @@
             <div class="card">
 
                 <!-- Card Main -->
-                <div class="card-main">
+                <div class="card-main" v-bind:class="[taskItem.status]">
                     <div>{{taskItem.statusMessage}}</div>
 
                     <div class="card-icon-wrapper">
-                        <div class="card-icon" v-bind:class="[taskItem.status]"></div>
+                        <div class="card-icon" >
+                            <div v-if="taskItem.status === 'default'">
+                                <font-awesome-icon icon="clock" />
+                            </div>
+                            <div v-if="taskItem.status === 'waiting'">
+                                <font-awesome-icon icon="clock" />
+
+                            </div>
+                            <div v-if="taskItem.status === 'working'">
+                                <font-awesome-icon icon="cog" />
+
+                            </div>
+                            <div v-if="taskItem.status === 'done'">
+                                <font-awesome-icon icon="check" />
+
+                            </div>
+                            <div v-if="taskItem.status === 'warning'">
+                                <font-awesome-icon icon="exclamation-triangle" />
+
+                            </div>
+                            <div v-if="taskItem.status === 'error'">
+                                <font-awesome-icon icon="uexclamation-circle" />
+
+                            </div>
+                        </div>
                     </div>
 
                     <h3>Task {{taskItem.number}}</h3>
 
                     <div class="date-time">
-                        <span class="date-time-day">{{ taskItem.changed | moment("calendar") | fromNow() }} </span>
+                        <span class="date-time-day">{{ taskItem.changed | moment("calendar") }} </span>
 <!--
                         <span class="date-time-time">{{ taskItem.changed | moment('hh:mm')  }}</span>
 -->
@@ -51,14 +75,14 @@
 
 <script lang="ts">
     import {Vue, Component, Prop, Constructor} from 'vue-property-decorator'
-    import {Task} from "@/store/models"
+    import {Task,} from "@/store/models"
+    import {TaskStatus} from "@/enums"
 
 
     @Component
     export default class TaskItem extends Vue {
         @Prop() taskItem?: Task
         @Prop() showDetails?: boolean
-
 
     }
 
