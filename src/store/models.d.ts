@@ -1,3 +1,6 @@
+import {TaskStatus, TaskStatusMessage} from "@/store/modules/tasks";
+import {Moment} from "moment";
+
 export interface TasksResponse {
     tasks?: (Task)[] | null;
     tasksCount: number;
@@ -6,8 +9,11 @@ export interface TasksResponse {
 export interface Task {
     id: number;
     title: string;
-    created:number;
+    created:number | Moment;
+    changed:number | Moment;
     done: boolean;
+    status: TaskStatus;
+    statusMessage: TaskStatusMessage;
     active: boolean;
     number: number;
     part_of: number;
@@ -25,6 +31,7 @@ export interface Range {
 export interface Message {
     id: number;
     title: string;
+    category: string;
 }
 
 export interface TaskRelated{
@@ -95,3 +102,5 @@ export interface ArticlesResponse {
     articles?: (Article)[] | null;
     articlesCount: number;
 }
+
+

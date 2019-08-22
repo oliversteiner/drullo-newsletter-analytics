@@ -4,8 +4,63 @@
   // Support
 
   // Module
+  border-bottom: 1px solid silver;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
 
   // Facets
+
+  h2 {
+    font-family: Roboto-Regular, sans-serif;
+    font-size: 22px;
+    color: #787878;
+    letter-spacing: 0.69px;
+    text-align: left;
+    line-height: 28px;
+  }
+
+  .wrapper {
+    display: flex;
+    border: 1px solid #d0cbcd; /* Debug */
+  }
+
+  .wrapper.detail{
+    display: block;
+    border: 1px solid #d0cbcd; /* Debug */
+
+  }
+
+  .box-info {
+    min-width: 300px;
+    margin-right: 20px;
+    padding-left: 10px;
+    border: 1px solid #d0cbcd; /* Debug */
+
+  }
+
+  .box-task-list {
+    display: flex;
+    width: 100%;
+    flex-wrap: wrap;
+    margin-top: 30px;
+    border: 1px solid #d0cbcd; /* Debug */
+
+  }
+
+  .table-related-info {
+    font-size: 14px;
+    line-height: 22px;
+
+    th {
+      font-weight: lighter;
+      padding-right: 10px;
+      margin-right: 10px;
+    }
+
+    td {
+      font-weight: normal;
+    }
+  }
 
   // States
 }

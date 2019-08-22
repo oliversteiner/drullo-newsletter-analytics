@@ -4,8 +4,11 @@ import router from './router';
 import store from './store';
 
 import '@/assets/main.css';
+import VueMoment from 'vue-moment';
 
 Vue.config.productionTip = false;
+Vue.use(VueMoment as any)
+
 
 new Vue({
   router,

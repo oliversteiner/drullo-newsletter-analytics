@@ -1,11 +1,63 @@
 .task-item {
-    // Vars
+  // Vars
 
-    // Support
+  // Support
 
-    // Module
+  // Module
 
-    // Facets
+  // Facets
 
-    // States
+  .square {
+    display: inline-block;
+    width: 33px;
+    height: 33px;
+    margin: 0 15px 15px 0;
+  }
+
+  .card{
+    display: inline-block;
+    width: 210px;
+    min-height: 170px;
+    margin: 0 15px 15px 0;
+  }
+
+  .card-icon{
+    display: inline-block;
+    width: 33px;
+    height: 33px;
+    margin: 0 15px 15px 0;
+  }
+
+  // States
+
+  .default{
+    background: rgba(0,0,0,0.04);
+    border: 1px solid #C4C4C4;
+  }
+
+  .waiting {
+    background: rgba(0,0,0,0.04);
+    border: 1px solid #C4C4C4;
+  }
+
+  .working {
+    background: rgba(0,0,0,0.04);
+    border: 1px solid #C4C4C4;
+  }
+
+
+  .done {
+    background: rgba(40, 139, 38, 0.17);
+    border: 1px solid rgba(25, 138, 59, 0.46);
+  }
+
+  .warning {
+    background: rgba(255,182,0,0.27);
+    border: 1px solid rgba(255,182,0,0.74);
+  }
+
+  .error {
+    background: rgba(224,0,0,0.17);
+    border: 1px solid #E88383;
+  }
 }
