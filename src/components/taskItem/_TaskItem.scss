@@ -19,20 +19,45 @@
     width: 210px;
     min-height: 170px;
     margin: 0 15px 15px 0;
+    padding: 10px;
   }
 
-  .card-icon{
-    display: inline-block;
-    width: 33px;
-    height: 33px;
-    margin: 0 15px 15px 0;
+  .cart-details{
+    display: none;
+  }
+
+
+  // Status
+  .cart-status-icon-wrapper{
+    float:right;
+    margin: 10px;
+    font-size: 1.2rem;
+  }
+
+  // Icons
+  .status-icon{
+
+
+    &-default{
+      color: gray;
+    }
+
+
+    &-done{
+      color: rgb(25, 138, 59);
+    }
+  }
+
+  // Dates
+  .date-time-detail{
+    display: none;
   }
 
   // States
 
   .default{
     background: rgba(0,0,0,0.04);
-    border: 1px solid #C4C4C4;
+    border: 1px solid #d3d3d3;
   }
 
   .waiting {
@@ -48,7 +73,7 @@
 
   .done {
     background: rgba(40, 139, 38, 0.17);
-    border: 1px solid rgba(25, 138, 59, 0.46);
+    border: 1px solid rgba(25, 138, 59, 0.41);
   }
 
   .warning {

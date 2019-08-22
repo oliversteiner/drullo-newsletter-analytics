@@ -5,8 +5,27 @@
 
   // Module
   border-bottom: 1px solid silver;
-  margin-bottom: 20px;
-  padding-bottom: 20px;
+
+  .task-related-item-header {
+    display: flex;
+    justify-content: space-between;
+  }
+
+
+  // Toolbox
+  .toolbox-more {
+margin-right: 30px;
+    a {
+      font-size: 0.9rem;
+      display: block;
+      padding: 5px;
+      color: grey;
+
+      &:hover {
+        color: black;
+      }
+    }
+  }
 
   // Facets
 
@@ -20,13 +39,16 @@
   }
 
   .wrapper {
+    padding: 20px 10px;
     display: flex;
-    border: 1px solid #d0cbcd; /* Debug */
+
+    &:hover {
+      background-color: whitesmoke;
+    }
   }
 
-  .wrapper.detail{
+  .wrapper.detail {
     display: block;
-    border: 1px solid #d0cbcd; /* Debug */
 
   }
 
@@ -34,7 +56,6 @@
     min-width: 300px;
     margin-right: 20px;
     padding-left: 10px;
-    border: 1px solid #d0cbcd; /* Debug */
 
   }
 
@@ -43,7 +64,8 @@
     width: 100%;
     flex-wrap: wrap;
     margin-top: 30px;
-    border: 1px solid #d0cbcd; /* Debug */
+    cursor: pointer;
+
 
   }
 

@@ -5,7 +5,6 @@ import { Task, TaskRelated } from '@/store/models'
 import moment from 'moment'
 import 'moment/locale/de-ch'
 import { TaskStatus, TaskStatusMessage } from '@/enums'
-import { Moment } from 'moment'
 
 moment.locale('de')
 
@@ -21,31 +20,24 @@ class TasksModule extends VuexModule {
 
   @MutationAction
   async refreshTasklist() {
-    console.log('refreshTasklist')
 
-    const taskListfromServer = await api.getTaskList()
-
-    //  console.log('taskListfromServer', taskListfromServer)
-    //  console.log('get from Server:', taskListfromServer.tasks)
-    //  console.log('get from Server:', taskListfromServer.tasksCount)
-
-    const tasks = taskListfromServer.tasks
+    const taskListFromServer = await api.getTaskList()
+    const tasks = taskListFromServer.tasks
 
     // Compute Status
 
     let relatedList: TaskRelated[] = []
 
     if (tasks) {
-
-      let counterUndoneTasks = 0;
+      let counterUndoneTasks = 0
 
       tasks.map(task => {
         // Date
-        task.changedMoment = moment.unix(task.changed)
         task.createdMoment = moment.unix(task.created)
+        task.changedMoment = moment.unix(task.changed)
         task.runMoment = moment.unix(task.changed)
 
-        // if undone change
+        // if Task is undone change runMoment to next possible Time
         if (!task.done) {
           moment.locale('de')
 
@@ -53,11 +45,13 @@ class TasksModule extends VuexModule {
           const now = new Date()
           const p = 60 * 60 * 1000 // milliseconds in an hour
           const fullHour = new Date(Math.ceil(now.getTime() / p) * p)
-          let nextRunAt = moment(fullHour).add(counterUndoneTasks -1, 'hour')
+          let nextRunAt = moment(fullHour).add(counterUndoneTasks - 1, 'hour')
           nextRunAt = nextRunAt.clone().minute(5)
 
           task.runMoment = nextRunAt
-          counterUndoneTasks++;
+
+          // count unfinished tasks for increase of the execution time
+          counterUndoneTasks++
         }
 
         // Status
@@ -89,8 +83,6 @@ class TasksModule extends VuexModule {
         }
       })
     }
-
-    console.log('relatedList', relatedList)
 
     //
 
