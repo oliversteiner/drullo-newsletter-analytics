@@ -9,8 +9,11 @@ export interface TasksResponse {
 export interface Task {
     id: number;
     title: string;
-    created:number | Moment;
-    changed:number | Moment;
+    created:number;
+    createdMoment:Moment;
+    changed:number ;
+    changedMoment:Moment;
+    runMoment:Moment | number;
     done: boolean;
     status: TaskStatus;
     statusMessage: TaskStatusMessage;

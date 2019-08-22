@@ -47,7 +47,7 @@
                     <h3>Task {{taskItem.number}}</h3>
 
                     <div class="date-time">
-                        <span class="date-time-day">{{ taskItem.changed | moment("calendar") }} </span>
+                        <span class="date-time-day">{{ taskItem.runMoment | moment("calendar") }} </span>
 <!--
                         <span class="date-time-time">{{ taskItem.changed | moment('hh:mm')  }}</span>
 -->
