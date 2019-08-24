@@ -1,10 +1,10 @@
-import { getModule, Module, MutationAction, VuexModule } from 'vuex-module-decorators'
+import {getModule, Module, MutationAction, VuexModule} from 'vuex-module-decorators'
 import store from '@/store'
 import * as api from '@/store/api'
-import { Task, TaskRelated } from '@/store/models'
+import {Addresses, Task, TaskRelated} from '@/store/models'
 import moment from 'moment'
 import 'moment/locale/de-ch'
-import { TaskStatus, TaskStatusMessage } from '@/enums'
+import {TaskStatus, TaskStatusMessage} from '@/enums'
 
 moment.locale('de')
 
@@ -32,6 +32,15 @@ class TasksModule extends VuexModule {
       let counterUndoneTasks = 0
 
       tasks.map(task => {
+
+        // Adresses
+        const addresses: Addresses = {
+          all: 0,
+          error: 0,
+          open: 0,
+        }
+        task.addresses = addresses;
+
 
         // Working
         task.working = false

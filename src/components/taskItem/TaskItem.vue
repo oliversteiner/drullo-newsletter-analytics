@@ -7,7 +7,7 @@
             <!-- Card Main -->
             <div class="card-main">
                 <!-- Status Icon-->
-                <div class="cart-status-icon-wrapper">
+                <div class="card-status-icon-wrapper">
                     <div class="card-status-icon">
 
                         <!-- Default -->
@@ -51,9 +51,9 @@
                 <!-- Number of Adresses -->
                 <div class="card-number-of-addresses">
                     von
-                    <span class="from">201</span>
+                    <span class="from">{{taskItem.range.from}}</span>
                     bis
-                    <span class="to">400</span>
+                    <span class="to">{{taskItem.range.to}}</span>
                 </div>
 
                 <!-- Runtime detail -->
@@ -109,7 +109,57 @@
             </div>
             <!-- Card Details -->
             <div class="card-details" v-if="isCardDetailsOpen">
-                <div>{{ taskItem.id }}</div>
+
+                <table>
+                    <!-- ID -->
+                    <tr>
+                        <th>ID:</th>
+                        <td>{{ taskItem.id }}</td>
+                    </tr>
+
+                    <!-- All Addresses -->
+                    <tr>
+                        <th>Adressen:</th>
+                        <td>{{taskItem.addresses.all}}</td>
+                    </tr>
+
+                    <!--  Addresses with Errors -->
+                    <tr>
+                        <th>Fehlerhaft:</th>
+                        <td>{{ taskItem.addresses.error}}</td>
+                    </tr>
+
+                    <!--  Addresses open -->
+                    <tr>
+                        <th>geöffnet:</th>
+                        <td>{{ taskItem.addresses.open}}</td>
+                    </tr>
+
+                    <!--  Addresse IDs -->
+
+                    <tr>
+                        <td colspan="2">
+                            <div class="card-details-address-ids">
+                            <ul>
+                                <li>1234</li>
+                                <li>1234</li>
+                                <li>1234</li>
+                                <li>1234</li>
+                                <li>1234</li>
+                                <li>1234</li>
+                                <li>1234</li>
+                                <li>1234</li>
+                                <li>1234</li>
+                                <li>1234</li>
+                                <li>1234</li>
+                                <li>1234</li>
+                                <li>1234</li>
+                            </ul>
+                            </div>
+                        </td>
+                    </tr>
+
+                </table>
             </div>
         </div>
         <!-- End Card Main-->

@@ -55,13 +55,9 @@
 
   }
 
-  .cart-details {
-    display: none;
-  }
-
 
   // Status
-  .cart-status-icon-wrapper {
+  .card-status-icon-wrapper {
     float: right;
     margin: 10px;
     font-size: 1.2rem;
@@ -88,6 +84,11 @@
   .card-details-button {
     margin-top: 10px;
     font-size: 0.9rem;
+
+    a {
+      margin-left: -7px;
+
+    }
   }
 
   // States
@@ -129,19 +130,47 @@
   justify-content: space-between;
 }
 
-.run-task-button{
+.run-task-button {
   font-size: 0.9rem;
 }
 
-.run-task-save-to-run{
+.run-task-save-to-run {
   background: rgba(40, 139, 38, 0.17);
   border: 1px solid rgba(25, 138, 59, 0.41);
 }
 
 
-.date-time-detail{
-//  position: absolute;
-//  margin-top: 50px;
+.date-time-detail {
+  //  position: absolute;
+  //  margin-top: 50px;
 
 
+}
+
+.card-details {
+  border-top: 1px solid #d5d5d5;
+  padding-top: 10px;
+  margin-top: 10px;
+  font-size: 0.8rem;
+}
+
+.card-details-address-ids {
+  border-top: 1px solid #d5d5d5;
+  padding-top: 10px;
+  margin-top: 10px;
+
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  li {
+    margin: 0;
+    padding: 2px;
+    margin-right: 10px;
+
+  }
 }
