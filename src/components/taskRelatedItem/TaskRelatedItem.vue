@@ -2,7 +2,7 @@
     <!-- <pre v-text="$attrs"/> -->
     <div class="task-related-item">
 
-        <div class="wrapper" v-bind:class="{detail: showDetails}">
+        <div class="wrapper" v-bind:class="{detail: isLargeCardOpen}">
 
 
             <header class="task-related-item-header">
@@ -29,13 +29,13 @@
 
                 <!-- Toolbox -->
                 <!-- Show only in Details Mode-->
-                <div class="toolbox-more" v-if="showDetails">
+                <div class="toolbox-more" v-if="isLargeCardOpen">
                     <nav>
-                        <a role="button">
+                        <a role="button" class="btn btn-link">
                             <font-awesome-icon icon="chart-bar"></font-awesome-icon>
                             Auswertung ansehen
                         </a>
-                        <a role="button">
+                        <a role="button" class="btn btn-link" @click="largeCardToggle">
                             <font-awesome-icon icon="th"></font-awesome-icon>
                             Details ausblenden
                         </a>
@@ -45,12 +45,22 @@
             </header>
 
             <main>
-                <!-- List -->
-                <div class="box-task-list" @click="toggleDetailsAction">
+                <!-- List Preview Cards -->
+                <div class="box-task-card-preview-list" @click="largeCardToggle" v-if="!isLargeCardOpen">
+
+                    <task-item-preview v-for="taskItemPreview in taskItemList"
+                    :taskItemPreview="taskItemPreview"
+                    :key="taskItemPreview.id">
+
+                    </task-item-preview>
+                </div>
+
+
+                <!-- List Large Cards -->
+                <div class="box-task-card-large-list" v-if="isLargeCardOpen">
                     <task-item v-for="taskItem in taskItemList"
                                :taskItem="taskItem"
-                               :key="taskItem.id"
-                               :showDetails="showDetails">
+                               :key="taskItem.id">
 
                     </task-item>
                 </div>
@@ -66,16 +76,17 @@
   import TaskItem from "@/components/taskItem/TaskItem.vue"
   import {TaskRelated} from "@/store/models"
   import tasks from "@/store/modules/tasks"
+  import TaskItemPreview from "@/components/taskItem/TaskItemPreview.vue"
 
   @Component({
     components: {
-      TaskItem,
+      TaskItem,TaskItemPreview
     },
   })
   export default class TaskRelatedItem extends Vue {
     @Prop() relatedItem?: TaskRelated
 
-    showDetails: boolean = false;
+    isLargeCardOpen: boolean = false;
 
 
     get taskItemList() {
@@ -103,10 +114,10 @@
       return this.taskItemList.filter(task => task.done).length
     }
 
-    toggleDetailsAction(): void {
-      console.log('toggle Detail', this.showDetails);
+    largeCardToggle(): void {
+      console.log('toggle large Card', this.isLargeCardOpen);
 
-      this.showDetails = !this.showDetails
+      this.isLargeCardOpen = !this.isLargeCardOpen
     }
 
 

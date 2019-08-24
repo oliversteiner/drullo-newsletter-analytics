@@ -3,7 +3,8 @@ module.exports = {
   css: {
     loaderOptions: {
       sass: {
-        data: '@import "@/scss/settings.scss";'
+        data: '@import "@/scss/settings.scss";' +
+          '@import "@/scss/drullo.scss";'
       }
     }
   },
@@ -12,7 +13,7 @@ module.exports = {
       new webpack.optimize.LimitChunkCountPlugin({
         maxChunks: 1,
       }),
-      // load `moment/locale/ja.js` and `moment/locale/it.js`
+      // load `moment/locale/de.js`
       new webpack.ContextReplacementPlugin(
         /moment[/\\]locale$/,
         /de|de-ch|en/)
