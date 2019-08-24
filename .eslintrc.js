@@ -3,6 +3,7 @@ module.exports = {
   parser: '@typescript-eslint/parser',
 
   extends: [
+    'plugin:vue/base',
     'plugin:vue/essential',
     '@vue/standard',
     '@vue/typescript',
