@@ -32,6 +32,10 @@ class TasksModule extends VuexModule {
       let counterUndoneTasks = 0
 
       tasks.map(task => {
+
+        // Working
+        task.working = false
+
         // Date
         task.createdMoment = moment.unix(task.created)
         task.changedMoment = moment.unix(task.changed)

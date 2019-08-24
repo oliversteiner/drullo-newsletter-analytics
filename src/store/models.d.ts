@@ -15,6 +15,7 @@ export interface Task {
     changedMoment:Moment;
     runMoment:Moment | number;
     done: boolean;
+    working: false;
     status: TaskStatus;
     statusMessage: TaskStatusMessage;
     active: boolean;

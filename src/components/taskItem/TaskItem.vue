@@ -9,21 +9,33 @@
                 <!-- Status Icon-->
                 <div class="cart-status-icon-wrapper">
                     <div class="card-status-icon">
+
+                        <!-- Default -->
                         <div class="status-icon status-icon-default" v-if="taskItem.status === 'default'">
                             <font-awesome-icon icon="clock"/>
                         </div>
+
+                        <!-- Waiting -->
                         <div class="status-icon status-icon-waiting" v-if="taskItem.status === 'waiting'">
                             <font-awesome-icon icon="clock"/>
                         </div>
+
+                        <!-- Working -->
                         <div class="status-icon status-icon-working" v-if="taskItem.status === 'working'">
                             <font-awesome-icon icon="cog"/>
                         </div>
+
+                        <!-- Done -->
                         <div class="status-icon status-icon-done" v-if="taskItem.status === 'done'">
                             <font-awesome-icon icon="check"/>
                         </div>
+
+                        <!-- Warning -->
                         <div class="status-icon status-icon-warning" v-if="taskItem.status === 'warning'">
                             <font-awesome-icon icon="exclamation-triangle"/>
                         </div>
+
+                        <!-- Error -->
                         <div class="status-icon status-icon-error" v-if="taskItem.status === 'error'">
                             <font-awesome-icon icon="uexclamation-circle"/>
                         </div>
@@ -78,7 +90,18 @@
                     </div>
 
                     <!-- Button runTask -->
-                    <a class="btn btn-outline run-task-trigger">Ausführen</a>
+                    <div>
+
+                        <a class="btn btn-outline run-task-button run-task-waiting" v-if="runTaskButtonStatus == 'waiting'">Ausführen</a>
+                        <a class="btn btn-outline run-task-button run-task-done"  v-if="runTaskButtonStatus == 'done'">nochmals</a>
+                        <a class="btn btn-outline run-task-button run-task-save-to-run"  v-if="runTaskButtonStatus == 'save-to-run'">Jetzt Ausführen</a>
+                        <a class="btn btn-outline run-task-button run-task-working"  v-if="runTaskButtonStatus == 'working'"></a>
+
+
+
+                    </div>
+
+
 
                 </div>
 
@@ -117,6 +140,32 @@
 
     hideDateTimeDetails() {
       return this.isTimeDetailsOpen = false;
+    }
+
+    get runTaskButtonStatus():string{
+
+      if(this.taskItem) {
+
+        // Task is working
+        if(this.taskItem.working)
+          return 'working'
+
+        // task is waiting to run
+        if(this.taskItem.number != 1 && !this.taskItem.done)
+          return 'waiting'
+
+        // Task is done
+        if(this.taskItem.done)
+          return 'done'
+
+        // Task is save to run
+        if(this.taskItem.number === 1 && !this.taskItem.done)
+          return 'save-to-run'
+
+      }else {
+        return ''
+      }
+
     }
 
   }
