@@ -1,0 +1,163 @@
+.task-item-preview,
+.task-item {
+  // Vars
+
+  // Support
+
+  // Module
+
+  // Facets
+
+  .square {
+    display: inline-block;
+    width: 33px;
+    height: 33px;
+    margin: 0 15px 15px 0;
+  }
+
+  .card {
+    margin: 0 20px 20px 0;
+    text-align: left;
+    display: inline-block;
+    width: 210px;
+    min-height: 170px;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 4px 5px 23px 0 #c7c7c7;
+
+    &-status-message {
+      margin-bottom: 10px;
+    }
+
+    &-title {
+      font-size: 1.5rem;
+      margin: 5px 0;
+      padding: 0;
+    }
+
+    &-date-time-readable {
+      font-size: 0.8rem;
+      width: 200px;
+      margin-bottom: 10px;
+    }
+
+    &-number-of-addresses {
+      margin-bottom: 10px;
+      font-size: 0.8rem;
+
+      .from,
+      .to {
+        font-weight: bold;
+      }
+    }
+  }
+
+  // Status
+  .card-status-icon-wrapper {
+    float: right;
+    margin: 10px;
+    font-size: 1.2rem;
+  }
+
+  // Icons
+  .status-icon {
+    &-default {
+      color: gray;
+    }
+
+    &-done {
+      color: rgb(25, 138, 59);
+    }
+  }
+
+  // Dates
+  .date-time-detail {
+  }
+
+  .card-details-button {
+    margin-top: 10px;
+    font-size: 0.9rem;
+
+    a {
+      margin-left: -7px;
+    }
+  }
+
+  // States
+
+  .default {
+    background: rgba(0, 0, 0, 0.04);
+    border: 1px solid #d3d3d3;
+  }
+
+  .waiting {
+    background: rgba(0, 0, 0, 0.04);
+    border: 1px solid #c4c4c4;
+  }
+
+  .working {
+    background: rgba(0, 0, 0, 0.04);
+    border: 1px solid #c4c4c4;
+  }
+
+  .done {
+    background: rgba(40, 139, 38, 0.17);
+    border: 1px solid rgba(25, 138, 59, 0.41);
+  }
+
+  .warning {
+    background: rgba(255, 182, 0, 0.27);
+    border: 1px solid rgba(255, 182, 0, 0.74);
+  }
+
+  .error {
+    background: rgba(224, 0, 0, 0.17);
+    border: 1px solid #e88383;
+  }
+}
+
+.detail-run-wrapper {
+  display: flex;
+  justify-content: space-between;
+}
+
+.run-task-button {
+  font-size: 0.9rem;
+}
+
+.run-task-save-to-run {
+  background: rgba(40, 139, 38, 0.17);
+  border: 1px solid rgba(25, 138, 59, 0.41);
+}
+
+.date-time-detail {
+  //  position: absolute;
+  //  margin-top: 50px;
+}
+
+.card-details {
+  border-top: 1px solid #d5d5d5;
+  padding-top: 10px;
+  margin-top: 10px;
+  font-size: 0.8rem;
+}
+
+.card-details-address-ids {
+  border-top: 1px solid #d5d5d5;
+  padding-top: 10px;
+  margin-top: 10px;
+
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  li {
+    margin: 0;
+    padding: 2px;
+    margin-right: 10px;
+  }
+}
