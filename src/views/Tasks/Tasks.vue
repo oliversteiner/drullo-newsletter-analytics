@@ -29,7 +29,7 @@ export default class Tasks extends Vue {
   }
 
   async created() {
-    await tasks.refreshTasklist()
+    await tasks.refreshTaskList()
   }
 }
 </script>

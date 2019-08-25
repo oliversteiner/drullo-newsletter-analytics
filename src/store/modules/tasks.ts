@@ -1,12 +1,11 @@
 import {getModule, Module, MutationAction, VuexModule} from 'vuex-module-decorators'
 import store from '@/store'
 import * as api from '@/store/api'
-import {Addresses, Task, TaskRelated} from '@/store/models'
+import { Subscribers, Task, TaskRelated} from '@/store/models'
 import moment from 'moment'
 import 'moment/locale/de-ch'
 import {TaskStatus, TaskStatusMessage} from '@/enums'
 
-moment.locale('de')
 
 @Module({
   dynamic: true,
@@ -19,7 +18,7 @@ class TasksModule extends VuexModule {
   relatedList: TaskRelated[] = []
 
   @MutationAction
-  async refreshTasklist() {
+  async refreshTaskList() {
 
     const taskListFromServer = await api.getTaskList()
     const tasks = taskListFromServer.tasks
@@ -34,12 +33,12 @@ class TasksModule extends VuexModule {
       tasks.map(task => {
 
         // Adresses
-        const addresses: Addresses = {
+        const subscribers: Subscribers = {
           all: 0,
           error: 0,
           open: 0,
         }
-        task.addresses = addresses;
+        task.subscribers = subscribers;
 
 
         // Working

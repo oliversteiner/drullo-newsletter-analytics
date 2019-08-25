@@ -1,23 +1,34 @@
-import {Moment} from 'moment'
-import {TaskStatus, TaskStatusMessage} from '@/enums'
+import { Moment } from 'moment'
+import { TaskStatus, TaskStatusMessage } from '@/enums'
 
 export interface TasksResponse {
   tasks?: (Task)[] | null
   tasksCount: number
 }
 
-export interface Address {
+export interface NewslettersResponse {
+  message: any[]
+  count: number
+  set: number
+  start: number
+  length: number
+  subscriber_group: number
+  newsletters?: (Newsletter)[] | null
+  nids?: number[]
+}
+
+export interface Subscriber {
   id: number
   email: string
   error: boolean
   open: boolean
 }
 
-export interface Addresses {
+export interface Subscribers {
   all?: number
   error?: number
   open?: number
-  list?: Address[]
+  list?: Subscriber[]
 }
 
 export interface Task {
@@ -39,7 +50,7 @@ export interface Task {
   message: Message
   range: Range
   related: string
-  addresses?: Addresses
+  subscribers?: Subscribers
 }
 
 export interface Range {
@@ -58,16 +69,26 @@ export interface TaskRelated {
   message: Message
 }
 
-interface Subscribers {
+interface SubscriberGroup {
+  id: number
+  name: string
+}
+
+interface Category {
   id: number
   name: string
 }
 
 export interface Newsletter {
+  id: number
   title: string
-  date: Date
-  category: string
-  subscribers: Subscribers[]
+  created: number
+  changed: number
+  category: Category[]
+  text: string
+  subscriber_group: SubscriberGroup[]
+  is_send: boolean
+  is_template: boolean
   count: {
     all: number
     send: number
@@ -75,7 +96,6 @@ export interface Newsletter {
     unsubscribe: number
   }
 }
-
 
 // ------------------------- //
 
@@ -102,7 +122,6 @@ export interface UserForUpdate {
   image?: string
 }
 
-
 export interface UserSubmit {
   email: string
   password: string
@@ -115,6 +134,3 @@ export interface UserResponse {
 export interface ProfileResponse {
   profile: Profile
 }
-
-
-

@@ -3,24 +3,27 @@ import {
     UserSubmit,
     UserResponse,
     User,
-    ArticlesResponse,
     Profile,
     ProfileResponse,
-    UserForUpdate, Article, TasksResponse,
+    UserForUpdate, TasksResponse, NewslettersResponse,
 } from './models';
 
 
-export const smmg_newsletterApi = axios.create({
+export const smmgApi = axios.create({
     baseURL: 'https://drullo.local/smmg'
 })
 
 
 
 export async function getTaskList() {
-    const response = await smmg_newsletterApi.get('/tasks/get');
+    const response = await smmgApi.get('/tasks/get');
     return response.data as TasksResponse;
 }
 
+export async function getNewsletterList() {
+    const response = await smmgApi.get('/api/newsletters');
+    return response.data as NewslettersResponse;
+}
 
 // --------------------------------------- //
 
@@ -51,11 +54,6 @@ export async function fetchProfile(username: string): Promise<Profile> {
 export async function fetchUser(): Promise<User> {
     const response = await conduitApi.get('/user')
     return (response.data as UserResponse).user
-}
-
-export async function getGlobalFeed() {
-    const response = await conduitApi.get('/articles');
-    return response.data as ArticlesResponse;
 }
 
 

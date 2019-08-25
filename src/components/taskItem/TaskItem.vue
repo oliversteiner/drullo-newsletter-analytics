@@ -122,19 +122,19 @@
                     <!-- All Addresses -->
                     <tr>
                         <th>Adressen:</th>
-                        <td>{{taskItem.addresses.all}}</td>
+                        <td>{{taskItem.subscribers.all}}</td>
                     </tr>
 
                     <!--  Addresses with Errors -->
                     <tr>
                         <th>Fehlerhaft:</th>
-                        <td>{{ taskItem.addresses.error}}</td>
+                        <td>{{ taskItem.subscribers.error}}</td>
                     </tr>
 
                     <!--  Addresses open -->
                     <tr>
                         <th>geöffnet:</th>
-                        <td>{{ taskItem.addresses.open}}</td>
+                        <td>{{ taskItem.subscribers.open}}</td>
                     </tr>
 
                     <!--  Addresse IDs -->
