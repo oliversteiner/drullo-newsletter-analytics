@@ -4,7 +4,8 @@ module.exports = {
     loaderOptions: {
       sass: {
         data: '@import "@/scss/settings.scss";' +
-          '@import "@/scss/drullo.scss";'
+          '@import "@/scss/drullo.scss";' +
+          '@import "@/scss/dark-mode.scss";'
       }
     }
   },

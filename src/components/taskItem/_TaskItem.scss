@@ -23,7 +23,7 @@
     min-height: 170px;
     padding: 10px;
     border-radius: 5px;
-    box-shadow: 4px 5px 23px 0 #c7c7c7;
+    box-shadow: 4px 5px 23px 0 rgba(0, 0, 0, 0.24);
 
     &-status-message {
       margin-bottom: 10px;
@@ -87,17 +87,17 @@
 
   .default {
     background: rgba(0, 0, 0, 0.04);
-    border: 1px solid #d3d3d3;
+    border: 1px solid rgba(0, 0, 0, 0.1);;
   }
 
   .waiting {
     background: rgba(0, 0, 0, 0.04);
-    border: 1px solid #c4c4c4;
+    border: 1px solid rgba(0, 0, 0, 0.1);;
   }
 
   .working {
     background: rgba(0, 0, 0, 0.04);
-    border: 1px solid #c4c4c4;
+    border: 1px solid rgba(0, 0, 0, 0.1);;
   }
 
   .done {
@@ -136,14 +136,14 @@
 }
 
 .card-details {
-  border-top: 1px solid #d5d5d5;
+  border-top: 1px solid rgba(0, 0, 0, 0.3);
   padding-top: 10px;
   margin-top: 10px;
   font-size: 0.8rem;
 }
 
 .card-details-address-ids {
-  border-top: 1px solid #d5d5d5;
+  border-top: 1px solid rgba(0, 0, 0, 0.3);
   padding-top: 10px;
   margin-top: 10px;
 

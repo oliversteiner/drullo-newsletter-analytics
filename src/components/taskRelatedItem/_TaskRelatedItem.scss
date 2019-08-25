@@ -4,7 +4,7 @@
   // Support
 
   // Module
-  border-bottom: 1px solid silver;
+  border-bottom: 1px solid rgba(0,0,0,0.5);
 
   .task-related-item-header {
     display: flex;
@@ -28,21 +28,12 @@
 
   // Facets
 
-  h2 {
-    font-family: Roboto-Regular, sans-serif;
-    font-size: 22px;
-    color: #787878;
-    letter-spacing: 0.69px;
-    text-align: left;
-    line-height: 28px;
-  }
-
   .wrapper {
     padding: 20px 10px;
     display: flex;
 
     &:hover {
-      background-color: whitesmoke;
+      background-color: rgba(0, 0, 0, 0.16);
     }
   }
 
