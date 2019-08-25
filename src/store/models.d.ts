@@ -1,5 +1,5 @@
-import { Moment } from 'moment'
-import { TaskStatus, TaskStatusMessage } from '@/enums'
+import {Moment} from 'moment'
+import {TaskStatus, TaskStatusMessage} from '@/enums'
 
 export interface TasksResponse {
   tasks?: (Task)[] | null
@@ -58,6 +58,25 @@ export interface TaskRelated {
   message: Message
 }
 
+interface Subscribers {
+  id: number
+  name: string
+}
+
+export interface Newsletter {
+  title: string
+  date: Date
+  category: string
+  subscribers: Subscribers[]
+  count: {
+    all: number
+    send: number
+    open: number
+    unsubscribe: number
+  }
+}
+
+
 // ------------------------- //
 
 export interface Profile {
@@ -83,25 +102,6 @@ export interface UserForUpdate {
   image?: string
 }
 
-export interface Article {
-  slug: string
-  title: string
-  description: string
-  body: string
-  tagList?: (string)[] | null
-  createdAt: string
-  updatedAt: string
-  favorited: boolean
-  favoritesCount: number
-  author: Author
-}
-
-export interface Author {
-  username: string
-  bio: string
-  image: string
-  following: boolean
-}
 
 export interface UserSubmit {
   email: string
@@ -116,7 +116,5 @@ export interface ProfileResponse {
   profile: Profile
 }
 
-export interface ArticlesResponse {
-  articles?: (Article)[] | null
-  articlesCount: number
-}
+
+

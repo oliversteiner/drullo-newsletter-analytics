@@ -63,7 +63,8 @@
                     </div>
 
                     <!-- Run Rime human readable-->
-                    <div class="card-date-time-readable"  @mouseenter="showDateTimeDetails" @mouseout="hideDateTimeDetails">
+                    <div class="card-date-time-readable" @click="toggleDateTimeDetails"
+                         @mouseout="hideDateTimeDetails">
                         <span class="date-time-day">{{ taskItem.runMoment | moment('calendar') }} </span>
                     </div>
                 </div>
@@ -92,15 +93,16 @@
                     <!-- Button runTask -->
                     <div>
 
-                        <a class="btn btn-outline run-task-button run-task-waiting" v-if="runTaskButtonStatus == 'waiting'">Ausführen</a>
-                        <a class="btn btn-outline run-task-button run-task-done"  v-if="runTaskButtonStatus == 'done'">nochmals</a>
-                        <a class="btn btn-outline run-task-button run-task-save-to-run"  v-if="runTaskButtonStatus == 'save-to-run'">Jetzt Ausführen</a>
-                        <a class="btn btn-outline run-task-button run-task-working"  v-if="runTaskButtonStatus == 'working'"></a>
-
+                        <a class="btn btn-outline run-task-button run-task-waiting"
+                           v-if="runTaskButtonStatus == 'waiting'">Ausführen</a>
+                        <a class="btn btn-outline run-task-button run-task-done" v-if="runTaskButtonStatus == 'done'">nochmals</a>
+                        <a class="btn btn-outline run-task-button run-task-save-to-run"
+                           v-if="runTaskButtonStatus == 'save-to-run'">Jetzt Ausführen</a>
+                        <a class="btn btn-outline run-task-button run-task-working"
+                           v-if="runTaskButtonStatus == 'working'"></a>
 
 
                     </div>
-
 
 
                 </div>
@@ -140,21 +142,21 @@
                     <tr>
                         <td colspan="2">
                             <div class="card-details-address-ids">
-                            <ul>
-                                <li>1234</li>
-                                <li>1234</li>
-                                <li>1234</li>
-                                <li>1234</li>
-                                <li>1234</li>
-                                <li>1234</li>
-                                <li>1234</li>
-                                <li>1234</li>
-                                <li>1234</li>
-                                <li>1234</li>
-                                <li>1234</li>
-                                <li>1234</li>
-                                <li>1234</li>
-                            </ul>
+                                <ul>
+                                    <li>1234</li>
+                                    <li>1234</li>
+                                    <li>1234</li>
+                                    <li>1234</li>
+                                    <li>1234</li>
+                                    <li>1234</li>
+                                    <li>1234</li>
+                                    <li>1234</li>
+                                    <li>1234</li>
+                                    <li>1234</li>
+                                    <li>1234</li>
+                                    <li>1234</li>
+                                    <li>1234</li>
+                                </ul>
                             </div>
                         </td>
                     </tr>
@@ -184,6 +186,11 @@
       return this.isCardDetailsOpen = !this.isCardDetailsOpen;
     }
 
+    // Date Time
+    toggleDateTimeDetails() {
+      return this.isTimeDetailsOpen = !this.isTimeDetailsOpen;
+    }
+
     showDateTimeDetails() {
       return this.isTimeDetailsOpen = true;
     }
@@ -192,30 +199,30 @@
       return this.isTimeDetailsOpen = false;
     }
 
-    get runTaskButtonStatus():string{
+    get runTaskButtonStatus(): string {
+      let status = ''
 
-      if(this.taskItem) {
+      if (this.taskItem) {
 
         // Task is working
-        if(this.taskItem.working)
-          return 'working'
+        if (this.taskItem.working)
+          status = 'working'
 
         // task is waiting to run
-        if(this.taskItem.number != 1 && !this.taskItem.done)
-          return 'waiting'
+
+        if (this.taskItem.number != 1 && !this.taskItem.done)
+          status = 'waiting'
 
         // Task is done
-        if(this.taskItem.done)
-          return 'done'
+         if (this.taskItem.done)
+          status = 'done'
 
         // Task is save to run
-        if(this.taskItem.number === 1 && !this.taskItem.done)
-          return 'save-to-run'
+        if (this.taskItem.number === 1 && !this.taskItem.done)
+          status = 'save-to-run'
 
-      }else {
-        return ''
       }
-
+      return status;
     }
 
   }

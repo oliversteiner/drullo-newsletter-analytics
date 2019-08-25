@@ -15,7 +15,6 @@
     margin: 0 15px 15px 0;
   }
 
-
   .card {
     margin: 0 20px 20px 0;
     text-align: left;
@@ -51,10 +50,7 @@
         font-weight: bold;
       }
     }
-
-
   }
-
 
   // Status
   .card-status-icon-wrapper {
@@ -65,12 +61,9 @@
 
   // Icons
   .status-icon {
-
-
     &-default {
       color: gray;
     }
-
 
     &-done {
       color: rgb(25, 138, 59);
@@ -87,7 +80,6 @@
 
     a {
       margin-left: -7px;
-
     }
   }
 
@@ -100,14 +92,13 @@
 
   .waiting {
     background: rgba(0, 0, 0, 0.04);
-    border: 1px solid #C4C4C4;
+    border: 1px solid #c4c4c4;
   }
 
   .working {
     background: rgba(0, 0, 0, 0.04);
-    border: 1px solid #C4C4C4;
+    border: 1px solid #c4c4c4;
   }
-
 
   .done {
     background: rgba(40, 139, 38, 0.17);
@@ -121,7 +112,7 @@
 
   .error {
     background: rgba(224, 0, 0, 0.17);
-    border: 1px solid #E88383;
+    border: 1px solid #e88383;
   }
 }
 
@@ -139,12 +130,9 @@
   border: 1px solid rgba(25, 138, 59, 0.41);
 }
 
-
 .date-time-detail {
   //  position: absolute;
   //  margin-top: 50px;
-
-
 }
 
 .card-details {
@@ -171,6 +159,5 @@
     margin: 0;
     padding: 2px;
     margin-right: 10px;
-
   }
 }
