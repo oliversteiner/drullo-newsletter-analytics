@@ -36,7 +36,8 @@ class TasksModule extends VuexModule {
         const subscribers: Subscribers = {
           all: 0,
           error: 0,
-          open: 0,
+          read: 0,
+          unsubscribe:0,
         }
         task.subscribers = subscribers;
 

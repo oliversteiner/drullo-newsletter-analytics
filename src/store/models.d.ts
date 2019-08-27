@@ -21,13 +21,14 @@ export interface Subscriber {
   id: number
   email: string
   error: boolean
-  open: boolean
+  read: boolean
 }
 
 export interface Subscribers {
   all?: number
   error?: number
-  open?: number
+  read?: number
+  unsubscribe?:number
   list?: Subscriber[]
 }
 
@@ -82,17 +83,21 @@ interface Category {
 export interface Newsletter {
   id: number
   title: string
-  created: number
-  changed: number
+  created_ts: number
+  created: Date
+  changed_ts: number
+  changed: Date
   category: Category[]
   text: string
   subscriber_group: SubscriberGroup[]
   is_send: boolean
+  send_ts: number
+  send: Date
   is_template: boolean
   count: {
     all: number
     send: number
-    open: number
+    read: number
     unsubscribe: number
   }
 }

@@ -16,7 +16,7 @@ export const smmgApi = axios.create({
 
 
 export async function getTaskList() {
-    const response = await smmgApi.get('/tasks/get');
+    const response = await smmgApi.get('/api/tasks');
     return response.data as TasksResponse;
 }
 

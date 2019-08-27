@@ -3,7 +3,7 @@
     background-color: #222;
     color: #c9c9c9;
   }
-  h1, h2, h3, h4, p, div, ul, li{
+  h1, h2, h3, h4, p, div, ul, li,a{
     color: #c9c9c9;
   }
   h1 {
@@ -12,6 +12,10 @@
   h2{
     color: #b1babe;
 
+  }
+
+  a:visited{
+    color: #6e68af;
   }
 
 }

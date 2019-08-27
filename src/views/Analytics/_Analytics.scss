@@ -2,7 +2,7 @@
   text-align: left;
   margin: 20px;
   padding: 10px;
-  border: 1px solid rgba(0,0,0,0.5); /* Debug */
+  border: 1px solid rgba(0, 0, 0, 0.5); /* Debug */
 }
 
 nav.navbar {
@@ -19,8 +19,56 @@ nav.navbar {
   }
 }
 
-li.nav-item.active{
+li.nav-item.active {
   font-weight: bold;
 }
 
+.selector-trigger {
+  cursor: pointer;
+}
 
+.selector-active {
+  margin-top: -11px;
+  margin-left: -17px;
+  background: #270029;
+  border-top-left-radius: 7px;
+  border-top-right-radius: 7px;
+  padding: 10px;
+
+  border: 1px solid gray;
+  border-bottom: none;
+}
+
+h2 {
+  margin-top: 5px;
+}
+
+.selector-active h2 {
+  border-bottom: 1px solid #303030;
+  padding-bottom: 10px;
+  margin-bottom: 5px;
+}
+
+.selector-active {
+  position: absolute;
+  background: #1f1f1f;
+  border-radius: 7px;
+  border: 1px solid gray;
+  padding: 10px;
+}
+
+.selector-title-placeholder {
+  display: none;
+}
+
+.placeholder-active {
+  display: block;
+}
+
+.title-caret {
+  color: #4c4c4c;
+}
+
+.selector-trigger:hover .title-caret {
+  color: white;
+}
