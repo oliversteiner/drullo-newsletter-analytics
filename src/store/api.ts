@@ -12,6 +12,7 @@ import {
   Member,
 } from './models'
 import tasks from '@/store/modules/tasks'
+import {eventBus} from '@/main'
 
 export const smmgApi = axios.create({
   baseURL: 'https://drullo.local/smmg',
@@ -41,6 +42,7 @@ export async function getAllSubscribers() {
 
   // Number of all Members
   const memberLength = response.data.all
+  eventBus.$emit('all Members', memberLength)
 
   // Args for request url
   const group = 0
@@ -48,18 +50,22 @@ export async function getAllSubscribers() {
   const range = 100
 
   // split to one request per 100 Members
-  let urls: string[] = []   // Store Urls for Requests
+  let urls: string[] = [] // Store Urls for Requests
   for (let i = 0; i < memberLength; i += range) {
     // build request url
-    const url = 'api/members/' + start + '/' + range + '/' + group
+    const url: string = 'api/members/' + start + '/' + range + '/' + group
     urls.push(url)
     start += range
   }
 
   // actual request
   // @ts-ignore url
-  const getData = async url => {
+  let loadingStatus: number = 0
+  const getData = async (url: string) => {
     const response = await smmgApi.get(url)
+    // wait(1000) // for Testing
+    eventBus.$emit('loading Members', loadingStatus)
+    loadingStatus += range
     return response.data as MemberResponse
   }
 
@@ -67,6 +73,7 @@ export async function getAllSubscribers() {
   const allResponses = (await Promise.all(urls.map(url => getData(url))).catch(e =>
     console.error('error loading Members', e),
   )) as MemberResponse[]
+
 
   // assemble all members in one array
   let members: Member[] = []
@@ -120,4 +127,12 @@ export async function fetchUser(): Promise<User> {
 export async function updateUser(user: UserForUpdate): Promise<User> {
   const response = await drupalApi.put('/user', user)
   return (response.data as UserResponse).user
+}
+
+function wait(ms: number) {
+  var start = new Date().getTime()
+  var end = start
+  while (end < start + ms) {
+    end = new Date().getTime()
+  }
 }

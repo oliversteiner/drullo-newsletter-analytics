@@ -23,6 +23,8 @@
     "vue-moment": "^4.0.0",
     "vue-property-decorator": "^8.2.2",
     "vue-router": "3.1.2",
+    "vue-wait": "^1.4.6",
+    "vue-worker": "^1.2.1",
     "vuedarkmode": "^0.4.1",
     "vuex": "3.1.1",
     "vuex-class": "^0.3.2",

@@ -27,19 +27,11 @@
     @Prop() newsletterList!: Newsletter[]
     @Prop() current!: number
 
-    isActive: boolean = false;
-
-
     changeItem(selected: number) {
       console.log('changeItem', selected);
       this.$emit('changeNewsletter', selected);
     }
 
-    get checkIfActive(index) {
-      if (this.current === index) {
-        return true
-      }
-    }
 
   }
 </script>
