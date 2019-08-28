@@ -15,11 +15,11 @@ import tasks from '@/store/modules/tasks'
 import {eventBus} from '@/main'
 
 export const smmgApi = axios.create({
-  baseURL: 'https://drullo.local/smmg',
+  baseURL: process.env.VUE_APP_HOST+'/smmg',
 })
 
 export const drupalApi = axios.create({
-  baseURL: 'https://drullo.local/',
+  baseURL: process.env.VUE_APP_HOST,
 })
 
 export async function getTaskList() {
