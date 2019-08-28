@@ -1,7 +1,7 @@
-import {getModule, Module, MutationAction, VuexModule} from 'vuex-module-decorators'
+import { getModule, Module, MutationAction, VuexModule } from 'vuex-module-decorators'
 import store from '@/store'
 import * as api from '@/store/api'
-import {Member, Subscriber} from '@/store/models'
+import { Member, Subscriber } from '@/store/models'
 
 @Module({
   dynamic: true,
@@ -17,20 +17,20 @@ class SubscriberModule extends VuexModule {
   async refreshSubscriberList() {
     const listFromServer = await api.getAllSubscribers()
     const members = listFromServer.members
-    const subscribers: Subscriber[] = [];
+    const subscribers: Subscriber[] = []
 
     if (members) {
       members.map(member => {
-        const subscriber:Subscriber = {
+        const subscriber: Subscriber = {
           id: member.id,
           contact: member.contact,
           address: member.address,
           error: false,
           read: false,
           unsubscribe: false,
-          groups:member.subscriber_groups,
-          origin:member.origin,
-        };
+          groups: member.subscriber_groups,
+          origin: member.origin,
+        }
 
         subscriber.created_ts = member.created
         subscriber.changed_ts = member.changed
@@ -38,11 +38,11 @@ class SubscriberModule extends VuexModule {
         subscriber.changed = new Date(member.changed * 1000)
 
         // Add new Subscriber to list
-        subscribers.push(subscriber);
+        subscribers.push(subscriber)
       })
     }
 
-    return {subscribersList: subscribers}
+    return { subscribersList: subscribers }
   }
 }
 

@@ -1,12 +1,7 @@
-import {
-  getModule,
-  Module,
-  MutationAction,
-  VuexModule,
-} from 'vuex-module-decorators';
-import store from '@/store';
-import { Profile, User, UserSubmit, UserForUpdate } from '../models';
-import { fetchProfile, fetchUser, loginUser, updateUser, setJWT } from '../api';
+import { getModule, Module, MutationAction, VuexModule } from 'vuex-module-decorators'
+import store from '@/store'
+import { Profile, User, UserSubmit, UserForUpdate } from '../models'
+import { fetchProfile, fetchUser, loginUser, updateUser, setJWT } from '../api'
 
 @Module({
   namespaced: true,
@@ -15,24 +10,24 @@ import { fetchProfile, fetchUser, loginUser, updateUser, setJWT } from '../api';
   dynamic: true,
 })
 class UsersModule extends VuexModule {
-  user: User | null = null;
-  profile: Profile | null = null;
+  user: User | null = null
+  profile: Profile | null = null
 
   get username() {
-    return (this.user && this.user.username) || null;
+    return (this.user && this.user.username) || null
   }
 
   @MutationAction
   async login(userSubmit: UserSubmit) {
-    const user = await loginUser(userSubmit);
+    const user = await loginUser(userSubmit)
     setJWT(user.token)
-    return { user };
+    return { user }
   }
 
   @MutationAction
   async loadProfile(username: string) {
-    const profile = await fetchProfile(username);
-    return { profile };
+    const profile = await fetchProfile(username)
+    return { profile }
   }
 
   @MutationAction
@@ -48,4 +43,4 @@ class UsersModule extends VuexModule {
   }
 }
 
-export default getModule(UsersModule);
+export default getModule(UsersModule)

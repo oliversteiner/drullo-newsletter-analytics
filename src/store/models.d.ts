@@ -24,21 +24,20 @@ export interface Subscriber {
   changed_ts?: number;
   created_ts?: number
   contact: Contact
-  address:Address
+  address: Address
   error: boolean
   read: boolean
-  unsubscribe:boolean
-  groups?:SubscriberGroup[]
-  origin:Origin
-
+  unsubscribe: boolean
+  groups?: SubscriberGroup[]
+  origin: Origin
 }
 
 export interface Subscribers {
-  message?:string
+  message?: string
   all?: number
   error?: number
   read?: number
-  unsubscribe?:number
+  unsubscribe?: number
   subscribers: Subscriber[]
 }
 
@@ -112,7 +111,7 @@ export interface Newsletter {
   }
 }
 
-export interface MemberResponse{
+export interface MemberResponse {
   count: number
   set: number
   start?: number
@@ -120,7 +119,6 @@ export interface MemberResponse{
   subscriber_group: number
   members: Member[]
 }
-
 
 interface Origin {
   id: number
@@ -197,5 +195,3 @@ export interface UserResponse {
 export interface ProfileResponse {
   profile: Profile
 }
-
-

@@ -12,10 +12,10 @@ import {
   Member,
 } from './models'
 import tasks from '@/store/modules/tasks'
-import {eventBus} from '@/main'
+import { eventBus } from '@/main'
 
 export const smmgApi = axios.create({
-  baseURL: process.env.VUE_APP_HOST+'/smmg',
+  baseURL: process.env.VUE_APP_HOST + '/smmg',
 })
 
 export const drupalApi = axios.create({
@@ -60,7 +60,7 @@ export async function getAllSubscribers() {
 
   // actual request
   // @ts-ignore url
-  let loadingStatus: number = 0
+  let loadingStatus = 0
   const getData = async (url: string) => {
     const response = await smmgApi.get(url)
     // wait(1000) // for Testing
@@ -73,7 +73,6 @@ export async function getAllSubscribers() {
   const allResponses = (await Promise.all(urls.map(url => getData(url))).catch(e =>
     console.error('error loading Members', e),
   )) as MemberResponse[]
-
 
   // assemble all members in one array
   let members: Member[] = []

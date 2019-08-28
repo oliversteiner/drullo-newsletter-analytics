@@ -15,7 +15,7 @@ import {
   faTh,
   faCaretDown,
   faCaretRight,
-  faCircleNotch
+  faCircleNotch,
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
@@ -36,7 +36,7 @@ Vue.component('font-awesome-icon', FontAwesomeIcon)
 Vue.config.productionTip = false
 Vue.use(VueMoment as any)
 
-export const eventBus = new Vue();
+export const eventBus = new Vue()
 
 new Vue({
   router,

@@ -1,11 +1,10 @@
-import {getModule, Module, MutationAction, VuexModule} from 'vuex-module-decorators'
+import { getModule, Module, MutationAction, VuexModule } from 'vuex-module-decorators'
 import store from '@/store'
 import * as api from '@/store/api'
-import { Subscribers, Task, TaskRelated} from '@/store/models'
+import { Subscribers, Task, TaskRelated } from '@/store/models'
 import moment from 'moment'
 import 'moment/locale/de-ch'
-import {TaskStatus, TaskStatusMessage} from '@/enums'
-
+import { TaskStatus, TaskStatusMessage } from '@/enums'
 
 @Module({
   dynamic: true,
@@ -19,7 +18,6 @@ class TasksModule extends VuexModule {
 
   @MutationAction
   async refreshTaskList() {
-
     const taskListFromServer = await api.getTaskList()
     const tasks = taskListFromServer.tasks
 
@@ -31,8 +29,6 @@ class TasksModule extends VuexModule {
       let counterUndoneTasks = 0
 
       tasks.map(task => {
-
-
         // Working
         task.working = false
 
@@ -74,7 +70,7 @@ class TasksModule extends VuexModule {
 
       // return only first task of each related Task
       tasks.forEach(task => {
-        if (-1 === uuid.indexOf(task.related)) {
+        if (uuid.indexOf(task.related) === -1) {
           uuid.push(task.related)
 
           if (task.related) {
