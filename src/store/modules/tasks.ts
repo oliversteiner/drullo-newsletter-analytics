@@ -32,15 +32,6 @@ class TasksModule extends VuexModule {
 
       tasks.map(task => {
 
-        // Adresses
-        const subscribers: Subscribers = {
-          all: 0,
-          error: 0,
-          read: 0,
-          unsubscribe:0,
-        }
-        task.subscribers = subscribers;
-
 
         // Working
         task.working = false

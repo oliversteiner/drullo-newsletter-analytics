@@ -19,17 +19,27 @@ export interface NewslettersResponse {
 
 export interface Subscriber {
   id: number
-  email: string
+  changed?: Date;
+  created?: Date;
+  changed_ts?: number;
+  created_ts?: number
+  contact: Contact
+  address:Address
   error: boolean
   read: boolean
+  unsubscribe:boolean
+  groups?:SubscriberGroup[]
+  origin:Origin
+
 }
 
 export interface Subscribers {
+  message?:string
   all?: number
   error?: number
   read?: number
   unsubscribe?:number
-  list?: Subscriber[]
+  subscribers: Subscriber[]
 }
 
 export interface Task {
@@ -102,6 +112,54 @@ export interface Newsletter {
   }
 }
 
+export interface MemberResponse{
+  count: number
+  set: number
+  start?: number
+  length?: number
+  subscriber_group: number
+  members: Member[]
+}
+
+
+interface Origin {
+  id: number
+  name: string
+}
+
+interface Contact {
+  phone: string
+  phone_2: string
+  mobile: string
+  email: string
+}
+
+interface Address {
+  first_name: string
+  last_name: string
+  street_and_number: string
+  zip_code: string
+  city: string
+  birthday: string
+}
+
+export interface Member {
+  id: number
+  name: string
+  created: number
+  changed: number
+  token: string
+  is_active: true
+  transfer_id?: number
+  newsletter: false
+  fake: false
+  address: Address
+  contact: Contact
+  subscriber_groups: SubscriberGroup[]
+  origin: Origin
+  data?: any
+}
+
 // ------------------------- //
 
 export interface Profile {
@@ -139,3 +197,5 @@ export interface UserResponse {
 export interface ProfileResponse {
   profile: Profile
 }
+
+

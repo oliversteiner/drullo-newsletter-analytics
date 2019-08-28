@@ -1,4 +1,5 @@
 .box {
+  display: inline-block;
   text-align: left;
   margin: 20px;
   padding: 10px;
@@ -34,7 +35,6 @@ li.nav-item.active {
   border-top-left-radius: 7px;
   border-top-right-radius: 7px;
   padding: 10px;
-
   border: 1px solid gray;
   border-bottom: none;
 }
@@ -71,4 +71,18 @@ h2 {
 
 .selector-trigger:hover .title-caret {
   color: white;
+}
+
+
+.raw-data {
+  margin: 20px;
+}
+
+.raw-data ul {
+  list-style-type: none;
+}
+
+.raw-data li {
+  display: inline-block;
+  width: 400px;
 }

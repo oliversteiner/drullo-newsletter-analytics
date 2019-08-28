@@ -8,7 +8,8 @@
             <div class="selector-background" v-bind:class="{ 'selector-active': isOpenSelector }">
                 <!-- Title -->
                 <h2 class="selector-trigger" @click="toggleSelector()">
-                    <font-awesome-icon class="title-caret" icon="caret-right" v-if="!isOpenSelector"></font-awesome-icon>
+                    <font-awesome-icon class="title-caret" icon="caret-right"
+                                       v-if="!isOpenSelector"></font-awesome-icon>
                     <font-awesome-icon icon="caret-down" v-if="isOpenSelector"></font-awesome-icon>
                     {{ newsletter.title }}
                 </h2>
@@ -45,11 +46,10 @@
             <h3>Empfänger Gruppen</h3>
             <nav class="navbar">
                 <ul class="navbar nav">
-                    <li class="nav-item">alle</li>
-                    <li class="nav-item active">Newsletter</li>
-                    <li class="nav-item">Import</li>
-                    <li class="nav-item">Vorstand</li>
-                    <li class="nav-item">Test</li>
+                    <li class="nav-item" v-for="group in subscriberGroups">
+                        {{ group.name }}
+                    </li>
+
                 </ul>
             </nav>
         </div>
@@ -82,7 +82,20 @@
         <!-- timeline -->
         <Timeline></Timeline>
 
+        <div @click="loadSubscribers">lade Nutzer</div>
+        <div>{{  }}</div>
+
         <!-- Raw Data -->
+        <div class="raw-data">
+            <div>{{ numberOfSubscribers}} Empfänger</div>
+            <ul>
+                <li v-for=" subscriber in subscriberList">
+
+                    {{ subscriber.id}} - {{subscriber.contact.email}}
+                </li>
+            </ul>
+        </div>
+
         <RawDataList></RawDataList>
     </div>
 </template>
@@ -94,6 +107,7 @@
   import RawDataList from '@/components/RawDataList/RawDataList.vue'
   import newsletters from '@/store/modules/newsletters'
   import NewsletterSelector from '@/components/NewsletterSelector/NewsletterSelector.vue'
+  import subscribers from "@/store/modules/subscribers"
 
   @Component({
     components: {RawDataList, Timeline, PieChart, NewsletterSelector},
@@ -105,9 +119,13 @@
     changeNewsletter(selected: number) {
       console.log('event', selected)
       this.selected = selected
-
       // close Selector
       this.isOpenSelector = false
+    }
+
+
+    loadSubscribers() {
+
     }
 
     openSelector() {
@@ -122,6 +140,21 @@
       return newsletters.newsletterList
     }
 
+
+    get subscriberList() {
+      return subscribers.subscribersList
+    }
+
+    get numberOfSubscribers(){
+      return subscribers.subscribersList.length;
+    }
+
+    get subscriberGroups() {
+
+      return this.newsletter.subscriber_group
+      //  return ['test 1', 'test 2']
+    }
+
     get newsletter() {
       console.log('newsletters', newsletters.newsletterList)
 
@@ -130,6 +163,8 @@
 
     async created() {
       await newsletters.refreshNewsletterList()
+      await subscribers.refreshSubscriberList()
+
     }
   }
 </script>
