@@ -3,6 +3,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import VueMoment from 'vue-moment'
+import 'vue-good-table/dist/vue-good-table.css'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {

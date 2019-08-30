@@ -15,5 +15,10 @@ export default new Router({
       name: 'analytics',
       component: () => import('@/views/Analytics/Analytics.vue'),
     },
+    {
+      path: '/subscribers',
+      name: 'subscribers',
+      component: () => import('@/views/SubscribersPage/SubscribersPage.vue'),
+    },
   ],
 })

@@ -13,6 +13,12 @@
                 <router-link to="/analytics" class="nav-link">
                     <i class="">Analytics</i>
                 </router-link>
+
+                <!-- Subscribers-->
+            <li class="nav-item">
+                <router-link to="/subscribers" class="nav-link">
+                    <i class="">Subscribers</i>
+                </router-link>
             </li>
         </ul>
     </nav>

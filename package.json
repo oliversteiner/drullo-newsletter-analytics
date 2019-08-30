@@ -20,6 +20,7 @@
     "vue": "2.6.10",
     "vue-class-component": "^7.0.2",
     "vue-custom-element": "3.2.7",
+    "vue-good-table": "^2.18.0",
     "vue-moment": "^4.0.0",
     "vue-property-decorator": "^8.2.2",
     "vue-router": "3.1.2",

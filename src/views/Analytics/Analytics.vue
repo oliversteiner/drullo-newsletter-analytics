@@ -118,8 +118,8 @@ export default class Analytics extends Vue {
   private selected: number = 0
   private isOpenSelector: boolean = false
   private loading: boolean = true
-  loadingState: number = 0
-  numberOfAllSubscribers: number = 0
+  private loadingState: number = 0
+  private numberOfAllSubscribers: number = 0
 
   changeNewsletter(selected: number) {
     console.log('event', selected)
