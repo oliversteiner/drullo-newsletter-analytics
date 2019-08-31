@@ -86,3 +86,21 @@ h2 {
   display: inline-block;
   width: 400px;
 }
+
+.loading {
+  border: 1px solid gray; /* Debug */
+  padding: 5px;
+  margin-bottom: 10px;
+  display: flex;
+  border-radius: 7px;
+  padding: 5px;
+
+  &-icon {
+
+  }
+
+  &-text {
+    margin-left: 10px;
+  }
+
+}

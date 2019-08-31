@@ -15,6 +15,6 @@
 
   }
 </script>
-<style>
-    @import '_NewsletterSelector.scss';
+<style lang="scss">
+    @import 'NewsletterSelector';
 </style>

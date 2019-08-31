@@ -11,6 +11,6 @@ import { Vue, Component, Prop } from 'vue-property-decorator'
 export default class PieChart extends Vue {}
 </script>
 
-<style scoped>
-@import '_PieChart.scss';
+<style lang="scss" scoped>
+@import 'PieChart';
 </style>

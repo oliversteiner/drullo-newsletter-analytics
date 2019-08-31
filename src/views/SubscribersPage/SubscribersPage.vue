@@ -4,9 +4,9 @@
       <div>{{ numberOfSubscribers }} Empfänger</div>
 
       <!-- Loading Spinner -->
-      <div v-if="loading">
+      <div v-if="loading ">
         <font-awesome-icon icon="circle-notch" spin size="lg"></font-awesome-icon>
-        lade daten...
+        Aktualisiere Empfänger ...
 
         {{ loadingState }} von {{ numberOfAllSubscribers }}
       </div>
@@ -60,6 +60,6 @@ export default class SubscribersPage extends Vue {
   }
 }
 </script>
-<style scoped>
-@import '_SubscribersPage.scss';
+<style lang="scss" scoped>
+@import 'SubscribersPage';
 </style>

@@ -1,4 +1,6 @@
 const webpack = require('webpack')
+const path = require('path')
+
 module.exports = {
   css: {
     loaderOptions: {
@@ -18,6 +20,20 @@ module.exports = {
   },
   chainWebpack: config => {
     config.optimization.delete('splitChunks')
+    const types = ['vue-modules', 'vue', 'normal-modules', 'normal']
+    types.forEach(type => addStyleResource(config.module.rule('stylus').oneOf(type)))
   },
   filenameHashing: false,
+}
+
+/* https://cli.vuejs.org/guide/css.html#pre-processors */
+function addStyleResource(rule) {
+  rule
+    .use('style-loader', 'css-loader','sass-loader')
+    .loader('style-resources-loader')
+    .options({
+      patterns: [
+        path.resolve(__dirname, './src/scss/*.scss'),
+      ],
+    })
 }

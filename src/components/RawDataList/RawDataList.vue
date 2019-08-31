@@ -1,6 +1,6 @@
 <template>
   <div class="raw-data-list">
-      Raw data
+    Raw data
   </div>
 </template>
 
@@ -11,6 +11,6 @@ import { Vue, Component, Prop } from 'vue-property-decorator'
 export default class RawDataList extends Vue {}
 </script>
 
-<style scoped>
-@import '_RawDataList.scss';
+<style lang="scss" scoped>
+@import 'RawDataList';
 </style>

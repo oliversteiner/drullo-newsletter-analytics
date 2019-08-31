@@ -49,10 +49,6 @@
         }
     }
 
-    .navbar nav {
-
-    }
-
     .router-link-active {
         font-weight: bold;
     }

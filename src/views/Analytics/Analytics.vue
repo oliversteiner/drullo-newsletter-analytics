@@ -15,9 +15,9 @@
         <!-- Newletter selector -->
         <div class="selector-wrapper" v-if="isOpenSelector">
           <NewsletterSelector
-            v-bind:newsletter-list="newsletterList"
-            v-bind:current="selected"
-            v-on:changeNewsletter="changeNewsletter($event)"
+              v-bind:newsletter-list="newsletterList"
+              v-bind:current="selected"
+              v-on:changeNewsletter="changeNewsletter($event)"
           ></NewsletterSelector>
         </div>
       </div>
@@ -78,18 +78,21 @@
     <!-- timeline -->
     <Timeline></Timeline>
 
-
     <!-- Raw Data -->
     <div class="raw-data">
-      <div>{{ numberOfSubscribers }} Empfänger</div>
-
       <!-- Loading Spinner -->
-      <div v-if="loading">
-        <font-awesome-icon icon="circle-notch" spin size="lg"></font-awesome-icon>
-        lade daten...
-
-        {{ loadingState }} von {{ numberOfAllSubscribers }}
+      <div class="loading" v-if="true">
+        <div class="loading-icon">
+          <font-awesome-icon icon="circle-notch" spin size="lg"></font-awesome-icon>
+        </div>
+        <div class="loading-text">
+          <div class="loading-count"></div>
+          aktualisiere Empfängerdaten ... {{ loadingState }} von {{ numberOfAllSubscribers }}
+        </div>
       </div>
+
+      <!-- Number of Subscibers-->
+      <div>{{ numberOfSubscribers }} Empfänger</div>
 
       <!-- List -->
       <ul>
@@ -102,84 +105,80 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator'
-import Timeline from '@/components/Timeline/Timeline.vue'
-import PieChart from '@/components/PieChart/PieChart.vue'
-import RawDataList from '@/components/RawDataList/RawDataList.vue'
-import newsletters from '@/store/modules/newsletters'
-import NewsletterSelector from '@/components/NewsletterSelector/NewsletterSelector.vue'
-import subscribers from '@/store/modules/subscribers'
-import { eventBus } from '@/main'
+  import {Vue, Component} from 'vue-property-decorator'
+  import Timeline from '@/components/Timeline/Timeline.vue'
+  import PieChart from '@/components/PieChart/PieChart.vue'
+  import RawDataList from '@/components/RawDataList/RawDataList.vue'
+  import newsletters from '@/store/modules/newsletters'
+  import NewsletterSelector from '@/components/NewsletterSelector/NewsletterSelector.vue'
+  import subscribers from '@/store/modules/subscribers'
+  import {eventBus} from '@/main'
 
-@Component({
-  components: { RawDataList, Timeline, PieChart, NewsletterSelector },
-})
-export default class Analytics extends Vue {
-  private selected: number = 0
-  private isOpenSelector: boolean = false
-  private loading: boolean = true
-  private loadingState: number = 0
-  private numberOfAllSubscribers: number = 0
+  @Component({
+    components: {RawDataList, Timeline, PieChart, NewsletterSelector},
+  })
+  export default class Analytics extends Vue {
+    private selected: number = 0
+    private isOpenSelector: boolean = false
+    private loading: boolean = true
+    private loadingState: number = 0
+    private numberOfAllSubscribers: number = 0
 
-  changeNewsletter(selected: number) {
-    console.log('event', selected)
-    this.selected = selected
-    // close Selector
-    this.isOpenSelector = false
+    changeNewsletter(selected: number) {
+      console.log('event', selected)
+      this.selected = selected
+      // close Selector
+      this.isOpenSelector = false
+    }
+
+    loadSubscribers() {
+    }
+
+    openSelector() {
+      this.isOpenSelector = true
+    }
+
+    toggleSelector() {
+      this.isOpenSelector = !this.isOpenSelector
+    }
+
+    get newsletterList() {
+      return newsletters.newsletterList
+    }
+
+    get subscriberList() {
+      return subscribers.subscribersList
+    }
+
+    get numberOfSubscribers() {
+      return subscribers.subscribersList.length
+    }
+
+    get subscriberGroups() {
+      return this.newsletter.subscriber_group
+    }
+
+    get newsletter() {
+      return newsletters.newsletterList[this.selected]
+    }
+
+    async created() {
+      eventBus.$on('all Members', (data: number) => {
+        this.numberOfAllSubscribers = data
+      })
+      eventBus.$on('loading Members', (data: number) => {
+        this.loadingState = data
+        console.log('loading data...', data)
+      })
+
+      await newsletters.refreshNewsletterList()
+      await subscribers.refreshSubscriberList()
+
+      this.loading = false
+    }
   }
-
-  loadSubscribers() {}
-
-  openSelector() {
-    this.isOpenSelector = true
-  }
-
-  toggleSelector() {
-    this.isOpenSelector = !this.isOpenSelector
-  }
-
-  get newsletterList() {
-    return newsletters.newsletterList
-  }
-
-  get subscriberList() {
-    return subscribers.subscribersList
-  }
-
-  get numberOfSubscribers() {
-    return subscribers.subscribersList.length
-  }
-
-  get subscriberGroups() {
-    return this.newsletter.subscriber_group
-  }
-
-
-
-  get newsletter() {
-    return newsletters.newsletterList[this.selected]
-  }
-
-
-
-  async created() {
-
-    eventBus.$on('all Members', (data:number) => {
-      this.numberOfAllSubscribers = data
-    })
-    eventBus.$on('loading Members', (data:number) => {
-      this.loadingState = data
-      console.log('loading data...', data)
-    })
-
-    await newsletters.refreshNewsletterList()
-    await subscribers.refreshSubscriberList()
-
-    this.loading = false
-  }
-}
 </script>
 
-<style scoped>
-@import '_Analytics.scss';
+<style lang="scss" scoped>
+  @import 'Analytics';
 </style>

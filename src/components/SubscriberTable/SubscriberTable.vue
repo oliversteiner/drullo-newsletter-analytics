@@ -23,8 +23,20 @@ export default class SubscriberTable extends Vue {
         field: 'id',
       },
       {
-        label: 'Name',
-        field: 'name',
+        label: 'Vorname',
+        field: 'first_name',
+        filterOptions: {
+          enabled: true, // enable filter for this column
+          trigger: 'enter', //only trigger on enter not on keyup
+        },
+      },
+      {
+        label: 'Nachname',
+        field: 'last_name',
+        filterOptions: {
+          enabled: true, // enable filter for this column
+          trigger: 'enter', //only trigger on enter not on keyup
+        },
       },
       {
         label: 'Age',
@@ -62,7 +74,9 @@ export default class SubscriberTable extends Vue {
     this.subscriberList.map((subscriber: Subscriber) => {
       let row = {
         id: subscriber.id,
-        name: subscriber.address.first_name +' ' + subscriber.address.last_name,
+        first_name: subscriber.address.first_name,
+        last_name: subscriber.address.last_name,
+
       }
 
       rows.push(row)
