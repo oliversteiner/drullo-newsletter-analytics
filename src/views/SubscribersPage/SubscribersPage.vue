@@ -4,7 +4,7 @@
       <div>{{ numberOfSubscribers }} Empfänger</div>
 
       <!-- Loading Spinner -->
-      <div v-if="loading ">
+      <div v-if="loading">
         <font-awesome-icon icon="circle-notch" spin size="lg"></font-awesome-icon>
         Aktualisiere Empfänger ...
 
@@ -12,12 +12,11 @@
       </div>
 
       <!-- List -->
-        <subscriberTable :subscriber-list="subscriberList"></subscriberTable>
+      <subscriberTable :subscriber-list="subscriberList"></subscriberTable>
 
-<!--        <ul>
+      <!--        <ul>
         <li v-for="subscriber in subscriberList">{{ subscriber.id }} - {{ subscriber.contact.email }}</li>
       </ul>-->
-
     </div>
   </div>
 </template>
@@ -29,7 +28,7 @@ import subscribers from '@/store/modules/subscribers'
 import SubscriberTable from '@/components/SubscriberTable/SubscriberTable.vue'
 
 @Component({
-  components: {SubscriberTable},
+  components: { SubscriberTable },
 })
 export default class SubscribersPage extends Vue {
   private loading: boolean = true
