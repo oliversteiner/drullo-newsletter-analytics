@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/member-delimiter-style */
 import { Moment } from 'moment'
 import { TaskStatus, TaskStatusMessage } from '@/enums'
 
@@ -16,13 +17,10 @@ export interface NewslettersResponse {
   newsletters?: (Newsletter)[] | null
   nids?: number[]
 }
-
-export interface Subscriber {
+export interface Member {
   id: number
-  changed?: Date;
-  created?: Date;
-  changed_ts?: number;
-  created_ts?: number
+  changed: number
+  created: number
   contact: Contact
   address: Address
   error: boolean
@@ -30,6 +28,24 @@ export interface Subscriber {
   unsubscribe: boolean
   groups?: SubscriberGroup[]
   origin: Origin
+  newsletter: boolean
+  data: any
+}
+
+export interface Subscriber {
+  id: number
+  changed?: Date
+  created?: Date
+  changedTs?: number
+  createdTs?: number
+  contact: Contact
+  address: Address
+  error: boolean
+  read: boolean
+  newsletter: boolean
+  groups?: SubscriberGroup[]
+  origin: Origin
+  data: any
 }
 
 export interface Subscribers {
@@ -139,23 +155,6 @@ interface Address {
   zip_code: string
   city: string
   birthday: string
-}
-
-export interface Member {
-  id: number
-  name: string
-  created: number
-  changed: number
-  token: string
-  is_active: true
-  transfer_id?: number
-  newsletter: false
-  fake: false
-  address: Address
-  contact: Contact
-  subscriber_groups: SubscriberGroup[]
-  origin: Origin
-  data?: any
 }
 
 // ------------------------- //

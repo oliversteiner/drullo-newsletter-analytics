@@ -62,15 +62,15 @@
         </tr>
         <tr>
           <th>Versendete Newsletter:</th>
-          <td>{{ newsletter.count.send }}</td>
+          <td>{{ statistic.send }}</td>
         </tr>
         <tr>
           <th>angesehen:</th>
-          <td>{{ newsletter.count.read }}</td>
+          <td>{{ statistic.open }}</td>
         </tr>
         <tr>
           <th>Abmeldungen:</th>
-          <td>{{ newsletter.count.unsubscribe }}</td>
+          <td>{{ statistic.unsubscribe }}</td>
         </tr>
       </table>
     </div>
@@ -84,7 +84,7 @@
     <!-- Raw Data -->
     <div class="raw-data">
       <!-- Loading Spinner -->
-      <div v-if="true" class="loading">
+      <div v-if="loading" class="loading">
         <div class="loading-icon">
           <font-awesome-icon icon="circle-notch" spin size="lg" />
         </div>
@@ -100,7 +100,7 @@
 
       <!-- List -->
       <ul>
-        <li v-for="subscriber in subscriberList" :key="subscriber.id">
+        <li v-for="subscriber in subscriberList" :key="subscriber.id + '-analytics'">
           {{ subscriber.id }} - {{ subscriber.contact.email }}
         </li>
       </ul>
@@ -119,6 +119,7 @@ import newsletters from '@/store/modules/newsletters'
 import NewsletterSelector from '@/components/NewsletterSelector/NewsletterSelector.vue'
 import subscribers from '@/store/modules/subscribers'
 import { eventBus } from '@/main'
+import { Subscriber } from '@/store/models'
 
 @Component({
   components: { RawDataList, Timeline, PieChart, NewsletterSelector },
@@ -129,12 +130,18 @@ export default class Analytics extends Vue {
   private loading: boolean = true
   private loadingState: number = 0
   private numberOfAllSubscribers: number = 0
+  private messageID = 0
+  private statistic = { send: 0, open: 0, unsubscribe: 0 }
 
   changeNewsletter(selected: number) {
     console.log('event', selected)
+    this.messageID = newsletters.newsletterList[selected].id
+    console.log('this.messageID', this.messageID)
+
     this.selected = selected
     // close Selector
     this.isOpenSelector = false
+    this.updateStatistic()
   }
 
   loadSubscribers() {}
@@ -152,11 +159,11 @@ export default class Analytics extends Vue {
   }
 
   get subscriberList() {
-    return subscribers.subscribersList
+    return subscribers.subscriberList
   }
 
   get numberOfSubscribers() {
-    return subscribers.subscribersList.length
+    return subscribers.subscriberCount
   }
 
   get subscriberGroups() {
@@ -167,6 +174,35 @@ export default class Analytics extends Vue {
     return newsletters.newsletterList[this.selected]
   }
 
+  updateStatistic() {
+    this.statistic = { open: 0, send: 0, unsubscribe: 0 }
+    const subs = subscribers.subscriberList
+    subs.map((sub: Subscriber) => {
+
+      // Message send?
+      if (sub.data) {
+        console.log('sub.data', sub.data)
+
+        sub.data.map((item: any) => {
+          if (item.message_id === this.messageID) {
+            // Send
+            this.statistic.send++
+
+            // Open
+            if (item.open == 1) {
+              this.statistic.open++
+            }
+
+            // unsubscribe
+            if (!sub.newsletter) {
+              this.statistic.unsubscribe++
+            }
+          }
+        })
+      }
+    })
+  }
+
   async created() {
     eventBus.$on('all Members', (data: number) => {
       this.numberOfAllSubscribers = data
@@ -175,11 +211,12 @@ export default class Analytics extends Vue {
       this.loadingState = data
       console.log('loading data...', data)
     })
-
     await newsletters.refreshNewsletterList()
+    await subscribers.getSubscriberCount()
     await subscribers.refreshSubscriberList()
-
     this.loading = false
+    this.updateStatistic()
+    console.log('actual length', subscribers.subscriberList.length)
   }
 }
 </script>

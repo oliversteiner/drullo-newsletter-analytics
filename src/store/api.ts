@@ -37,6 +37,11 @@ export async function getSubscribersList() {
   return response.data as MemberResponse
 }
 
+export async function getSubscriberCount() {
+  const response = await smmgApi.get('/api/members/count')
+  return response.data.all
+}
+
 export async function getAllSubscribers() {
   const response = await smmgApi.get('/api/members/count')
 
@@ -46,16 +51,16 @@ export async function getAllSubscribers() {
 
   // Args for request url
   const group = 0
-  let start = 0
   const range = 100
 
   // split to one request per 100 Members
   let urls: string[] = [] // Store Urls for Requests
   for (let i = 0; i < memberLength; i += range) {
     // build request url
-    const url: string = 'api/members/' + start + '/' + range + '/' + group
+    const url = 'api/members/' + i + '/' + range + '/' + group
+
+    // add url to request queue
     urls.push(url)
-    start += range
   }
 
   // actual request
@@ -66,6 +71,7 @@ export async function getAllSubscribers() {
     // wait(1000) // for Testing
     eventBus.$emit('loading Members', loadingStatus)
     loadingStatus += range
+
     return response.data as MemberResponse
   }
 
@@ -77,6 +83,8 @@ export async function getAllSubscribers() {
   // assemble all members in one array
   let members: Member[] = []
   allResponses.map(response => {
+    console.warn('-- Rsponse Members', response.members.length)
+
     response.members.map(member => {
       members.push(member)
     })

@@ -1,7 +1,8 @@
 import { getModule, Module, MutationAction, VuexModule } from 'vuex-module-decorators'
 import store from '@/store'
 import * as api from '@/store/api'
-import { Newsletter } from '@/store/models'
+import {Newsletter, Subscriber} from '@/store/models'
+import { State } from 'vuex-class'
 
 @Module({
   dynamic: true,
@@ -10,21 +11,24 @@ import { Newsletter } from '@/store/models'
   store,
 })
 class NewslettersModule extends VuexModule {
-  newsletterList: Newsletter[] = []
+  public newsletterList: Newsletter[] = []
 
   @MutationAction
   async refreshNewsletterList() {
     const listFromServer = await api.getNewsletterList()
-    const newsletters = listFromServer.newsletters
+    const items = listFromServer.newsletters
+    const newsletters: Newsletter[] = []
 
-    if (newsletters) {
-      newsletters.map(newsletter => {
-        newsletter.created = new Date(newsletter.created_ts * 1000)
-        newsletter.changed = new Date(newsletter.changed_ts * 1000)
-        newsletter.send = new Date(newsletter.send_ts * 1000)
+    if (items) {
+      items.map((item: Newsletter) => {
+        const newsletter: Newsletter = item
+        newsletter.created = new Date(item.created_ts * 1000)
+        newsletter.changed = new Date(item.changed_ts * 1000)
+        newsletter.send = new Date(item.send_ts * 1000)
+
+        newsletters.push(newsletter)
       })
     }
-
     return { newsletterList: newsletters }
   }
 }
