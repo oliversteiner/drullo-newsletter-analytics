@@ -7,16 +7,25 @@ export interface TasksResponse {
   tasksCount: number
 }
 
-export interface NewslettersResponse {
+export interface MolloMessageResponse {
   message: any[]
   count: number
   set: number
   start: number
   length: number
   subscriber_group: number
-  newsletters?: (Newsletter)[] | null
+  newsletters?: MolloMessage[] | null
   nids?: number[]
 }
+
+interface MolloMemberData {
+  messageId: number
+  sendDate: number
+  section: number
+  open: boolean
+  unsubscribe: false
+}
+
 export interface Member {
   id: number
   changed: number
@@ -26,10 +35,10 @@ export interface Member {
   error: boolean
   read: boolean
   unsubscribe: boolean
-  groups?: SubscriberGroup[]
+  groups: SubscriberGroup[]
   origin: Origin
   newsletter: boolean
-  data: any
+  data: MolloMemberData[]
 }
 
 export interface Subscriber {
@@ -43,9 +52,9 @@ export interface Subscriber {
   error: boolean
   read: boolean
   newsletter: boolean
-  groups?: SubscriberGroup[]
+  groups: SubscriberGroup[]
   origin: Origin
-  data: any
+  data: MolloMemberData[]
 }
 
 export interface Subscribers {
@@ -104,22 +113,34 @@ interface Category {
   id: number
   name: string
 }
+export interface MolloMessage {
+  id: number
+  title: string
+  created: number
+  changed: number
+  category: Category[]
+  text: string
+  subscriberGroups: SubscriberGroup[]
+  isSend: boolean
+  send: number
+  isTemplate: boolean
+}
 
 export interface Newsletter {
   id: number
   title: string
-  created_ts: number
+  createdTs: number
   created: Date
-  changed_ts: number
+  changedTs: number
   changed: Date
   category: Category[]
   text: string
-  subscriber_group: SubscriberGroup[]
-  is_send: boolean
-  send_ts: number
+  subscriberGroups: SubscriberGroup[]
+  isSend: boolean
+  sendTs: number
   send: Date
-  is_template: boolean
-  count: {
+  isTemplate: boolean
+  count?: {
     all: number
     send: number
     read: number
@@ -132,7 +153,7 @@ export interface MemberResponse {
   set: number
   start?: number
   length?: number
-  subscriber_group: number
+  subscriberGroups: number
   members: Member[]
 }
 

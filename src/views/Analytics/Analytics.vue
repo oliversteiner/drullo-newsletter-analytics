@@ -4,40 +4,40 @@
 
     <!-- Newsletter Data -->
     <div class="box newsletter-data">
+      <!-- Date -->
+      <div>
+        <span class="label">Versendet am: </span>
+        <!-- not send -->
+        <div v-if="!newsletter.isSend">
+          <span> - </span>
+        </div>
+        <!-- send -->
+        <div v-if="newsletter.isSend">
+          <span v-if="newsletter.isSend">{{ newsletter.send | moment('DD. MMMM - HH:mm') }}</span>
+        </div>
+      </div>
+
       <!-- Title Wrapper -->
       <div class="selector-background" :class="{ 'selector-active': isOpenSelector }">
         <!-- Title -->
         <h2 class="selector-trigger" @click="toggleSelector()">
-          <font-awesome-icon v-if="!isOpenSelector" class="title-caret" icon="caret-right" />
-          <font-awesome-icon v-if="isOpenSelector" icon="caret-down" />
-          {{ newsletter.title }}
+          <font-awesome-icon v-if="!isOpenSelector" class="title-caret" icon="caret-right"></font-awesome-icon>
+          <font-awesome-icon v-if="isOpenSelector" icon="caret-down"></font-awesome-icon>
+          <div class="title-text">{{ newsletter.title }}</div>
         </h2>
 
         <!-- Newletter selector -->
         <div v-if="isOpenSelector" class="selector-wrapper">
           <NewsletterSelector
-            :newsletter-list="newsletterList"
-            :current="selected"
+            :newsletter-list-send="newsletterListSortedSend.send"
+            :newsletter-list-un-send="newsletterListSortedSend.unSend"
+            :selected-newsletter="newsletterID"
             @changeNewsletter="changeNewsletter($event)"
           />
         </div>
       </div>
       <div class="selector-title-placeholder" :class="{ 'placeholder-active': isOpenSelector }">
         <h2>.</h2>
-      </div>
-
-      <!-- Date -->
-      <div>
-        <span class="label">Versendet am: </span>
-        <!-- not send -->
-        <div v-if="!newsletter.is_send">
-          <span> - </span>
-        </div>
-        <!-- send -->
-        <div v-if="newsletter.is_send">
-          <span v-if="newsletter.is_send">{{ newsletter.send | moment('DD.MM.YYYY - HH:mm') }}</span>
-          <span v-if="newsletter.is_send">( {{ newsletter.send | moment('calendar') }} )</span>
-        </div>
       </div>
     </div>
 
@@ -46,7 +46,12 @@
       <h3>Empfänger Gruppen</h3>
       <nav class="navbar">
         <ul class="navbar nav">
-          <li v-for="group in subscriberGroups" :key="group.id" class="nav-item">
+          <li
+            v-for="group in subscriberGroups"
+            :key="group.id"
+            class="nav-item btn btn-outline"
+            @click="changeSubscriberGroup(group.id)"
+          >
             {{ group.name }}
           </li>
         </ul>
@@ -57,20 +62,16 @@
     <div class="box box-list">
       <table>
         <tr>
-          <th>Personen in der Gruppe:</th>
-          <td>{{ newsletter.count.all }}</td>
-        </tr>
-        <tr>
           <th>Versendete Newsletter:</th>
-          <td>{{ statistic.send }}</td>
+          <td>{{ statistic1.send }}</td>
         </tr>
         <tr>
           <th>angesehen:</th>
-          <td>{{ statistic.open }}</td>
+          <td>{{ statistic1.open }}</td>
         </tr>
         <tr>
           <th>Abmeldungen:</th>
-          <td>{{ statistic.unsubscribe }}</td>
+          <td>{{ statistic1.unsubscribe }}</td>
         </tr>
       </table>
     </div>
@@ -111,7 +112,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator'
+import { Vue, Component, Watch } from 'vue-property-decorator'
 import Timeline from '@/components/Timeline/Timeline.vue'
 import PieChart from '@/components/PieChart/PieChart.vue'
 import RawDataList from '@/components/RawDataList/RawDataList.vue'
@@ -119,32 +120,29 @@ import newsletters from '@/store/modules/newsletters'
 import NewsletterSelector from '@/components/NewsletterSelector/NewsletterSelector.vue'
 import subscribers from '@/store/modules/subscribers'
 import { eventBus } from '@/main'
-import { Subscriber } from '@/store/models'
+import { MolloMemberData, Newsletter, Subscriber } from '@/store/models'
 
 @Component({
   components: { RawDataList, Timeline, PieChart, NewsletterSelector },
 })
 export default class Analytics extends Vue {
-  private selected: number = 0
   private isOpenSelector: boolean = false
   private loading: boolean = true
   private loadingState: number = 0
   private numberOfAllSubscribers: number = 0
-  private messageID = 0
-  private statistic = { send: 0, open: 0, unsubscribe: 0 }
+  private newsletterID: number = 0
+  private subGroupID: number = 0
+  private statistic = {}
 
-  changeNewsletter(selected: number) {
-    console.log('event', selected)
-    this.messageID = newsletters.newsletterList[selected].id
-    console.log('this.messageID', this.messageID)
+  changeNewsletter(newsletterID: number) {
+    console.log('event', newsletterID)
+    this.newsletterID = newsletterID
+    this.subGroupID = this.getGroupsfromNewsletter()
+    console.log('this.newsletterID', this.newsletterID)
 
-    this.selected = selected
     // close Selector
     this.isOpenSelector = false
-    this.updateStatistic()
   }
-
-  loadSubscribers() {}
 
   openSelector() {
     this.isOpenSelector = true
@@ -155,11 +153,44 @@ export default class Analytics extends Vue {
   }
 
   get newsletterList() {
-    return newsletters.newsletterList
+    return newsletters.list
+  }
+
+  get newsletterListSortedSend() {
+    let send: Newsletter[] = []
+    let unSend: Newsletter[] = []
+
+    const items = newsletters.list
+    items.map((item: Newsletter) => {
+      if (item.isSend) {
+        send.push(item)
+      } else {
+        unSend.push(item)
+      }
+    })
+    return { send: send, unSend: unSend }
   }
 
   get subscriberList() {
-    return subscribers.subscriberList
+    const newSubscribers = subscribers.list
+    console.log('newSubscribers', newSubscribers)
+
+    newSubscribers
+      .filter(sub => sub.groups.length > 0)
+      .filter(sub => {
+        let result = false
+        sub.groups.map(group => {
+          if (group.id == this.subGroupID) {
+            console.warn('search for ' + this.subGroupID, result)
+            result = true
+          }
+        })
+        return result
+      })
+
+    console.log('newSubscribers', newSubscribers.length)
+
+    return newSubscribers
   }
 
   get numberOfSubscribers() {
@@ -167,40 +198,92 @@ export default class Analytics extends Vue {
   }
 
   get subscriberGroups() {
-    return this.newsletter.subscriber_group
+    if (this.newsletter) return this.newsletter.subscriberGroups
   }
 
   get newsletter() {
-    return newsletters.newsletterList[this.selected]
+    let currentNewsletter: Newsletter | boolean
+
+    if (this.newsletterID === 0) {
+      currentNewsletter = newsletters.list[0]
+      // get latest Newsletter who was sended
+      const result = newsletters.list.filter(newsletter => newsletter.isSend)
+      if (result.length != 0) {
+        console.log('getNewsletter', result)
+        currentNewsletter = result[0]
+      } else {
+        console.error('No Newsletter found', this.newsletterID)
+        currentNewsletter = false
+      }
+
+      console.log('defaultNewsletter', currentNewsletter)
+    } else {
+      const result = newsletters.list.filter(newsletter => newsletter.id === this.newsletterID)
+      if (result.length != 0) {
+        console.log('getNewsletter', result)
+        currentNewsletter = result[0]
+      } else {
+        console.error('No Newsletter found', this.newsletterID)
+        currentNewsletter = false
+      }
+    }
+    return currentNewsletter
+  }
+
+  changeSubscriberGroup(groupID: number) {
+    console.log('changeSubscriberGroup', groupID)
+    this.subGroupID = groupID
+    this.updateStatistic()
+  }
+
+  get statistic1() {
+    return this.statistic
   }
 
   updateStatistic() {
-    this.statistic = { open: 0, send: 0, unsubscribe: 0 }
-    const subs = subscribers.subscriberList
+    console.log('updateStatistic', this.newsletterID)
+
+    const statistic = { open: 0, send: 0, unsubscribe: 0 }
+    const subs = this.subscriberList
     subs.map((sub: Subscriber) => {
+      // MolloMessages send?
+      console.log('sub', sub)
 
-      // Message send?
       if (sub.data) {
-        console.log('sub.data', sub.data)
-
-        sub.data.map((item: any) => {
-          if (item.message_id === this.messageID) {
+        sub.data.map((item: MolloMemberData) => {
+          if (item.messageId === this.newsletterID) {
             // Send
-            this.statistic.send++
+            statistic.send++
 
             // Open
-            if (item.open == 1) {
-              this.statistic.open++
+            if (item.open) {
+              statistic.open++
             }
 
             // unsubscribe
-            if (!sub.newsletter) {
-              this.statistic.unsubscribe++
+            if (item.unsubscribe) {
+              statistic.unsubscribe++
             }
           }
         })
       }
     })
+    this.statistic = statistic
+    console.log('statistic', statistic)
+  }
+
+  getGroupsfromNewsletter() {
+    if (this.newsletter) {
+      const result = this.newsletter
+      return result.subscriberGroups[0].id
+    } else {
+      return 0
+    }
+  }
+
+  @Watch('subGroupID')
+  testFunc() {
+    this.updateStatistic()
   }
 
   async created() {
@@ -211,12 +294,21 @@ export default class Analytics extends Vue {
       this.loadingState = data
       console.log('loading data...', data)
     })
+    // Newsletter
     await newsletters.refreshNewsletterList()
+
+    // Subscribers
     await subscribers.getSubscriberCount()
     await subscribers.refreshSubscriberList()
     this.loading = false
+
+    // get newsletter
+    const result = newsletters.list.filter(newsletter => newsletter.isSend)
+
+    this.changeNewsletter(result[0].id)
+    this.subGroupID = result[0].subscriberGroups[0].id
     this.updateStatistic()
-    console.log('actual length', subscribers.subscriberList.length)
+    console.log('actual length', subscribers.list.length)
   }
 }
 </script>

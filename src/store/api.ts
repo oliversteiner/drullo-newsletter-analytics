@@ -7,7 +7,7 @@ import {
   ProfileResponse,
   UserForUpdate,
   TasksResponse,
-  NewslettersResponse,
+  MolloMessageResponse,
   MemberResponse,
   Member,
 } from './models'
@@ -29,7 +29,7 @@ export async function getTaskList() {
 
 export async function getNewsletterList() {
   const response = await smmgApi.get('/api/newsletters')
-  return response.data as NewslettersResponse
+  return response.data as MolloMessageResponse
 }
 
 export async function getSubscribersList() {
@@ -96,7 +96,7 @@ export async function getAllSubscribers() {
     set: range,
     start: 0,
     length: memberLength,
-    subscriber_group: 0,
+    subscriberGroups: 0,
     members: members,
   }
 

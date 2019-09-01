@@ -1,8 +1,7 @@
 import { getModule, Module, MutationAction, VuexModule } from 'vuex-module-decorators'
 import store from '@/store'
 import * as api from '@/store/api'
-import {Newsletter, Subscriber} from '@/store/models'
-import { State } from 'vuex-class'
+import { MolloMessage, Newsletter } from '@/store/models'
 
 @Module({
   dynamic: true,
@@ -11,7 +10,7 @@ import { State } from 'vuex-class'
   store,
 })
 class NewslettersModule extends VuexModule {
-  public newsletterList: Newsletter[] = []
+  public list: Newsletter[] = []
 
   @MutationAction
   async refreshNewsletterList() {
@@ -20,16 +19,37 @@ class NewslettersModule extends VuexModule {
     const newsletters: Newsletter[] = []
 
     if (items) {
-      items.map((item: Newsletter) => {
-        const newsletter: Newsletter = item
-        newsletter.created = new Date(item.created_ts * 1000)
-        newsletter.changed = new Date(item.changed_ts * 1000)
-        newsletter.send = new Date(item.send_ts * 1000)
+      items.map((item: MolloMessage) => {
+        const newsletter: Newsletter = {
+          id: item.id,
+          title: item.title,
+          createdTs: item.created,
+          changedTs: item.changed,
+          sendTs: item.send,
+          isSend: item.isSend,
+          isTemplate: item.isTemplate,
+          text: item.text,
+          category: item.category,
+          created: new Date(item.created * 1000),
+          changed: new Date(item.changed * 1000),
+          send: new Date(item.send * 1000),
+          subscriberGroups: item.subscriberGroups,
+          count: {
+            all: 0,
+            read: 0,
+            send: 0,
+            unsubscribe: 0,
+          },
+        }
 
         newsletters.push(newsletter)
       })
+    } else {
+      console.warn('no Messages from Server')
     }
-    return { newsletterList: newsletters }
+    console.log('newsletters', newsletters)
+
+    return { list: newsletters }
   }
 }
 

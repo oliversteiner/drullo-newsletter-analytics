@@ -14,7 +14,7 @@ import { Subscriber } from '@/store/models'
   },
 })
 export default class SubscriberTable extends Vue {
-  @Prop() subscriberList!: Subscriber[]
+  @Prop() list!: Subscriber[]
 
   get columns() {
     const columns = [

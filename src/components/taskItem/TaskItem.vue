@@ -42,7 +42,7 @@
                     </div>
                 </div>
 
-                <!-- Status Message-->
+                <!-- Status MolloMessages-->
                 <div class="card-status-message">{{ taskItem.statusMessage }}</div>
 
                 <!-- Title -->

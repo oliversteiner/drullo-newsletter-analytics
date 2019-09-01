@@ -10,18 +10,19 @@ import { Member, Subscriber } from '@/store/models'
   store,
 })
 class SubscriberModule extends VuexModule {
-  public subscriberList: Subscriber[] = []
+  public list: Subscriber[] = []
   public subscriberCount: number = 0
 
   @MutationAction
   async getSubscriberCount() {
     const all = await api.getSubscriberCount()
-    return { subscriberCount: all }
+  //  this.subscriberCount = all
+    return all
   }
 
   @MutationAction
   async refreshSubscriberList() {
-    this.subscriberList = []
+    this.list = []
     const listFromServer = await api.getAllSubscribers()
     const members = listFromServer.members
     console.log('members', members)
@@ -44,7 +45,6 @@ class SubscriberModule extends VuexModule {
           data: member.data,
         }
 
-
         subscriber.createdTs = member.created
         subscriber.changedTs = member.changed
         subscriber.created = new Date(member.created * 1000)
@@ -56,8 +56,8 @@ class SubscriberModule extends VuexModule {
         subscribers.map((subscriber: Subscriber) => {
           if (subscriber.id == member.id) {
             console.log('------ duplicate ------', member.id)
-            console.log('--Member:', member);
-            console.log('--Subscriber:', subscriber);
+            //  console.log('--Member:', member);
+            //  console.log('--Subscriber:', subscriber);
 
             duplicate = true
             duplicatesCount++
@@ -70,8 +70,8 @@ class SubscriberModule extends VuexModule {
       })
     }
     console.log('Duplicates:', duplicatesCount)
-
-    return { subscriberList: subscribers }
+  //  this.list = subscribers
+    return { list: subscribers }
   }
 }
 

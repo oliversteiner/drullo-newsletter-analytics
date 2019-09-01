@@ -1,41 +1,60 @@
 <template>
-    <div class="newsletter-selector">
-        <ul>
-            <li v-for="(newsletter , index) in newsletterList"
-                :key="newsletter.id"
-                @click="changeItem(index)"
-                v-bind:class="{'active': current === index}">
-                <div class="wrapper">
-                    <!-- Label -->
-                    <div class="label">{{ newsletter.title}}</div>
-                    <!-- Send Date -->
-                    <div class="date">
-                        <div v-if="!newsletter.is_send"> -</div>
-                        <div v-if="newsletter.is_send">({{newsletter.send| moment('DD.MM.YYYY')}})</div>
-                    </div>
-                </div>
-            </li>
-        </ul>
-    </div>
+  <div class="newsletter-selector">
+    <!-- ============= Send ============= -->
+    <ul>
+      <li
+        v-for="newsletter in newsletterListSend"
+        :key="newsletter.id"
+        :class="{ active: selectedNewsletter === newsletter.id }"
+        @click="changeItem(newsletter.id)"
+      >
+        <div class="wrapper">
+          <!-- Send Date -->
+          <div class="date">
+            <div v-if="newsletter.isSend">{{ newsletter.send | moment('DD. MMM') }}</div>
+          </div>
+          <!-- Label -->
+          <div class="label">{{ newsletter.title }}</div>
+        </div>
+      </li>
+    </ul>
+    <!-- ============= UnSend ============= -->
+    <div class="divider-un-send">Noch nicht gesended</div>
+    <ul>
+      <li
+        v-for="(newsletter) in newsletterListUnSend"
+        :key="newsletter.id"
+        @click="changeItem(newsletter.id)"
+        :class="{ active: selectedNewsletter === newsletter.id }"
+      >
+        <div class="wrapper">
+          <!-- Send Date -->
+          <div class="date">-</div>
+
+          <!-- Label -->
+          <div class="label">{{ newsletter.title }}</div>
+        </div>
+      </li>
+    </ul>
+  </div>
 </template>
 <script lang="ts">
-  import {Vue, Component, Prop, Model} from 'vue-property-decorator'
-  import {Newsletter} from '@/store/models'
+import { Vue, Component, Prop, Model } from 'vue-property-decorator'
+import { Newsletter } from '@/store/models'
 
-  @Component
-  export default class NewsletterSelector extends Vue {
-    @Prop() newsletterList!: Newsletter[]
-    @Prop() current!: number
+@Component
+export default class NewsletterSelector extends Vue {
+  @Prop() newsletterListSend!: Newsletter[]
+  @Prop() newsletterListUnSend!: Newsletter[]
+  @Prop() selectedNewsletter!: number
 
-    changeItem(selected: number) {
-      console.log('changeItem', selected);
-      this.$emit('changeNewsletter', selected);
-    }
-
-
+  changeItem(newsletterID: number) {
+    console.log('change current Newsletter ID', newsletterID)
+    this.$emit('changeNewsletter', newsletterID)
   }
+}
 </script>
 
 <style lang="scss">
-    @import 'NewsletterSelector';
+@import 'NewsletterSelector';
 </style>

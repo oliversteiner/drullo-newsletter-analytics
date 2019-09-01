@@ -15,7 +15,7 @@
       <subscriberTable :subscriber-list="subscriberList"></subscriberTable>
 
       <!--        <ul>
-        <li v-for="subscriber in subscriberList">{{ subscriber.id }} - {{ subscriber.contact.email }}</li>
+        <li v-for="subscriber in list">{{ subscriber.id }} - {{ subscriber.contact.email }}</li>
       </ul>-->
     </div>
   </div>
@@ -36,11 +36,12 @@ export default class SubscribersPage extends Vue {
   private numberOfAllSubscribers: number = 0
 
   get subscriberList() {
-    return subscribers.subscriberList
+   // return subscribers.list
+    return []
   }
 
   get numberOfSubscribers() {
-    return subscribers.subscriberList.length
+    return subscribers.list.length
   }
 
   async created() {
