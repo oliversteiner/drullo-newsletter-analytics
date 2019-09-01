@@ -107,6 +107,7 @@ export interface TaskRelated {
 interface SubscriberGroup {
   id: number
   name: string
+  subscribers?: number
 }
 
 interface Category {
@@ -214,4 +215,14 @@ export interface UserResponse {
 
 export interface ProfileResponse {
   profile: Profile
+}
+
+
+
+export interface SubscriberCountResponse {
+  countMembers: number
+}
+
+export interface SubscriberGroupsResponse {
+  subscriberGroups: SubscriberGroup[]
 }

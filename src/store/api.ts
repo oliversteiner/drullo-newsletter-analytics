@@ -10,6 +10,8 @@ import {
   MolloMessageResponse,
   MemberResponse,
   Member,
+  SubscriberCountResponse,
+  SubscriberGroupsResponse,
 } from './models'
 import tasks from '@/store/modules/tasks'
 import { eventBus } from '@/main'
@@ -39,14 +41,18 @@ export async function getSubscribersList() {
 
 export async function getSubscriberCount() {
   const response = await smmgApi.get('/api/members/count')
-  return response.data.all
+  return response.data as SubscriberCountResponse
+}
+export async function getSubscriberGroups() {
+  const response = await smmgApi.get('/api/subscriberGroups')
+  return response.data as SubscriberGroupsResponse
 }
 
 export async function getAllSubscribers() {
   const response = await smmgApi.get('/api/members/count')
 
   // Number of all Members
-  const memberLength = response.data.all
+  const memberLength = response.data.countMembers
   eventBus.$emit('all Members', memberLength)
 
   // Args for request url

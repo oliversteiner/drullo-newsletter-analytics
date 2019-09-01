@@ -1,7 +1,8 @@
-import { getModule, Module, MutationAction, VuexModule } from 'vuex-module-decorators'
+import { Action, getModule, Module, Mutation, MutationAction, VuexModule } from 'vuex-module-decorators'
 import store from '@/store'
 import * as api from '@/store/api'
-import { Member, Subscriber } from '@/store/models'
+import {Member, Subscriber, SubscriberCountResponse, SubscriberGroup, SubscriberGroupsResponse} from '@/store/models'
+import { AxiosResponse } from 'axios'
 
 @Module({
   dynamic: true,
@@ -11,13 +12,33 @@ import { Member, Subscriber } from '@/store/models'
 })
 class SubscriberModule extends VuexModule {
   public list: Subscriber[] = []
-  public subscriberCount: number = 0
+  public groups: SubscriberGroup[] = []
+  public count: number = 0
 
-  @MutationAction
-  async getSubscriberCount() {
-    const all = await api.getSubscriberCount()
-  //  this.subscriberCount = all
-    return all
+
+
+  @Mutation
+  public getSubscriberCount({ countMembers }: SubscriberCountResponse) {
+    if (countMembers) {
+      this.count = countMembers
+    }
+  }
+
+  @Action({ commit: 'getSubscriberGroups' })
+  async loadSubscriberCount() {
+    return await api.getSubscriberCount()
+  }
+
+  @Mutation
+  public getSubscriberGroups({ subscriberGroups }: SubscriberGroupsResponse) {
+    if (subscriberGroups && subscriberGroups.length) {
+      this.groups = subscriberGroups
+    }
+  }
+
+  @Action({ commit: 'getSubscriberGroups' })
+  async loadSubscriberGroups() {
+    return await api.getSubscriberGroups()
   }
 
   @MutationAction
@@ -25,12 +46,13 @@ class SubscriberModule extends VuexModule {
     this.list = []
     const listFromServer = await api.getAllSubscribers()
     const members = listFromServer.members
-    console.log('members', members)
+    // console.log('members', members)
 
     const subscribers: Subscriber[] = []
     let duplicatesCount = 0
 
     if (members) {
+      // ------------------  Subscribers  ------------------
       members.map((member: Member) => {
         let duplicate = false
         const subscriber: Subscriber = {
@@ -70,9 +92,8 @@ class SubscriberModule extends VuexModule {
       })
     }
     console.log('Duplicates:', duplicatesCount)
-  //  this.list = subscribers
+    //  this.list = subscribers
     return { list: subscribers }
   }
 }
-
 export default getModule(SubscriberModule)

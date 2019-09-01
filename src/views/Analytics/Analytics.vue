@@ -31,7 +31,7 @@
           <NewsletterSelector
             :newsletter-list-send="newsletterListSortedSend.send"
             :newsletter-list-un-send="newsletterListSortedSend.unSend"
-            :selected-newsletter="newsletterID"
+            :selected-newsletter="newsletterId"
             @changeNewsletter="changeNewsletter($event)"
           />
         </div>
@@ -63,15 +63,15 @@
       <table>
         <tr>
           <th>Versendete Newsletter:</th>
-          <td>{{ statistic1.send }}</td>
+          <td>{{ statistic.send }}</td>
         </tr>
         <tr>
           <th>angesehen:</th>
-          <td>{{ statistic1.open }}</td>
+          <td>{{ statistic.open }}</td>
         </tr>
         <tr>
           <th>Abmeldungen:</th>
-          <td>{{ statistic1.unsubscribe }}</td>
+          <td>{{ statistic.unsubscribe }}</td>
         </tr>
       </table>
     </div>
@@ -130,15 +130,17 @@ export default class Analytics extends Vue {
   private loading: boolean = true
   private loadingState: number = 0
   private numberOfAllSubscribers: number = 0
-  private newsletterID: number = 0
-  private subGroupID: number = 0
+  private newsletterId: number = 0
+  private subGroupId: number = 0
   private statistic = {}
+  private filterdSubscribers: Subscriber[] = []
+  private currentNewsletter!: Newsletter
 
-  changeNewsletter(newsletterID: number) {
-    console.log('event', newsletterID)
-    this.newsletterID = newsletterID
-    this.subGroupID = this.getGroupsfromNewsletter()
-    console.log('this.newsletterID', this.newsletterID)
+  changeNewsletter(newsletterId: number) {
+    console.log('event', newsletterId)
+    this.newsletterId = newsletterId
+    this.subGroupId = this.getGroupsfromNewsletter()
+    console.log('this.newsletterId', this.newsletterId)
 
     // close Selector
     this.isOpenSelector = false
@@ -172,29 +174,27 @@ export default class Analytics extends Vue {
   }
 
   get subscriberList() {
-    const newSubscribers = subscribers.list
-    console.log('newSubscribers', newSubscribers)
+    // console.log('newSubscribers', subscribers.list)
 
-    newSubscribers
+    const filterdSubscribers = subscribers.list
       .filter(sub => sub.groups.length > 0)
       .filter(sub => {
-        let result = false
+        let isInGroup = false
         sub.groups.map(group => {
-          if (group.id == this.subGroupID) {
-            console.warn('search for ' + this.subGroupID, result)
-            result = true
+          if (group.id == this.subGroupId) {
+            console.log('isInGroup ' + this.subGroupId)
+            isInGroup = true
           }
         })
-        return result
+        return isInGroup
       })
 
-    console.log('newSubscribers', newSubscribers.length)
-
-    return newSubscribers
+    this.filterdSubscribers = filterdSubscribers
+    return filterdSubscribers
   }
 
   get numberOfSubscribers() {
-    return subscribers.subscriberCount
+    return subscribers.count
   }
 
   get subscriberGroups() {
@@ -204,7 +204,7 @@ export default class Analytics extends Vue {
   get newsletter() {
     let currentNewsletter: Newsletter | boolean
 
-    if (this.newsletterID === 0) {
+    if (this.newsletterId === 0) {
       currentNewsletter = newsletters.list[0]
       // get latest Newsletter who was sended
       const result = newsletters.list.filter(newsletter => newsletter.isSend)
@@ -212,18 +212,18 @@ export default class Analytics extends Vue {
         console.log('getNewsletter', result)
         currentNewsletter = result[0]
       } else {
-        console.error('No Newsletter found', this.newsletterID)
+        console.error('No Newsletter found', this.newsletterId)
         currentNewsletter = false
       }
 
       console.log('defaultNewsletter', currentNewsletter)
     } else {
-      const result = newsletters.list.filter(newsletter => newsletter.id === this.newsletterID)
+      const result = newsletters.list.filter(newsletter => newsletter.id === this.newsletterId)
       if (result.length != 0) {
         console.log('getNewsletter', result)
         currentNewsletter = result[0]
       } else {
-        console.error('No Newsletter found', this.newsletterID)
+        console.error('No Newsletter found', this.newsletterId)
         currentNewsletter = false
       }
     }
@@ -232,26 +232,57 @@ export default class Analytics extends Vue {
 
   changeSubscriberGroup(groupID: number) {
     console.log('changeSubscriberGroup', groupID)
-    this.subGroupID = groupID
+    this.subGroupId = groupID
     this.updateStatistic()
   }
 
   get statistic1() {
-    return this.statistic
+    console.log('--this.newsletterId', this.newsletterId)
+
+    let statistic = { open: 0, send: 0, unsubscribe: 0 }
+    const subs = subscribers.list
+    subs.map((sub: Subscriber) => {
+      // MolloMessages send?
+
+      if (sub.data) {
+        sub.data.forEach((item: MolloMemberData) => {
+          if (item && item.messageId && item.messageId === this.newsletterId) {
+            console.log('item', item)
+
+            // Send
+            if (item.sendDate) {
+              statistic.send++
+            }
+            // Open
+            if (item.open) {
+              statistic.open++
+            }
+
+            // unsubscribe
+            if (item.unsubscribe) {
+              statistic.unsubscribe++
+            }
+          }
+        })
+      }
+    })
+    return statistic
   }
 
   updateStatistic() {
-    console.log('updateStatistic', this.newsletterID)
+    console.log('updateStatistic', this.newsletterId)
 
-    const statistic = { open: 0, send: 0, unsubscribe: 0 }
-    const subs = this.subscriberList
+    let statistic = { open: 0, send: 0, unsubscribe: 0 }
+    const subs = subscribers.list
+    console.log('subs', subs)
+
     subs.map((sub: Subscriber) => {
       // MolloMessages send?
-      console.log('sub', sub)
 
       if (sub.data) {
-        sub.data.map((item: MolloMemberData) => {
-          if (item.messageId === this.newsletterID) {
+        sub.data.forEach((item: MolloMemberData) => {
+          if (item && item.messageId && item.messageId === this.newsletterId) {
+            // console.log('sub', sub)
             // Send
             statistic.send++
 
@@ -281,7 +312,7 @@ export default class Analytics extends Vue {
     }
   }
 
-  @Watch('subGroupID')
+  @Watch('subGroupId')
   testFunc() {
     this.updateStatistic()
   }
@@ -292,23 +323,24 @@ export default class Analytics extends Vue {
     })
     eventBus.$on('loading Members', (data: number) => {
       this.loadingState = data
-      console.log('loading data...', data)
+      // console.log('loading data...', data)
     })
     // Newsletter
     await newsletters.refreshNewsletterList()
 
     // Subscribers
-    await subscribers.getSubscriberCount()
+    await subscribers.loadSubscriberCount()
     await subscribers.refreshSubscriberList()
+    await subscribers.loadSubscriberGroups()
     this.loading = false
 
     // get newsletter
     const result = newsletters.list.filter(newsletter => newsletter.isSend)
-
-    this.changeNewsletter(result[0].id)
-    this.subGroupID = result[0].subscriberGroups[0].id
-    this.updateStatistic()
-    console.log('actual length', subscribers.list.length)
+    const newsletterId = result[0].id
+    this.currentNewsletter = result[0]
+    this.changeNewsletter(newsletterId)
+    this.newsletterId = newsletterId
+    this.subGroupId = result[0].subscriberGroups[0].id
   }
 }
 </script>
