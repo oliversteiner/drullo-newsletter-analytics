@@ -14,7 +14,7 @@ import { Subscriber } from '@/store/models'
   },
 })
 export default class SubscriberTable extends Vue {
-  @Prop() list!: Subscriber[]
+  @Prop() subscriberList!: Subscriber[]
 
   get columns() {
     const columns = [
@@ -82,7 +82,6 @@ export default class SubscriberTable extends Vue {
       rows.push(row)
     })
 
-    console.log(this.subscriberList)
     console.log(rows)
 
     return rows

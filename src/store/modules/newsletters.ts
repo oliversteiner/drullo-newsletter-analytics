@@ -42,6 +42,8 @@ class NewslettersModule extends VuexModule {
           },
         }
 
+
+
         newsletters.push(newsletter)
       })
     } else {

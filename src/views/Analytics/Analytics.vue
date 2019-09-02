@@ -52,7 +52,7 @@
             class="nav-item btn btn-outline"
             @click="changeSubscriberGroup(group.id)"
           >
-            {{ group.name }}
+            {{ group.name }} ({{ group.subscribers }})
           </li>
         </ul>
       </nav>
@@ -202,31 +202,27 @@ export default class Analytics extends Vue {
   }
 
   get newsletter() {
-    let currentNewsletter: Newsletter | boolean
+    let currentNewsletter = newsletters.list[0]
 
     if (this.newsletterId === 0) {
       currentNewsletter = newsletters.list[0]
       // get latest Newsletter who was sended
       const result = newsletters.list.filter(newsletter => newsletter.isSend)
       if (result.length != 0) {
-        console.log('getNewsletter', result)
         currentNewsletter = result[0]
       } else {
         console.error('No Newsletter found', this.newsletterId)
-        currentNewsletter = false
       }
-
-      console.log('defaultNewsletter', currentNewsletter)
     } else {
       const result = newsletters.list.filter(newsletter => newsletter.id === this.newsletterId)
       if (result.length != 0) {
-        console.log('getNewsletter', result)
         currentNewsletter = result[0]
       } else {
         console.error('No Newsletter found', this.newsletterId)
-        currentNewsletter = false
       }
     }
+
+    this.currentNewsletter = currentNewsletter
     return currentNewsletter
   }
 

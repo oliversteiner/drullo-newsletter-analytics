@@ -36,12 +36,11 @@ export default class SubscribersPage extends Vue {
   private numberOfAllSubscribers: number = 0
 
   get subscriberList() {
-   // return subscribers.list
-    return []
+    return subscribers.list
   }
 
   get numberOfSubscribers() {
-    return subscribers.list.length
+    return subscribers.count
   }
 
   async created() {
