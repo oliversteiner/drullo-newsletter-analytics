@@ -15,3 +15,12 @@ export const enum TaskStatusMessage {
   WARNING = 'beendet mit Fehlern',
   ERROR = 'nicht ausgeführt',
 }
+
+export const enum EnumsSubscriberStatus {
+  NONE = 'none', // white outline
+  SEND = 'send', // white full
+  OPEN = 'open', // green
+  ERROR = 'error', // red ( email-address invalide)
+  UNSUBSCRIBE = 'unsubscribe', // viollet
+  WARNING = 'warning', // orange (not definded)
+}

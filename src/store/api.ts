@@ -29,6 +29,7 @@ export async function getTaskList() {
   return response.data as TasksResponse
 }
 
+
 export async function getNewsletterList() {
   const response = await smmgApi.get('/api/newsletters')
   return response.data as MolloMessageResponse

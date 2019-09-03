@@ -1,118 +1,142 @@
 <template>
-  <div v-if="newsletter" class="analytics">
+  <div class="analytics">
+
+    <!-- Loading Spinner -->
+    <div v-if="loading" class="loading">
+      <div class="loading-icon">
+        <font-awesome-icon icon="circle-notch" spin size="lg" />
+      </div>
+      <div class="loading-text">
+        aktualisiere Empfängerdaten ...
+      </div>
+
+      <div class="loading-count">{{ loadingState }} von {{ numberOfAllSubscribers }}</div>
+    </div>
+
     <h1>Analytics</h1>
 
-    <!-- Newsletter Data -->
-    <div class="box newsletter-data">
-      <!-- Date -->
-      <div>
-        <span class="label">Versendet am: </span>
-        <!-- not send -->
-        <div v-if="!newsletter.isSend">
-          <span> - </span>
-        </div>
-        <!-- send -->
-        <div v-if="newsletter.isSend">
-          <span v-if="newsletter.isSend">{{ newsletter.send | moment('DD. MMMM - HH:mm') }}</span>
-        </div>
-      </div>
-
-      <!-- Title Wrapper -->
-      <div class="selector-background" :class="{ 'selector-active': isOpenSelector }">
-        <!-- Title -->
-        <h2 class="selector-trigger" @click="toggleSelector()">
-          <font-awesome-icon v-if="!isOpenSelector" class="title-caret" icon="caret-right"></font-awesome-icon>
-          <font-awesome-icon v-if="isOpenSelector" icon="caret-down"></font-awesome-icon>
-          <div class="title-text">{{ newsletter.title }}</div>
-        </h2>
-
-        <!-- Newletter selector -->
-        <div v-if="isOpenSelector" class="selector-wrapper">
-          <NewsletterSelector
-            :newsletter-list-send="newsletterListSortedSend.send"
-            :newsletter-list-un-send="newsletterListSortedSend.unSend"
-            :selected-newsletter="newsletterId"
-            @changeNewsletter="changeNewsletter($event)"
-          />
-        </div>
-      </div>
-      <div class="selector-title-placeholder" :class="{ 'placeholder-active': isOpenSelector }">
-        <h2>.</h2>
-      </div>
-    </div>
-
-    <!-- Subscriber Groups -->
-    <div class="box box-subscriber-groups">
-      <h3>Empfänger Gruppen</h3>
-      <nav class="navbar">
-        <ul class="navbar nav">
-          <li
-            v-for="group in subscriberGroups"
-            :key="group.id"
-            class="nav-item btn btn-outline"
-            @click="changeSubscriberGroup(group.id)"
-          >
-            {{ group.name }} ({{ group.subscribers }})
-          </li>
-        </ul>
-      </nav>
-    </div>
-
-    <!--  List -->
-    <div class="box box-list">
-      <table>
-        <tr>
-          <th>Versendete Newsletter:</th>
-          <td>{{ statistic.send }}</td>
-        </tr>
-        <tr>
-          <th>angesehen:</th>
-          <td>{{ statistic.open }}</td>
-        </tr>
-        <tr>
-          <th>Abmeldungen:</th>
-          <td>{{ statistic.unsubscribe }}</td>
-        </tr>
-      </table>
-    </div>
-
-    <!-- Pie Chart -->
-    <PieChart />
-
-    <!-- timeline -->
-    <Timeline />
-
-    <!-- Raw Data -->
-    <div class="raw-data">
-      <!-- Loading Spinner -->
-      <div v-if="loading" class="loading">
+    <div v-if="!newsletter">
+      <div class="loading">
         <div class="loading-icon">
           <font-awesome-icon icon="circle-notch" spin size="lg" />
         </div>
         <div class="loading-text">
-          aktualisiere Empfängerdaten ...
+          lade Newsletter Daten ...
         </div>
-
-        <div class="loading-count">{{ loadingState }} von {{ numberOfAllSubscribers }}</div>
       </div>
-
-      <!-- Number of Subscibers-->
-      <div>{{ numberOfSubscribers }} Empfänger</div>
-
-      <!-- List -->
-      <ul>
-        <li v-for="subscriber in subscriberList" :key="subscriber.id + '-analytics'">
-          {{ subscriber.id }} - {{ subscriber.contact.email }}
-        </li>
-      </ul>
     </div>
 
-    <RawDataList />
+    <div v-if="newsletter">
+      <!-- Newsletter Data -->
+      <div class="box newsletter-data">
+        <!-- Date -->
+        <div>
+          <span class="label">Versendet am: </span>
+          <!-- not send -->
+          <div v-if="!newsletter.isSend">
+            <span> - </span>
+          </div>
+          <!-- send -->
+          <div v-if="newsletter.isSend">
+            <span v-if="newsletter.isSend">{{ newsletter.send | moment('DD. MMMM - HH:mm') }}</span>
+          </div>
+        </div>
+
+        <!-- Title Wrapper -->
+        <div class="selector-background" :class="{ 'selector-active': isOpenSelector }">
+          <div ref="collapsibles">
+            <div class="collapsible">
+              <!-- Title -->
+              <h2 class="selector-trigger" @click="toggleSelector()">
+                <font-awesome-icon v-if="!isOpenSelector" class="title-caret" icon="caret-right"></font-awesome-icon>
+                <font-awesome-icon v-if="isOpenSelector" icon="caret-down"></font-awesome-icon>
+                <div class="title-text">{{ newsletter.title }}</div>
+              </h2>
+
+              <!-- Newletter selector -->
+              <div v-show="isOpenSelector" class="selector-wrapper ">
+                <NewsletterSelector
+                  ref="test-ref"
+                  :newsletter-list-send="newsletterListSortedSend.send"
+                  :newsletter-list-un-send="newsletterListSortedSend.unSend"
+                  :selected-newsletter="newsletterId"
+                  @changeNewsletter="changeNewsletter($event)"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="selector-title-placeholder" :class="{ 'placeholder-active': isOpenSelector }">
+          <h2>.</h2>
+        </div>
+      </div>
+
+      <!-- Subscriber Groups -->
+      <div class="box box-subscriber-groups">
+        <h3>Empfänger Gruppen</h3>
+        <nav class="navbar">
+          <ul class="navbar nav">
+            <li
+              v-for="group in subscriberGroups"
+              :key="group.id"
+              class="nav-item btn btn-outline"
+              @click="changeSubscriberGroup(group.id)"
+            >
+              {{ group.name }} ({{ group.subscribers }})
+            </li>
+          </ul>
+        </nav>
+      </div>
+
+      <!--  List -->
+      <div class="box box-list">
+        <table>
+          <tr>
+            <th>Versendete Newsletter:</th>
+            <td>{{ statistic.send }}</td>
+          </tr>
+          <tr>
+            <th>angesehen:</th>
+            <td>{{ statistic.open }}</td>
+          </tr>
+          <tr>
+            <th>Abmeldungen:</th>
+            <td>{{ statistic.unsubscribe }}</td>
+          </tr>
+        </table>
+      </div>
+
+      <!-- Pie Chart -->
+      <PieChart />
+
+      <!-- timeline -->
+      <Timeline />
+
+      <!-- Raw Data -->
+      <div class="raw-data">
+
+
+        <!-- Number of Subscibers-->
+        <div>{{ subscriberList.length }} von {{ numberOfAllSubscribers }} Empfänger</div>
+
+        <!-- List -->
+        <ul class="subscriber-list">
+          <li v-for="subscriber in subscriberList" :key="subscriber.id + '-analytics'">
+            <div class="subscriber-list-wrapper">
+              <div class="subscriber-status" :class="subscriber.currentStatus"></div>
+              <div> {{subscriber.currentStatus}} - {{ subscriber.id }} - {{ subscriber.contact.email }}</div>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <RawDataList />
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component, Watch } from 'vue-property-decorator'
+import { Vue, Component, Watch, Ref } from 'vue-property-decorator'
 import Timeline from '@/components/Timeline/Timeline.vue'
 import PieChart from '@/components/PieChart/PieChart.vue'
 import RawDataList from '@/components/RawDataList/RawDataList.vue'
@@ -121,6 +145,8 @@ import NewsletterSelector from '@/components/NewsletterSelector/NewsletterSelect
 import subscribers from '@/store/modules/subscribers'
 import { eventBus } from '@/main'
 import { MolloMemberData, Newsletter, Subscriber } from '@/store/models'
+import hotkeys from 'hotkeys-js'
+import { EnumsSubscriberStatus } from '@/enums'
 
 @Component({
   components: { RawDataList, Timeline, PieChart, NewsletterSelector },
@@ -137,21 +163,29 @@ export default class Analytics extends Vue {
   private currentNewsletter!: Newsletter
 
   changeNewsletter(newsletterId: number) {
-    console.log('event', newsletterId)
     this.newsletterId = newsletterId
-    this.subGroupId = this.getGroupsfromNewsletter()
-    console.log('this.newsletterId', this.newsletterId)
+    this.currentNewsletter = this.getNewsletterById(newsletterId)
+    this.subGroupId = this.getGroupsFromNewsletter()
 
     // close Selector
     this.isOpenSelector = false
+  }
+
+  getNewsletterById(newsletterId: number) {
+    return newsletters.list.filter(newsletter => newsletter.id === newsletterId)[0]
   }
 
   openSelector() {
     this.isOpenSelector = true
   }
 
+  onClose() {
+    this.isOpenSelector = false
+  }
+
   toggleSelector() {
     this.isOpenSelector = !this.isOpenSelector
+    console.log('toggleSelector', this.isOpenSelector)
   }
 
   get newsletterList() {
@@ -182,15 +216,31 @@ export default class Analytics extends Vue {
         let isInGroup = false
         sub.groups.map(group => {
           if (group.id == this.subGroupId) {
-            console.log('isInGroup ' + this.subGroupId)
+          //  console.log('isInGroup ' + this.subGroupId)
             isInGroup = true
           }
         })
         return isInGroup
       })
 
-    this.filterdSubscribers = filterdSubscribers
-    return filterdSubscribers
+    // set Status based on Message ID
+    let filterdSubscribersStatus = filterdSubscribers.map(subscriber => {
+      // new default status
+      subscriber.currentStatus = EnumsSubscriberStatus.NONE
+      // iterate over status
+      subscriber.status.forEach(message => {
+        if (message.messageId === this.newsletterId) {
+          // add status for current Newsletter
+          subscriber.currentStatus = message.status
+        }
+      })
+      return subscriber
+    })
+
+console.log('filterdSubscribersStatus', filterdSubscribersStatus);
+
+    this.filterdSubscribers = filterdSubscribersStatus
+    return filterdSubscribersStatus
   }
 
   get numberOfSubscribers() {
@@ -237,7 +287,7 @@ export default class Analytics extends Vue {
 
     let statistic = { open: 0, send: 0, unsubscribe: 0 }
     const subs = subscribers.list
-    subs.map((sub: Subscriber) => {
+    subs.forEach((sub: Subscriber) => {
       // MolloMessages send?
 
       if (sub.data) {
@@ -246,7 +296,7 @@ export default class Analytics extends Vue {
             console.log('item', item)
 
             // Send
-            if (item.sendDate) {
+            if (item.sendTS) {
               statistic.send++
             }
             // Open
@@ -272,7 +322,7 @@ export default class Analytics extends Vue {
     const subs = subscribers.list
     console.log('subs', subs)
 
-    subs.map((sub: Subscriber) => {
+    subs.forEach((sub: Subscriber) => {
       // MolloMessages send?
 
       if (sub.data) {
@@ -299,12 +349,18 @@ export default class Analytics extends Vue {
     console.log('statistic', statistic)
   }
 
-  getGroupsfromNewsletter() {
-    if (this.newsletter) {
-      const result = this.newsletter
-      return result.subscriberGroups[0].id
+  getGroupsFromNewsletter() {
+    if (this.currentNewsletter) return this.currentNewsletter.subscriberGroups[0].id
+    return 0
+  }
+
+  @Ref('collapsibles') readonly collapsibles!: HTMLElement
+  onClickOutside(event: MouseEvent) {
+    if (!this.collapsibles || this.collapsibles.contains(event.target as HTMLElement)) {
+      console.log('inside')
     } else {
-      return 0
+      console.log('outside')
+      this.isOpenSelector = false
     }
   }
 
@@ -333,10 +389,25 @@ export default class Analytics extends Vue {
     // get newsletter
     const result = newsletters.list.filter(newsletter => newsletter.isSend)
     const newsletterId = result[0].id
-    this.currentNewsletter = result[0]
     this.changeNewsletter(newsletterId)
-    this.newsletterId = newsletterId
     this.subGroupId = result[0].subscriberGroups[0].id
+  }
+
+  mounted() {
+    // Close Popup if clickt outside of Popup
+    document.addEventListener('click', this.onClickOutside)
+
+    // Global press esc
+    hotkeys('esc', () => {
+      // event.preventDefault()
+      console.log('ESC pressed')
+      this.isOpenSelector = false
+    })
+  }
+
+  beforeDestroy() {
+    // remove EventListeners
+    document.removeEventListener('click', this.onClickOutside)
   }
 }
 </script>

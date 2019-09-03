@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/member-delimiter-style */
 import { Moment } from 'moment'
-import { TaskStatus, TaskStatusMessage } from '@/enums'
+import { EnumsSubscriberStatus, TaskStatus, TaskStatusMessage } from '@/enums'
 
 export interface TasksResponse {
   tasks?: (Task)[] | null
@@ -20,10 +20,14 @@ export interface MolloMessageResponse {
 
 interface MolloMemberData {
   messageId: number
-  sendDate: number
-  section: number
+  send: boolean
+  sendTS: number
   open: boolean
+  openTS: number
   unsubscribe: false
+  invalidEmail: boolean
+  error: boolean
+  test: boolean
 }
 
 export interface Member {
@@ -55,6 +59,8 @@ export interface Subscriber {
   groups: SubscriberGroup[]
   origin: Origin
   data: MolloMemberData[]
+  status: SubscriberStatus[]
+  currentStatus?: EnumsSubscriberStatus
 }
 
 export interface Subscribers {
@@ -217,12 +223,15 @@ export interface ProfileResponse {
   profile: Profile
 }
 
-
-
 export interface SubscriberCountResponse {
   countMembers: number
 }
 
 export interface SubscriberGroupsResponse {
   subscriberGroups: SubscriberGroup[]
+}
+
+export interface SubscriberStatus {
+  messageId: number
+  status: EnumsSubscriberStatus
 }

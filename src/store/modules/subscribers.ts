@@ -1,8 +1,16 @@
 import { Action, getModule, Module, Mutation, MutationAction, VuexModule } from 'vuex-module-decorators'
 import store from '@/store'
 import * as api from '@/store/api'
-import {Member, Subscriber, SubscriberCountResponse, SubscriberGroup, SubscriberGroupsResponse} from '@/store/models'
-import { AxiosResponse } from 'axios'
+import {
+  Member,
+  Subscriber,
+  SubscriberCountResponse,
+  SubscriberGroup,
+  SubscriberGroupsResponse,
+  SubscriberStatus,
+} from '@/store/models'
+import { EnumsSubscriberStatus } from '@/enums'
+import getSubscriberStatus from '@/_helper/member'
 
 @Module({
   dynamic: true,
@@ -14,8 +22,6 @@ class SubscriberModule extends VuexModule {
   public list: Subscriber[] = []
   public groups: SubscriberGroup[] = []
   public count: number = 0
-
-
 
   @Mutation
   public getSubscriberCount({ countMembers }: SubscriberCountResponse) {
@@ -53,7 +59,7 @@ class SubscriberModule extends VuexModule {
 
     if (members) {
       // ------------------  Subscribers  ------------------
-      members.map((member: Member) => {
+      members.forEach((member: Member) => {
         let duplicate = false
         const subscriber: Subscriber = {
           id: member.id,
@@ -65,6 +71,7 @@ class SubscriberModule extends VuexModule {
           groups: member.groups,
           origin: member.origin,
           data: member.data,
+          status: getSubscriberStatus(member.data),
         }
 
         subscriber.createdTs = member.created
@@ -75,7 +82,7 @@ class SubscriberModule extends VuexModule {
         // Add new Subscriber to list
 
         // check on duplicates
-        subscribers.map((subscriber: Subscriber) => {
+        subscribers.forEach((subscriber: Subscriber) => {
           if (subscriber.id == member.id) {
             console.log('------ duplicate ------', member.id)
             //  console.log('--Member:', member);
@@ -95,5 +102,7 @@ class SubscriberModule extends VuexModule {
     //  this.list = subscribers
     return { list: subscribers }
   }
+
+
 }
 export default getModule(SubscriberModule)

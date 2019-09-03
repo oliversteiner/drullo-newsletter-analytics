@@ -82,6 +82,8 @@ h2 {
 
 .loading {
   position: absolute;
+  left: 20px;
+  top: 20px;
   border: 1px solid rgba(0,0,0,0.8); /* Debug */
   margin-bottom: 10px;
   display: flex;
