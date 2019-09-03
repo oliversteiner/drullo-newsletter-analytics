@@ -1,7 +1,7 @@
 import { getModule, Module, MutationAction, VuexModule } from 'vuex-module-decorators'
 import store from '@/store'
 import * as api from '@/store/api'
-import { Subscribers, Task, TaskRelated } from '@/store/models'
+import { Subscribers, Task, TaskRelated } from '@/models/models'
 import moment from 'moment'
 import 'moment/locale/de-ch'
 import { TaskStatus, TaskStatusMessage } from '@/enums'

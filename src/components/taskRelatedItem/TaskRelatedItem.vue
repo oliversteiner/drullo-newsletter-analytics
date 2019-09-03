@@ -74,7 +74,7 @@
 <script lang="ts">
   import {Vue, Component, Prop} from 'vue-property-decorator'
   import TaskItem from "@/components/taskItem/TaskItem.vue"
-  import {TaskRelated} from "@/store/models"
+  import {TaskRelated} from "@/models/models"
   import tasks from "@/store/modules/tasks"
   import TaskItemPreview from "@/components/taskItem/TaskItemPreview.vue"
 

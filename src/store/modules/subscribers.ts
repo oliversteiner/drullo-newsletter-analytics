@@ -8,7 +8,7 @@ import {
   SubscriberGroup,
   SubscriberGroupsResponse,
   SubscriberStatus,
-} from '@/store/models'
+} from '@/models/models'
 import { EnumsSubscriberStatus } from '@/enums'
 import getSubscriberStatus from '@/_helper/member'
 

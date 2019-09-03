@@ -7,7 +7,7 @@
 
 <script lang="ts">
   import {Vue, Component, Prop} from 'vue-property-decorator'
-  import {Task} from '@/store/models'
+  import {Task} from '@/models/models'
 
   @Component
   export default class TaskItemPreview extends Vue {

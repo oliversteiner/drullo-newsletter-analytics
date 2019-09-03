@@ -1,7 +1,7 @@
 import { getModule, Module, MutationAction, VuexModule } from 'vuex-module-decorators'
 import store from '@/store'
 import * as api from '@/store/api'
-import { MolloMessage, Newsletter } from '@/store/models'
+import { MolloMessage, Newsletter } from '@/models/models'
 
 @Module({
   dynamic: true,

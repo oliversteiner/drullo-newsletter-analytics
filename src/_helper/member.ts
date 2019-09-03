@@ -1,4 +1,4 @@
-import { Member, MolloMemberData, SubscriberStatus } from '@/store/models'
+import { Member, MolloMemberData, SubscriberStatus } from '@/models/models'
 import { EnumsSubscriberStatus } from '@/enums'
 
 /**
@@ -21,7 +21,7 @@ export default function getSubscriberStatus(data: MolloMemberData[]): Subscriber
   // Data
   data.forEach(data => {
 
-    console.log('data', data);
+    // console.log('data', data);
 
     const message = {
       messageId: 0,

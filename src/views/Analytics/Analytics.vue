@@ -1,6 +1,5 @@
 <template>
   <div class="analytics">
-
     <!-- Loading Spinner -->
     <div v-if="loading" class="loading">
       <div class="loading-icon">
@@ -107,15 +106,16 @@
       </div>
 
       <!-- Pie Chart -->
-      <PieChart />
+      <NewsletterPieChart :data-statistic="statistic"></NewsletterPieChart>
 
       <!-- timeline -->
-      <Timeline />
+      <NewsletterTimeline></NewsletterTimeline>
+
+      <!-- Test  -->
+      <!-- <CommitChart></CommitChart>-->
 
       <!-- Raw Data -->
       <div class="raw-data">
-
-
         <!-- Number of Subscibers-->
         <div>{{ subscriberList.length }} von {{ numberOfAllSubscribers }} Empfänger</div>
 
@@ -124,7 +124,8 @@
           <li v-for="subscriber in subscriberList" :key="subscriber.id + '-analytics'">
             <div class="subscriber-list-wrapper">
               <div class="subscriber-status" :class="subscriber.currentStatus"></div>
-              <div> {{subscriber.currentStatus}} - {{ subscriber.id }} - {{ subscriber.contact.email }}</div>
+              <div v-if="debug">{{ subscriber.id }} -</div>
+              <div>{{ subscriber.contact.email }}</div>
             </div>
           </li>
         </ul>
@@ -137,28 +138,30 @@
 
 <script lang="ts">
 import { Vue, Component, Watch, Ref } from 'vue-property-decorator'
-import Timeline from '@/components/Timeline/Timeline.vue'
-import PieChart from '@/components/PieChart/PieChart.vue'
 import RawDataList from '@/components/RawDataList/RawDataList.vue'
 import newsletters from '@/store/modules/newsletters'
-import NewsletterSelector from '@/components/NewsletterSelector/NewsletterSelector.vue'
 import subscribers from '@/store/modules/subscribers'
 import { eventBus } from '@/main'
-import { MolloMemberData, Newsletter, Subscriber } from '@/store/models'
+import { MolloMemberData, Newsletter, Statistic, Subscriber } from '@/models/models'
 import hotkeys from 'hotkeys-js'
 import { EnumsSubscriberStatus } from '@/enums'
+import NewsletterSelector from '@/components/NewsletterSelector/NewsletterSelector.vue'
+import NewsletterPieChart from '@/components/NewsletterPieChart/NewsletterPieChart.vue'
+import NewsletterTimeline from '@/components/NewsletterTimeline/NewsletterTimeline.vue'
+import CommitChart from '@/components/CommitChart'
 
 @Component({
-  components: { RawDataList, Timeline, PieChart, NewsletterSelector },
+  components: { RawDataList, NewsletterTimeline, NewsletterPieChart, NewsletterSelector },
 })
 export default class Analytics extends Vue {
+  private debug = false
   private isOpenSelector: boolean = false
   private loading: boolean = true
   private loadingState: number = 0
   private numberOfAllSubscribers: number = 0
   private newsletterId: number = 0
   private subGroupId: number = 0
-  private statistic = {}
+  private statistic: Statistic = { send: 0, open: 0, unsubscribe: 0 }
   private filterdSubscribers: Subscriber[] = []
   private currentNewsletter!: Newsletter
 
@@ -216,7 +219,7 @@ export default class Analytics extends Vue {
         let isInGroup = false
         sub.groups.map(group => {
           if (group.id == this.subGroupId) {
-          //  console.log('isInGroup ' + this.subGroupId)
+            //  console.log('isInGroup ' + this.subGroupId)
             isInGroup = true
           }
         })
@@ -237,7 +240,7 @@ export default class Analytics extends Vue {
       return subscriber
     })
 
-console.log('filterdSubscribersStatus', filterdSubscribersStatus);
+    //  console.log('filterdSubscribersStatus', filterdSubscribersStatus)
 
     this.filterdSubscribers = filterdSubscribersStatus
     return filterdSubscribersStatus
@@ -249,6 +252,9 @@ console.log('filterdSubscribersStatus', filterdSubscribersStatus);
 
   get subscriberGroups() {
     if (this.newsletter) return this.newsletter.subscriberGroups
+  }
+  get statisticData() {
+    return this.updateStatistic()
   }
 
   get newsletter() {
@@ -282,45 +288,10 @@ console.log('filterdSubscribersStatus', filterdSubscribersStatus);
     this.updateStatistic()
   }
 
-  get statistic1() {
-    console.log('--this.newsletterId', this.newsletterId)
-
-    let statistic = { open: 0, send: 0, unsubscribe: 0 }
-    const subs = subscribers.list
-    subs.forEach((sub: Subscriber) => {
-      // MolloMessages send?
-
-      if (sub.data) {
-        sub.data.forEach((item: MolloMemberData) => {
-          if (item && item.messageId && item.messageId === this.newsletterId) {
-            console.log('item', item)
-
-            // Send
-            if (item.sendTS) {
-              statistic.send++
-            }
-            // Open
-            if (item.open) {
-              statistic.open++
-            }
-
-            // unsubscribe
-            if (item.unsubscribe) {
-              statistic.unsubscribe++
-            }
-          }
-        })
-      }
-    })
-    return statistic
-  }
-
   updateStatistic() {
-    console.log('updateStatistic', this.newsletterId)
-
     let statistic = { open: 0, send: 0, unsubscribe: 0 }
     const subs = subscribers.list
-    console.log('subs', subs)
+    // console.log('subs', subs)
 
     subs.forEach((sub: Subscriber) => {
       // MolloMessages send?
@@ -346,7 +317,8 @@ console.log('filterdSubscribersStatus', filterdSubscribersStatus);
       }
     })
     this.statistic = statistic
-    console.log('statistic', statistic)
+    console.log('updateStatistic: ' + this.newsletterId, statistic)
+    return statistic
   }
 
   getGroupsFromNewsletter() {
@@ -391,6 +363,10 @@ console.log('filterdSubscribersStatus', filterdSubscribersStatus);
     const newsletterId = result[0].id
     this.changeNewsletter(newsletterId)
     this.subGroupId = result[0].subscriberGroups[0].id
+
+    // Update Statistic
+    this.updateStatistic()
+
   }
 
   mounted() {

@@ -6,7 +6,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator'
-import { Subscriber } from '@/store/models'
+import { Subscriber } from '@/models/models'
 
 @Component({
   components: {

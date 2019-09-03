@@ -12,7 +12,7 @@ import {
   Member,
   SubscriberCountResponse,
   SubscriberGroupsResponse,
-} from './models'
+} from '../models/models'
 import tasks from '@/store/modules/tasks'
 import { eventBus } from '@/main'
 

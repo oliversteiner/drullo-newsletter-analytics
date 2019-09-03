@@ -167,7 +167,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator'
-import { Task } from '@/store/models'
+import { Task } from '@/models/models'
 import { smmgApi } from '@/store/api'
 
 @Component

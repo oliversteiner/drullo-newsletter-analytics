@@ -235,3 +235,9 @@ export interface SubscriberStatus {
   messageId: number
   status: EnumsSubscriberStatus
 }
+
+interface Statistic {
+  send: number
+  open: number
+  unsubscribe: number
+}

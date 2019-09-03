@@ -1,6 +1,6 @@
 import { getModule, Module, MutationAction, VuexModule } from 'vuex-module-decorators'
 import store from '@/store'
-import { Profile, User, UserSubmit, UserForUpdate } from '../models'
+import { Profile, User, UserSubmit, UserForUpdate } from '../../models/models'
 import { fetchProfile, fetchUser, loginUser, updateUser, setJWT } from '../api'
 
 @Module({
