@@ -16,25 +16,29 @@
  *     x: am / pm
  *
  */
-export default function formatTimestamp(timestamp: number, format: string): string {
-  function formatDate(format: string, pattern: any, dateContent: string[]): string {
+export default function formatTimestamp(timestamp: number | false, format: string): string {
+  function formatDate(format: string, pattern: string[] | any, dateContent: string[]): string {
     let patternArr = Array.isArray(pattern)
     let dataArr = Array.isArray(dateContent)
     let result = format.toString()
     if (patternArr) {
-      for (let i in pattern) {
-        let c: string | string[]
-        c = dateContent[i] ? (dataArr ? dateContent[i] : dateContent) : dataArr ? '' : dateContent
-        result = result.replace(new RegExp(pattern[i], 'g'), c)
+      let i: any = ''
+      for (i in pattern) {
+        let content: any
+        content = dateContent[i] ? (dataArr ? dateContent[i] : dateContent) : dataArr ? '' : dateContent
+        result = result.replace(new RegExp(pattern[i], 'g'), content)
       }
     } else {
-      let c = dataArr ? dateContent[0] : dateContent
-      result = result.replace(new RegExp(pattern, 'g'), c)
+      let content: any
+      // @ts-ignore
+      content = dataArr ? dateContent[0] : dateContent
+      result = result.replace(new RegExp(pattern, 'g'), content)
     }
     return result
   }
 
-  const date = new Date(timestamp * 1000)
+  let date = timestamp ? new Date(timestamp * 1000) : new Date()
+
   const year = date.getFullYear().toString()
   const year2 = year.slice(-2)
   const month = ('0' + (date.getMonth() + 1)).slice(-2)

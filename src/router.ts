@@ -20,5 +20,10 @@ export default new Router({
       name: 'subscribers',
       component: () => import('@/views/SubscribersPage/SubscribersPage.vue'),
     },
+    {
+      path: '/develop',
+      name: 'Develop',
+      component: () => import('@/views/DeveloperPage/DeveloperPage.vue'),
+    },
   ],
 })

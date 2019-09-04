@@ -63,6 +63,15 @@ export default class PieChart extends Vue<Line> {
       text: 'Tagesverlauf',
     },
     scales: {
+      xAxes: [
+        {
+          time: {
+            displayFormats: {
+              hour: 'h:mm',
+            },
+          },
+        },
+      ],
       yAxes: [
         {
           type: 'linear', // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance

@@ -50,7 +50,7 @@ class TasksModule extends VuexModule {
 
           task.runMoment = nextRunAt
 
-          // count unfinished tasks for increase of the execution time
+          // count unfinished tasks for increase of the execution hour
           counterUndoneTasks++
         }
 

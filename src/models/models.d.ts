@@ -24,7 +24,9 @@ interface MolloMemberData {
   open: boolean
   openTS: number
   unsubscribe: false
+  unsubscribeTS?: false
   invalidEmail: boolean
+  invalidEmailTS?: boolean
   error: boolean
   test: boolean
 }
@@ -235,12 +237,13 @@ export interface SubscriberStatus {
   status: EnumsSubscriberStatus
 }
 
-export interface SubscriberTimeline{
-  send: number[]
-  open: number[]
-  unsubscribe: number[]
+export interface SubscriberTimeline {
+  send: { t: number; x: number; }[]
+  open: { t: number; x: number; }[]
+  unsubscribe: { t: number; x: number; }[]
   error: number[]
   label: string[]
+  timestamp?: number[]
 }
 
 interface Statistic {
@@ -250,6 +253,4 @@ interface Statistic {
   error: number
 }
 
-interface Timeline {
-
-}
+interface Timeline {}
