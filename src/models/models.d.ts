@@ -238,10 +238,10 @@ export interface SubscriberStatus {
 }
 
 export interface SubscriberTimeline {
-  send: { t: number; x: number; }[]
-  open: { t: number; x: number; }[]
-  unsubscribe: { t: number; x: number; }[]
-  error: number[]
+  send: { t: Date; y: number; }[]
+  open: { t: Date; y: number; }[]
+  unsubscribe: { t: Date; y: number; }[]
+  error: { t: Date; y: number; }[]
   label: string[]
   timestamp?: number[]
 }
@@ -252,5 +252,3 @@ interface Statistic {
   unsubscribe: number
   error: number
 }
-
-interface Timeline {}

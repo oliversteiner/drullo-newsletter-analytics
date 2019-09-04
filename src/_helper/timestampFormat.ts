@@ -16,7 +16,7 @@
  *     x: am / pm
  *
  */
-export default function formatTimestamp(timestamp: number | false, format: string): string {
+export default function formatTimestamp(timestamp: any, format: string): string {
   function formatDate(format: string, pattern: string[] | any, dateContent: string[]): string {
     let patternArr = Array.isArray(pattern)
     let dataArr = Array.isArray(dateContent)

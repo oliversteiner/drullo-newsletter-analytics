@@ -52,7 +52,7 @@ export default function getSubscriberTimeline(subscribers: Subscriber[]): Subscr
       const find = TimelineInHourSend.filter(item => item.hour == sendH)
 
       if (find.length == 0) {
-        TimelineInHourSend.push({ hour: sendH, count: 1 })
+        TimelineInHourSend.push({ hour: sendH, count: 1, timestamp: 0 })
       } else {
         find[0].count++
       }
@@ -66,7 +66,7 @@ export default function getSubscriberTimeline(subscribers: Subscriber[]): Subscr
       const find = TimelineInHourOpen.filter(item => item.hour == openH)
 
       if (find.length == 0) {
-        TimelineInHourOpen.push({ hour: openH, count: 1 })
+        TimelineInHourOpen.push({ hour: openH, count: 1, timestamp: 0 })
       } else {
         find[0].count++
       }
@@ -80,7 +80,7 @@ export default function getSubscriberTimeline(subscribers: Subscriber[]): Subscr
       const find = TimelineInHourUnsu.filter(item => item.hour == unsubH)
 
       if (find.length == 0) {
-        TimelineInHourUnsu.push({ hour: unsubH, count: 1 })
+        TimelineInHourUnsu.push({ hour: unsubH, count: 1, timestamp: 0 })
       } else {
         find[0].count++
       }
@@ -106,19 +106,19 @@ export default function getSubscriberTimeline(subscribers: Subscriber[]): Subscr
     // send
     const find1 = TimelineInHourSend.filter(item => item.hour == stepH)
     if (find1.length == 0) {
-      TimelineInHourSend.push({ hour: stepH, count: 0 })
+      TimelineInHourSend.push({ hour: stepH, count: 0, timestamp: 0 })
     }
 
     // Open
     const find2 = TimelineInHourOpen.filter(item => item.hour == stepH)
     if (find2.length == 0) {
-      TimelineInHourOpen.push({ hour: stepH, count: 0 })
+      TimelineInHourOpen.push({ hour: stepH, count: 0, timestamp: 0 })
     }
 
     // unsubscribe
     const find3 = TimelineInHourUnsu.filter(item => item.hour == stepH)
     if (find3.length == 0) {
-      TimelineInHourUnsu.push({ hour: stepH, count: 0 })
+      TimelineInHourUnsu.push({ hour: stepH, count: 0, timestamp: 0 })
     }
   })
 

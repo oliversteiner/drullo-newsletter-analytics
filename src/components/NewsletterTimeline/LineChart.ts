@@ -1,6 +1,6 @@
 import { Line } from 'vue-chartjs'
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
-import { SubscriberTimeline, Timeline } from '@/models/models'
+import { SubscriberTimeline } from '@/models/models'
 import Colors from '@/models/colors'
 
 // @ts-ignore
