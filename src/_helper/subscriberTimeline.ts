@@ -44,7 +44,7 @@ export default function getSubscriberTimeline(subscribers: Subscriber[]): Subscr
     const data = subscriber.data[0]
 
     // Send
-    if (data.send) {
+    if (data && data.send) {
       const sendTS = data.sendTS
       sendTSs.push(sendTS)
       const sendH: string = formatTimestamp(sendTS, formatString)
@@ -59,7 +59,7 @@ export default function getSubscriberTimeline(subscribers: Subscriber[]): Subscr
     }
 
     // open
-    if (data.open) {
+    if (data && data.open) {
       const openTS = data.openTS
       const openH = formatTimestamp(openTS, formatString)
 
@@ -73,7 +73,7 @@ export default function getSubscriberTimeline(subscribers: Subscriber[]): Subscr
     }
 
     // unsubscribe
-    if (data.unsubscribe) {
+    if (data && data.unsubscribe) {
       const unsubTS = data.unsubscribeTS
       const unsubH = formatTimestamp(unsubTS, formatString)
 

@@ -17,13 +17,7 @@ import getSubscriberTimeline from '@/_helper/subscriberTimeline'
 export default class NewsletterTimeline extends Vue {
   @Prop() subscribers!: Subscriber[]
 
-  private dataTimeline: SubscriberTimeline = {
-    send: [],
-    open: [],
-    unsubscribe: [],
-    error: [],
-    label: [],
-  }
+  private dataTimeline: SubscriberTimeline = {}
 
   getData() {
     this.dataTimeline = getSubscriberTimeline(this.subscribers)
@@ -31,14 +25,16 @@ export default class NewsletterTimeline extends Vue {
 
   get chartStyle() {
     return {
-      height: '300px',
+      height: '400px',
     }
   }
 
   // Change Input
   @Watch('subscribers')
   updateData() {
-    this.getData()
+    console.log('Newslettertimeline subscribers', this.subscribers);
+
+    this.dataTimeline = getSubscriberTimeline(this.subscribers)
   }
 
   mounted() {

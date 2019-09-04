@@ -106,7 +106,7 @@ export default class PieChart extends Vue<Line> {
 
   // Mounted
   public mounted(): void {
-    this.renderData()
     console.log('Linechart Mounted', this.stl.send)
+    this.renderData()
   }
 }
