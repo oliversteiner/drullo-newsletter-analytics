@@ -29,5 +29,16 @@ module.exports = {
         'allowFirstLine': false
       }
     }],
+    '@typescript-eslint/member-delimiter-style': [1, {
+      "multiline": {
+        "delimiter": "none",
+        "requireLast": false
+      },
+      "singleline": {
+        "delimiter": "semi",
+        "requireLast": true
+      },
+    }],
+
   },
 };

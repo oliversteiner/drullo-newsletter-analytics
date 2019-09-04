@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/member-delimiter-style */
 import { Moment } from 'moment'
 import { EnumsSubscriberStatus, TaskStatus, TaskStatusMessage } from '@/enums'
 
@@ -236,8 +235,21 @@ export interface SubscriberStatus {
   status: EnumsSubscriberStatus
 }
 
+export interface SubscriberTimeline{
+  send: number[]
+  open: number[]
+  unsubscribe: number[]
+  error: number[]
+  label: string[]
+}
+
 interface Statistic {
   send: number
   open: number
   unsubscribe: number
+  error: number
+}
+
+interface Timeline {
+
 }

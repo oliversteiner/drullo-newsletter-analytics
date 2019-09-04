@@ -7,10 +7,8 @@ import {
   SubscriberCountResponse,
   SubscriberGroup,
   SubscriberGroupsResponse,
-  SubscriberStatus,
 } from '@/models/models'
-import { EnumsSubscriberStatus } from '@/enums'
-import getSubscriberStatus from '@/_helper/member'
+import getSubscriberStatus from '@/_helper/subscriberStatus'
 
 @Module({
   dynamic: true,

@@ -1,16 +1,52 @@
 <template>
   <div class="newsletter-timeline">
-    Timeline
+    <LineChart :stl="dataTimeline" :styles="chartStyle"></LineChart>
   </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator'
+import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
+import LineChart from '@/components/NewsletterTimeline/LineChart'
+import { Subscriber, SubscriberTimeline } from '@/models/models'
+import getSubscriberTimeline from '@/_helper/subscriberTimeline'
 
-@Component
-export default class NewsletterTimeline extends Vue {}
+// @ts-ignore
+@Component({
+  components: { LineChart },
+})
+export default class NewsletterTimeline extends Vue {
+  @Prop() subscribers!: Subscriber[]
+
+  private dataTimeline: SubscriberTimeline = {
+    send: [],
+    open: [],
+    unsubscribe: [],
+    error: [],
+    label: [],
+  }
+
+  getData() {
+    this.dataTimeline = getSubscriberTimeline(this.subscribers)
+  }
+
+  get chartStyle() {
+    return {
+      height: '300px',
+    }
+  }
+
+  // Change Input
+  @Watch('subscribers')
+  updateData() {
+    this.getData()
+  }
+
+  mounted() {
+    this.dataTimeline = getSubscriberTimeline(this.subscribers)
+  }
+}
 </script>
 
-<style scoped>
+<style lang="scss">
 @import '_NewsletterTimeline.scss';
 </style>

@@ -109,7 +109,7 @@
       <NewsletterPieChart :data-statistic="statistic"></NewsletterPieChart>
 
       <!-- timeline -->
-      <NewsletterTimeline></NewsletterTimeline>
+      <NewsletterTimeline :subscribers="subscriberList"></NewsletterTimeline>
 
       <!-- Test  -->
       <!-- <CommitChart></CommitChart>-->
@@ -148,7 +148,6 @@ import { EnumsSubscriberStatus } from '@/enums'
 import NewsletterSelector from '@/components/NewsletterSelector/NewsletterSelector.vue'
 import NewsletterPieChart from '@/components/NewsletterPieChart/NewsletterPieChart.vue'
 import NewsletterTimeline from '@/components/NewsletterTimeline/NewsletterTimeline.vue'
-import CommitChart from '@/components/CommitChart'
 
 @Component({
   components: { RawDataList, NewsletterTimeline, NewsletterPieChart, NewsletterSelector },
@@ -161,7 +160,7 @@ export default class Analytics extends Vue {
   private numberOfAllSubscribers: number = 0
   private newsletterId: number = 0
   private subGroupId: number = 0
-  private statistic: Statistic = { send: 0, open: 0, unsubscribe: 0 }
+  private statistic: Statistic = { send: 0, open: 0, unsubscribe: 0, error: 0 }
   private filterdSubscribers: Subscriber[] = []
   private currentNewsletter!: Newsletter
 
@@ -289,7 +288,7 @@ export default class Analytics extends Vue {
   }
 
   updateStatistic() {
-    let statistic = { open: 0, send: 0, unsubscribe: 0 }
+    let statistic: Statistic = { open: 0, send: 0, unsubscribe: 0, error: 0 }
     const subs = subscribers.list
     // console.log('subs', subs)
 
@@ -311,6 +310,11 @@ export default class Analytics extends Vue {
             // unsubscribe
             if (item.unsubscribe) {
               statistic.unsubscribe++
+            }
+
+            // error
+            if (item.error || item.invalidEmail) {
+              statistic.error++
             }
           }
         })
@@ -366,7 +370,6 @@ export default class Analytics extends Vue {
 
     // Update Statistic
     this.updateStatistic()
-
   }
 
   mounted() {
