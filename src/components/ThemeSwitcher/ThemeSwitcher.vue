@@ -18,7 +18,7 @@ export default class ThemeSwitcher extends Vue {
   private themes = [
     { id: 'dark', name: 'Dark Mode' },
     { id: 'light', name: 'Light Mode' },
-    { id: 'system', name: 'Auto Mode' },
+    { id: 'system', name: 'Auto' },
   ]
   private index = 0
   private currentTheme = 'dark'

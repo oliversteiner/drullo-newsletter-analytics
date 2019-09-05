@@ -1,13 +1,13 @@
 <template>
   <div id="app">
     <div class="main-theme" :class="theme">
-    <div style="display: flex;justify-content: space-between">
-      <AppNavbar></AppNavbar>
-      <ThemeSwitcher></ThemeSwitcher>
+      <div style="display: flex;justify-content: space-between">
+        <AppNavbar></AppNavbar>
+        <ThemeSwitcher></ThemeSwitcher>
+      </div>
+      <router-view></router-view>
+      <AppFooter></AppFooter>
     </div>
-    <router-view></router-view>
-    <AppFooter></AppFooter>
-  </div>
   </div>
 </template>
 
@@ -34,7 +34,6 @@ export default class App extends Vue {
       console.log('Theme Switch:', this.theme)
     })
   }
-
 }
 </script>
 
