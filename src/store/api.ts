@@ -12,8 +12,8 @@ import {
   Member,
   SubscriberCountResponse,
   SubscriberGroupsResponse,
+  StatusMessage,
 } from '../models/models'
-import tasks from '@/store/modules/tasks'
 import { eventBus } from '@/main'
 
 export const smmgApi = axios.create({
@@ -28,7 +28,6 @@ export async function getTaskList() {
   const response = await smmgApi.get('/api/tasks')
   return response.data as TasksResponse
 }
-
 
 export async function getNewsletterList() {
   const response = await smmgApi.get('/api/newsletters')
@@ -50,11 +49,13 @@ export async function getSubscriberGroups() {
 }
 
 export async function getAllSubscribers() {
-  const response = await smmgApi.get('/api/members/count')
-
   // Number of all Members
+  let statusMessage!: StatusMessage
+
+  const response = await smmgApi.get('/api/members/count')
   const memberLength = response.data.countMembers
-  eventBus.$emit('all Members', memberLength)
+  statusMessage = { module: 'subscribers', status: 'start', count: memberLength }
+  eventBus.$emit('LOADING_DATA', statusMessage)
 
   // Args for request url
   const group = 0
@@ -76,27 +77,36 @@ export async function getAllSubscribers() {
   const getData = async (url: string) => {
     const response = await smmgApi.get(url)
     // wait(1000) // for Testing
-    eventBus.$emit('loading Members', loadingStatus)
+    statusMessage = { module: 'subscribers', status: 'loading', progress: loadingStatus }
+    eventBus.$emit('LOADING_DATA', statusMessage)
     loadingStatus += range
 
     return response.data as MemberResponse
   }
 
   // collect all requests
-  const allResponses = (await Promise.all(urls.map(url => getData(url))).catch(e =>
-    console.error('error loading Members', e),
-  )) as MemberResponse[]
+  const allResponses = (await Promise.all(urls.map(url => getData(url))).catch(e => {
+    console.error('error loading Members', e)
+    statusMessage = {
+      module: 'subscribers',
+      status: 'error',
+      message: "Can't load the Subscriber data",
+    }
+    eventBus.$emit('LOADING_DATA', statusMessage)
+  })) as MemberResponse[]
 
   // assemble all members in one array
   let members: Member[] = []
   allResponses.map(response => {
-    console.warn('-- Rsponse Members', response.members.length)
+    console.warn('-- Response Members', response.members.length)
 
     response.members.map(member => {
       members.push(member)
     })
   })
 
+  statusMessage = { module: 'subscribers', status: 'finish' }
+  eventBus.$emit('LOADING_DATA', statusMessage)
   // build Request Response
   const result: MemberResponse = {
     count: memberLength,

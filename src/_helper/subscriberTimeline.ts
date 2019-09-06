@@ -27,8 +27,6 @@ export default function getSubscriberTimeline(subscribers: Subscriber[]): Subscr
   // no Data
   if (!subscribers) return timeline
 
-  console.log('Subscriber:', subscribers[0])
-
   let sendTSs: number[] = []
   let TimelineInHourTS: number[] = []
   let TimelineInHourSend: { hour: string; count: number; timestamp: number }[] = []
@@ -39,7 +37,6 @@ export default function getSubscriberTimeline(subscribers: Subscriber[]): Subscr
   // Data
   subscribers.forEach(subscriber => {
     // Send Timeline
-    // console.log('subscriber.data', subscriber.data[0])
 
     const data = subscriber.data[0]
 
@@ -100,8 +97,6 @@ export default function getSubscriberTimeline(subscribers: Subscriber[]): Subscr
     TimelineInHourTS.push(newTS)
   }
 
-  console.log('TimelineInHour:', TimelineInHour)
-
   TimelineInHour.forEach((stepH: string) => {
     // send
     const find1 = TimelineInHourSend.filter(item => item.hour == stepH)
@@ -135,10 +130,6 @@ export default function getSubscriberTimeline(subscribers: Subscriber[]): Subscr
   const timestamp1 = TimelineInHourOpen[lastindex].timestamp
   const hours = TimelineInHourOpen.findIndex(elem => elem.timestamp === timestamp1)
   const numberOfHours = hours + 4
-  console.log('Hours', hours)
-  console.log('TimelineInHourSend', TimelineInHourSend)
-  console.log('TimelineInHourOpen', TimelineInHourOpen)
-  console.log('TimelineInHourUnsu', TimelineInHourUnsu)
 
   // build chartjs axis:
   const timestampAxis = TimelineInHourTS
@@ -172,10 +163,6 @@ export default function getSubscriberTimeline(subscribers: Subscriber[]): Subscr
     return { t: date, y: item.count }
   })
 
-  console.log('sendAxis', sendAxis)
-  console.log('openAxis', openAxis)
-  console.log('unsubscribAxis', unsubscribAxis)
-
   // reduce of active Times:
   labelAxis.length = numberOfHours
   timestampAxis.length = numberOfHours
@@ -183,12 +170,16 @@ export default function getSubscriberTimeline(subscribers: Subscriber[]): Subscr
   openAxis.length = numberOfHours
   unsubscribAxis.length = numberOfHours
 
+  // Dummy Data
+  const errorAxis = [{ t: new Date(), y: 0 }]
+
   timeline = {
     label: labelAxis,
     timestamp: timestampAxis,
     send: sendAxis,
     open: openAxis,
     unsubscribe: unsubscribAxis,
+    error: errorAxis,
   }
 
   return timeline

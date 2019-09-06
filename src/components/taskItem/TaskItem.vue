@@ -1,46 +1,24 @@
+import {TaskStatus} from '@/enums';
 <template>
   <!-- <pre v-text="$attrs"/> -->
   <div class="task-item">
-    <div class="card" v-bind:class="[taskItem.status]">
+    <div class="card" :class="[taskItem.status]">
       <!-- Card Main -->
       <div class="card-main">
         <!-- Status Icon-->
         <div class="card-status-icon-wrapper">
           <div class="card-status-icon">
             <!-- Default -->
-            <div class="status-icon status-icon-default" v-if="taskItem.status === 'default'">
-              <font-awesome-icon icon="clock" />
-            </div>
-
-            <!-- Waiting -->
-            <div class="status-icon status-icon-waiting" v-if="taskItem.status === 'waiting'">
-              <font-awesome-icon icon="clock" />
-            </div>
-
-            <!-- Working -->
-            <div class="status-icon status-icon-working" v-if="taskItem.status === 'working'">
-              <font-awesome-icon icon="cog" />
-            </div>
-
-            <!-- Done -->
-            <div class="status-icon status-icon-done" v-if="taskItem.status === 'done'">
-              <font-awesome-icon icon="check" />
-            </div>
-
-            <!-- Warning -->
-            <div class="status-icon status-icon-warning" v-if="taskItem.status === 'warning'">
-              <font-awesome-icon icon="exclamation-triangle" />
-            </div>
-
-            <!-- Error -->
-            <div class="status-icon status-icon-error" v-if="taskItem.status === 'error'">
-              <font-awesome-icon icon="uexclamation-circle" />
+            <div class="status-icon">
+              <font-awesome-icon :icon="taskItem.icon" />
             </div>
           </div>
         </div>
 
         <!-- Status MolloMessages-->
-        <div class="card-status-message">{{ taskItem.statusMessage }}</div>
+        <div class="card-status-message">
+          {{ taskItem.statusMessage }}
+        </div>
 
         <!-- Title -->
         <h3 class="card-title">Task {{ taskItem.number }}</h3>
@@ -55,7 +33,7 @@
 
         <!-- Runtime detail -->
         <div class="tooltip">
-          <div class="date-time-detail tooltiptext" v-if="isTimeDetailsOpen">
+          <div v-if="isTimeDetailsOpen" class="date-time-detail tooltiptext">
             <span class="date-time-day">{{ taskItem.runMoment | moment('D. MMMM - HH:mm') }} </span>
           </div>
 
@@ -75,7 +53,7 @@
               class="btn card-details-open-trigger"
               @click="showCardDetailsToggle"
             >
-              <font-awesome-icon icon="caret-right"></font-awesome-icon>
+              <font-awesome-icon icon="caret-right" />
               <span class="label-width-icon">Details</span>
             </a>
 
@@ -86,30 +64,34 @@
               class="btn card-details-open-trigger"
               @click="showCardDetailsToggle"
             >
-              <font-awesome-icon icon="caret-down"></font-awesome-icon>
+              <font-awesome-icon icon="caret-down" />
               <span class="label-width-icon">Schliessen</span>
             </a>
           </div>
 
           <!-- Button runTask -->
           <div>
-            <a class="btn btn-outline run-task-button run-task-waiting" v-if="runTaskButtonStatus == 'waiting'"
+            <a v-if="runTaskButtonStatus == 'waiting'" class="btn btn-outline run-task-button run-task-waiting"
               >Ausführen</a
             >
-            <a class="btn btn-outline run-task-button run-task-done" v-if="runTaskButtonStatus == 'done'"
-               @click="taskRun(taskItem.id)">nochmals</a>
             <a
+              v-if="runTaskButtonStatus === 'done'"
+              class="btn btn-outline run-task-button run-task-done"
+              @click="taskRun(taskItem.id)"
+              >nochmals</a
+            >
+            <a
+              v-if="runTaskButtonStatus === 'save-to-run'"
               class="btn btn-outline run-task-button run-task-save-to-run"
-              v-if="runTaskButtonStatus == 'save-to-run'"
               @click="taskRun(taskItem.id)"
               >Jetzt Ausführen</a
             >
-            <a class="btn btn-outline run-task-button run-task-working" v-if="runTaskButtonStatus == 'working'"></a>
+            <a v-if="runTaskButtonStatus == 'working'" class="btn btn-outline run-task-button run-task-working" />
           </div>
         </div>
       </div>
       <!-- Card Details -->
-      <div class="card-details" v-if="isCardDetailsOpen">
+      <div v-if="isCardDetailsOpen" class="card-details">
         <table>
           <!-- ID -->
           <tr>
@@ -166,13 +148,14 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator'
+import { Component, Prop, Vue } from 'vue-property-decorator'
 import { Task } from '@/models/models'
 import { smmgApi } from '@/store/api'
+import { TaskStatusMessage } from '@/enums'
 
 @Component
 export default class TaskItem extends Vue {
-  @Prop() taskItem?: Task
+  @Prop() taskItem!: Task
 
   isCardDetailsOpen: boolean = false
   isTimeDetailsOpen: boolean = false
@@ -194,33 +177,29 @@ export default class TaskItem extends Vue {
     return (this.isTimeDetailsOpen = false)
   }
 
+  get icon() {
+    return this.taskItem.icon
+  }
+
   async taskRun(taskId: number) {
     const response = await smmgApi.get('/api/task/run/' + taskId)
-    console.log(response.data)
+    // TODO: Add UI Feedback
   }
 
   get runTaskButtonStatus(): string {
     let status = ''
+    const taskItem = this.taskItem
 
-    if (this.taskItem) {
-      // Task is working
-      if (this.taskItem.working) status = 'working'
-
-      // task is waiting to run
-
-      if (this.taskItem.number != 1 && !this.taskItem.done) status = 'waiting'
-
-      // Task is done
-      if (this.taskItem.done) status = 'done'
-
+    if (taskItem) {
+      status = taskItem.status
       // Task is save to run
-      if (this.taskItem.number === 1 && !this.taskItem.done) status = 'save-to-run'
+      if (taskItem.statusMessage == TaskStatusMessage.SAVE) status = 'save-to-run'
     }
     return status
   }
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import 'TaskItem';
 </style>

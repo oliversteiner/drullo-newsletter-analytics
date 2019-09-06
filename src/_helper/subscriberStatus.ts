@@ -20,9 +20,6 @@ export default function getSubscriberStatus(data: MolloMemberData[]): Subscriber
 
   // Data
   data.forEach(data => {
-
-    // console.log('data', data);
-
     const message = {
       messageId: 0,
       // Default
@@ -35,12 +32,14 @@ export default function getSubscriberStatus(data: MolloMemberData[]): Subscriber
     }
 
     // Compute Status
+
     // Send
     if (data.sendTS != 0) message.status = EnumsSubscriberStatus.SEND
     if (data.send) message.status = EnumsSubscriberStatus.SEND
 
     // Open
     if (data.open) message.status = EnumsSubscriberStatus.OPEN
+
     // Unsubscribe
     if (data.unsubscribe) message.status = EnumsSubscriberStatus.UNSUBSCRIBE
 

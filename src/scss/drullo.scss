@@ -79,23 +79,3 @@ h2 {
 .label-hidden{
   display: none;
 }
-
-.loading {
-  position: absolute;
-  left: 20px;
-  top: 20px;
-  border: 1px solid rgba(0,0,0,0.8); /* Debug */
-  margin-bottom: 10px;
-  display: flex;
-  border-radius: 7px;
-  padding: 15px;
-  background: rgba(0,0,0,0.7);
-
-  &-icon {
-  }
-
-  &-text {
-    margin-left: 10px;
-    margin-right: 10px;
-  }
-}

@@ -1,106 +1,83 @@
-import { Action, getModule, Module, Mutation, MutationAction, VuexModule } from 'vuex-module-decorators'
-import store from '@/store'
+import { Action, Module, Mutation, MutationAction, VuexModule } from 'vuex-module-decorators'
+import store, { SubscriberStore } from '@/store'
 import * as api from '@/store/api'
-import {
-  Member,
-  Subscriber,
-  SubscriberCountResponse,
-  SubscriberGroup,
-  SubscriberGroupsResponse,
-} from '@/models/models'
+import { Member, Subscriber, SubscriberCountResponse, SubscriberGroup, SubscriberGroupsResponse } from '@/models/models'
 import getSubscriberStatus from '@/_helper/subscriberStatus'
 
+// eslint-disable-next-line @typescript-eslint/interface-name-prefix
+export interface ISubscriberModule {
+  list: Subscriber[]
+  groups: SubscriberGroup[]
+  count: number
+}
+
 @Module({
-  dynamic: true,
   namespaced: true,
-  name: 'subscribers',
+  name: 'subscriber',
   store,
 })
-class SubscriberModule extends VuexModule {
+export default class SubscriberModule extends VuexModule implements ISubscriberModule {
   public list: Subscriber[] = []
   public groups: SubscriberGroup[] = []
   public count: number = 0
-
-  @Mutation
-  public getSubscriberCount({ countMembers }: SubscriberCountResponse) {
-    if (countMembers) {
-      this.count = countMembers
-    }
-  }
-
-  @Action({ commit: 'getSubscriberGroups' })
-  async loadSubscriberCount() {
-    return await api.getSubscriberCount()
-  }
-
-  @Mutation
-  public getSubscriberGroups({ subscriberGroups }: SubscriberGroupsResponse) {
-    if (subscriberGroups && subscriberGroups.length) {
-      this.groups = subscriberGroups
-    }
-  }
 
   @Action({ commit: 'getSubscriberGroups' })
   async loadSubscriberGroups() {
     return await api.getSubscriberGroups()
   }
 
-  @MutationAction
-  async refreshSubscriberList() {
-    this.list = []
-    const listFromServer = await api.getAllSubscribers()
-    const members = listFromServer.members
-    // console.log('members', members)
+  @Mutation
+  public async refresh() {
+    // ------------------  Subscribers  ------------------
 
-    const subscribers: Subscriber[] = []
-    let duplicatesCount = 0
+    if (SubscriberStore.count == 0) {
+      const listFromServer = await api.getAllSubscribers()
+      const members = listFromServer.members
 
-    if (members) {
-      // ------------------  Subscribers  ------------------
-      members.forEach((member: Member) => {
-        let duplicate = false
-        const subscriber: Subscriber = {
-          id: member.id,
-          contact: member.contact,
-          address: member.address,
-          error: false,
-          read: false,
-          newsletter: member.newsletter,
-          groups: member.groups,
-          origin: member.origin,
-          data: member.data,
-          status: getSubscriberStatus(member.data),
-        }
+      const subscribers: Subscriber[] = []
 
-        subscriber.createdTs = member.created
-        subscriber.changedTs = member.changed
-        subscriber.created = new Date(member.created * 1000)
-        subscriber.changed = new Date(member.changed * 1000)
+      if (members) {
+        members.forEach((member: Member) => {
+          let duplicate = false
+          const subscriber: Subscriber = {
+            id: member.id,
+            contact: member.contact,
+            address: member.address,
+            error: false,
+            read: false,
+            newsletter: member.newsletter,
+            groups: member.groups,
+            origin: member.origin,
+            data: member.data,
+            status: getSubscriberStatus(member.data),
+          }
 
-        // Add new Subscriber to list
+          subscriber.createdTs = member.created
+          subscriber.changedTs = member.changed
+          subscriber.created = new Date(member.created * 1000)
+          subscriber.changed = new Date(member.changed * 1000)
 
-        // check on duplicates
-        subscribers.forEach((subscriber: Subscriber) => {
-          if (subscriber.id == member.id) {
-            console.log('------ duplicate ------', member.id)
-            //  console.log('--Member:', member);
-            //  console.log('--Subscriber:', subscriber);
+          // check on duplicates
+          subscribers.forEach((subscriber: Subscriber) => {
+            if (subscriber.id == member.id) {
+              duplicate = true
+            }
+          })
 
-            duplicate = true
-            duplicatesCount++
+          // Add new Subscriber to list
+          if (!duplicate) {
+            subscribers.push(subscriber)
           }
         })
+      }
+      this.list = subscribers
+      this.count = subscribers.length
 
-        if (!duplicate) {
-          subscribers.push(subscriber)
-        }
-      })
+      // ------------------  Subscriber Groups  ------------------
+      const groupResponse = await api.getSubscriberGroups()
+      this.groups = groupResponse.subscriberGroups
+    } else {
+      true
     }
-    console.log('Duplicates:', duplicatesCount)
-    //  this.list = subscribers
-    return { list: subscribers }
   }
-
-
 }
-export default getModule(SubscriberModule)

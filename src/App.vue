@@ -5,6 +5,7 @@
         <AppNavbar></AppNavbar>
         <ThemeSwitcher></ThemeSwitcher>
       </div>
+      <StatusMessages></StatusMessages>
       <router-view></router-view>
       <AppFooter></AppFooter>
     </div>
@@ -17,22 +18,27 @@ import AppFooter from './components/AppFooter.vue'
 import AppNavbar from './components/AppNavbar.vue'
 import ThemeSwitcher from '@/components/ThemeSwitcher/ThemeSwitcher.vue'
 import { eventBus } from '@/main'
+import { SubscriberStore } from '@/store'
+import StatusMessages from '@/components/StatusMesages/StatusMessages.vue'
 
 @Component({
   components: {
     AppFooter,
     AppNavbar,
     ThemeSwitcher,
+    StatusMessages,
   },
 })
 export default class App extends Vue {
   private theme: string = 'dark'
 
-  created() {
+  async created() {
     eventBus.$on('theme', (themeID: string) => {
       this.theme = themeID
-      console.log('Theme Switch:', this.theme)
     })
+
+    // Subscribers
+    await SubscriberStore.refresh()
   }
 }
 </script>

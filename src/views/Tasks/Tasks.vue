@@ -1,12 +1,11 @@
 <template>
   <div class="tasks">
     <h1>Tasks</h1>
-    <!-- <pre v-text="$attrs"/>-->
 
     <TaskRelatedItem
       v-for="relatedItem in relatedItemList"
-      :relatedItem="relatedItem"
       :key="relatedItem.related"
+      :related-item="relatedItem"
       :uuid="relatedItem.related"
     >
     </TaskRelatedItem>
@@ -15,8 +14,8 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
-import tasks from '@/store/modules/tasks'
 import TaskRelatedItem from '@/components/taskRelatedItem/TaskRelatedItem.vue'
+import { TasksStore } from '@/store'
 
 @Component({
   components: {
@@ -25,11 +24,11 @@ import TaskRelatedItem from '@/components/taskRelatedItem/TaskRelatedItem.vue'
 })
 export default class Tasks extends Vue {
   get relatedItemList() {
-    return tasks.relatedList
+    return TasksStore.relatedList
   }
 
   async created() {
-    await tasks.refreshTaskList()
+    await TasksStore.refresh()
   }
 }
 </script>

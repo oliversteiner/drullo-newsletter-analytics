@@ -1,11 +1,11 @@
 .theme-switcher {
-  margin: 10px;
-  padding: 10px;
   display: flex;
+  margin: 10px 10px 0;
 
   &-icon {
-    min-width: 30px;
-    min-height: 30px;
+    display: inline-block;
+    min-width: 20px;
+    min-height: 20px;
     cursor: pointer;
     color: gray;
   }

@@ -9,21 +9,20 @@ import 'vue-good-table/dist/vue-good-table.css'
 // Font Awesome
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import {
-  faCheck,
-  faCog,
-  faExclamationTriangle,
-  faExclamationCircle,
-  faClock,
-  faChartBar,
-  faTh,
-  faCaretDown,
-  faCaretRight,
-  faCircleNotch,
-  faSun,
-  faMoon,
-  faCircle,
-} from '@fortawesome/free-solid-svg-icons'
+import { faTimesCircle } from '@fortawesome/free-solid-svg-icons/faTimesCircle'
+import { faCaretDown } from '@fortawesome/free-solid-svg-icons/faCaretDown'
+import { faCaretRight } from '@fortawesome/free-solid-svg-icons/faCaretRight'
+import { faChartBar } from '@fortawesome/free-solid-svg-icons/faChartBar'
+import { faCog } from '@fortawesome/free-solid-svg-icons/faCog'
+import { faCheck } from '@fortawesome/free-solid-svg-icons/faCheck'
+import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons/faExclamationTriangle'
+import { faCircle } from '@fortawesome/free-solid-svg-icons/faCircle'
+import { faClock } from '@fortawesome/free-solid-svg-icons/faClock'
+import { faTh } from '@fortawesome/free-solid-svg-icons/faTh'
+import { faSun } from '@fortawesome/free-solid-svg-icons/faSun'
+import { faMoon } from '@fortawesome/free-solid-svg-icons/faMoon'
+import { faCircleNotch } from '@fortawesome/free-solid-svg-icons/faCircleNotch'
+import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons/faExclamationCircle'
 
 library.add(
   faCaretDown,
@@ -39,10 +38,11 @@ library.add(
   faSun,
   faMoon,
   faCircle,
+  faTimesCircle,
 )
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 
-// Global Vars / Theme
+// Global Vars / Theme // TODO remove?
 Vue.use(VueGlobalVar, {
   globals: {
     $theme: 'dark',

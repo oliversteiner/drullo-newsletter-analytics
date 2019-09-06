@@ -1,19 +1,26 @@
-import { getModule, Module, MutationAction, VuexModule } from 'vuex-module-decorators'
+import { getModule, Module, MutationAction, VuexModule, Mutation } from 'vuex-module-decorators'
 import store from '@/store'
 import * as api from '@/store/api'
-import { MolloMessage, Newsletter } from '@/models/models'
+import { MolloMessage, Newsletter, Task } from '@/models/models'
+
+// eslint-disable-next-line @typescript-eslint/interface-name-prefix
+interface INewslettersModule {
+  list: Newsletter[]
+  count: number
+}
 
 @Module({
-  dynamic: true,
   namespaced: true,
   name: 'newsletter',
   store,
 })
-class NewslettersModule extends VuexModule {
+export default class NewslettersModule extends VuexModule implements INewslettersModule {
   public list: Newsletter[] = []
+  public count: number = 0
 
-  @MutationAction
-  async refreshNewsletterList() {
+  @Mutation
+  public async refresh() {
+
     const listFromServer = await api.getNewsletterList()
     const items = listFromServer.newsletters
     const newsletters: Newsletter[] = []
@@ -42,17 +49,12 @@ class NewslettersModule extends VuexModule {
           },
         }
 
-
-
         newsletters.push(newsletter)
       })
     } else {
-      console.warn('no Messages from Server')
+      console.warn('no Newsletters found on Server')
     }
-    console.log('newsletters', newsletters)
-
-    return { list: newsletters }
+    this.list = newsletters
+    this.count = newsletters.length
   }
 }
-
-export default getModule(NewslettersModule)

@@ -17,7 +17,7 @@ import getSubscriberTimeline from '@/_helper/subscriberTimeline'
 export default class NewsletterTimeline extends Vue {
   @Prop() subscribers!: Subscriber[]
 
-  private dataTimeline: SubscriberTimeline = {}
+  private dataTimeline: SubscriberTimeline | {} = {}
 
   getData() {
     this.dataTimeline = getSubscriberTimeline(this.subscribers)
@@ -32,8 +32,6 @@ export default class NewsletterTimeline extends Vue {
   // Change Input
   @Watch('subscribers')
   updateData() {
-    console.log('Newslettertimeline subscribers', this.subscribers);
-
     this.dataTimeline = getSubscriberTimeline(this.subscribers)
   }
 

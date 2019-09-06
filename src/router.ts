@@ -1,9 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import store, { NewsletterStore, SubscriberStore } from '@/store'
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   routes: [
     {
       path: '/',
@@ -27,3 +28,10 @@ export default new Router({
     },
   ],
 })
+
+/*const waitForStorageToBeReady = async (to, from, next) => {
+  next()
+}
+router.beforeEach(waitForStorageToBeReady)*/
+
+export default router

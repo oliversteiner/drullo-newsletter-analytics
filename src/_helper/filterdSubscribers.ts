@@ -23,7 +23,6 @@ export default function getfilterdSubscribers(
       let isInGroup = false
       subscriber.groups.map(group => {
         if (group.id == groupId) {
-          //  console.log('isInGroup ' + this.subGroupId)
           isInGroup = true
         }
       })

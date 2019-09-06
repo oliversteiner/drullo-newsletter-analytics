@@ -1,16 +1,5 @@
 <template>
   <div class="analytics">
-    <!-- Loading Spinner -->
-    <div v-if="loading" class="loading">
-      <div class="loading-icon">
-        <font-awesome-icon icon="circle-notch" spin size="lg" />
-      </div>
-      <div class="loading-text">
-        aktualisiere Empfängerdaten ...
-      </div>
-
-      <div class="loading-count">{{ loadingState }} von {{ numberOfAllSubscribers }}</div>
-    </div>
 
     <h1>Analytics</h1>
 
@@ -18,9 +7,6 @@
       <div class="loading">
         <div class="loading-icon">
           <font-awesome-icon icon="circle-notch" spin size="lg" />
-        </div>
-        <div class="loading-text">
-          lade Newsletter Daten ...
         </div>
       </div>
     </div>
@@ -111,8 +97,7 @@
       <!-- timeline -->
       <NewsletterTimeline :subscribers="subscriberList"></NewsletterTimeline>
 
-      <!-- Test  -->
-      <!-- <CommitChart></CommitChart>-->
+
 
       <!-- Raw Data -->
       <div class="raw-data">
@@ -139,8 +124,6 @@
 <script lang="ts">
 import { Vue, Component, Watch, Ref } from 'vue-property-decorator'
 import RawDataList from '@/components/RawDataList/RawDataList.vue'
-import newsletters from '@/store/modules/newsletters'
-import subscribers from '@/store/modules/subscribers'
 import { eventBus } from '@/main'
 import { MolloMemberData, Newsletter, Statistic, Subscriber } from '@/models/models'
 import hotkeys from 'hotkeys-js'
@@ -148,6 +131,7 @@ import { EnumsSubscriberStatus } from '@/enums'
 import NewsletterSelector from '@/components/NewsletterSelector/NewsletterSelector.vue'
 import NewsletterPieChart from '@/components/NewsletterPieChart/NewsletterPieChart.vue'
 import NewsletterTimeline from '@/components/NewsletterTimeline/NewsletterTimeline.vue'
+import { NewsletterStore, SubscriberStore } from '@/store'
 
 @Component({
   components: { RawDataList, NewsletterTimeline, NewsletterPieChart, NewsletterSelector },
@@ -161,7 +145,6 @@ export default class Analytics extends Vue {
   private newsletterId: number = 0
   private subGroupId: number = 0
   private statistic: Statistic = { send: 0, open: 0, unsubscribe: 0, error: 0 }
-  private filterdSubscribers: Subscriber[] = []
   private currentNewsletter!: Newsletter
 
   changeNewsletter(newsletterId: number) {
@@ -171,10 +154,11 @@ export default class Analytics extends Vue {
 
     // close Selector
     this.isOpenSelector = false
+    console.log('changeNewsletter', this.isOpenSelector)
   }
 
   getNewsletterById(newsletterId: number) {
-    return newsletters.list.filter(newsletter => newsletter.id === newsletterId)[0]
+    return NewsletterStore.list.filter(newsletter => newsletter.id === newsletterId)[0]
   }
 
   openSelector() {
@@ -187,18 +171,17 @@ export default class Analytics extends Vue {
 
   toggleSelector() {
     this.isOpenSelector = !this.isOpenSelector
-    console.log('toggleSelector', this.isOpenSelector)
   }
 
   get newsletterList() {
-    return newsletters.list
+    return NewsletterStore.list
   }
 
   get newsletterListSortedSend() {
     let send: Newsletter[] = []
     let unSend: Newsletter[] = []
 
-    const items = newsletters.list
+    const items = NewsletterStore.list
     items.map((item: Newsletter) => {
       if (item.isSend) {
         send.push(item)
@@ -210,15 +193,12 @@ export default class Analytics extends Vue {
   }
 
   get subscriberList() {
-    // console.log('newSubscribers', subscribers.list)
-
-    const filterdSubscribers = subscribers.list
+    const filterdSubscribers = SubscriberStore.list
       .filter(sub => sub.groups.length > 0)
       .filter(sub => {
         let isInGroup = false
         sub.groups.map(group => {
           if (group.id == this.subGroupId) {
-            //  console.log('isInGroup ' + this.subGroupId)
             isInGroup = true
           }
         })
@@ -239,37 +219,31 @@ export default class Analytics extends Vue {
       return subscriber
     })
 
-    //  console.log('filterdSubscribersStatus', filterdSubscribersStatus)
-
-    this.filterdSubscribers = filterdSubscribersStatus
     return filterdSubscribersStatus
   }
 
   get numberOfSubscribers() {
-    return subscribers.count
+    return SubscriberStore.count
   }
 
   get subscriberGroups() {
     if (this.newsletter) return this.newsletter.subscriberGroups
   }
-  get statisticData() {
-    return this.updateStatistic()
-  }
 
   get newsletter() {
-    let currentNewsletter = newsletters.list[0]
+    let currentNewsletter = NewsletterStore.list[0]
 
     if (this.newsletterId === 0) {
-      currentNewsletter = newsletters.list[0]
+      currentNewsletter = NewsletterStore.list[0]
       // get latest Newsletter who was sended
-      const result = newsletters.list.filter(newsletter => newsletter.isSend)
+      const result = NewsletterStore.list.filter(newsletter => newsletter.isSend)
       if (result.length != 0) {
         currentNewsletter = result[0]
       } else {
         console.error('No Newsletter found', this.newsletterId)
       }
     } else {
-      const result = newsletters.list.filter(newsletter => newsletter.id === this.newsletterId)
+      const result = NewsletterStore.list.filter(newsletter => newsletter.id === this.newsletterId)
       if (result.length != 0) {
         currentNewsletter = result[0]
       } else {
@@ -282,23 +256,19 @@ export default class Analytics extends Vue {
   }
 
   changeSubscriberGroup(groupID: number) {
-    console.log('changeSubscriberGroup', groupID)
     this.subGroupId = groupID
     this.updateStatistic()
   }
 
   updateStatistic() {
     let statistic: Statistic = { open: 0, send: 0, unsubscribe: 0, error: 0 }
-    const subs = subscribers.list
-    // console.log('subs', subs)
 
-    subs.forEach((sub: Subscriber) => {
+    SubscriberStore.list.forEach((subscriber: Subscriber) => {
       // MolloMessages send?
 
-      if (sub.data) {
-        sub.data.forEach((item: MolloMemberData) => {
+      if (subscriber.data) {
+        subscriber.data.forEach((item: MolloMemberData) => {
           if (item && item.messageId && item.messageId === this.newsletterId) {
-            // console.log('sub', sub)
             // Send
             statistic.send++
 
@@ -321,8 +291,6 @@ export default class Analytics extends Vue {
       }
     })
     this.statistic = statistic
-    console.log('updateStatistic: ' + this.newsletterId, statistic)
-    return statistic
   }
 
   getGroupsFromNewsletter() {
@@ -332,38 +300,43 @@ export default class Analytics extends Vue {
 
   @Ref('collapsibles') readonly collapsibles!: HTMLElement
   onClickOutside(event: MouseEvent) {
+    this.isOpenSelector = false
     if (!this.collapsibles || this.collapsibles.contains(event.target as HTMLElement)) {
-      console.log('inside')
-    } else {
-      console.log('outside')
-      this.isOpenSelector = false
+      this.isOpenSelector = true
     }
   }
 
   @Watch('subGroupId')
-  testFunc() {
+  subGroupMatch() {
     this.updateStatistic()
   }
 
-  async created() {
-    eventBus.$on('all Members', (data: number) => {
-      this.numberOfAllSubscribers = data
+  private mounted() {
+    // Close Popup if clickt outside of Popup
+    document.addEventListener('click', this.onClickOutside)
+
+    // Global press esc
+    hotkeys('esc', () => {
+      this.isOpenSelector = false
     })
-    eventBus.$on('loading Members', (data: number) => {
-      this.loadingState = data
-      // console.log('loading data...', data)
-    })
+  }
+
+  private async created() {
+
+
+
+
     // Newsletter
-    await newsletters.refreshNewsletterList()
+     await NewsletterStore.refresh()
 
     // Subscribers
-    await subscribers.loadSubscriberCount()
-    await subscribers.refreshSubscriberList()
-    await subscribers.loadSubscriberGroups()
+     await SubscriberStore.refresh()
+
+    // Response
     this.loading = false
 
     // get newsletter
-    const result = newsletters.list.filter(newsletter => newsletter.isSend)
+    const result = NewsletterStore.list.filter(newsletter => newsletter.isSend)
     const newsletterId = result[0].id
     this.changeNewsletter(newsletterId)
     this.subGroupId = result[0].subscriberGroups[0].id
@@ -372,19 +345,7 @@ export default class Analytics extends Vue {
     this.updateStatistic()
   }
 
-  mounted() {
-    // Close Popup if clickt outside of Popup
-    document.addEventListener('click', this.onClickOutside)
-
-    // Global press esc
-    hotkeys('esc', () => {
-      // event.preventDefault()
-      console.log('ESC pressed')
-      this.isOpenSelector = false
-    })
-  }
-
-  beforeDestroy() {
+  private beforeDestroy() {
     // remove EventListeners
     document.removeEventListener('click', this.onClickOutside)
   }

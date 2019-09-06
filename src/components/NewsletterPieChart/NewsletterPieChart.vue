@@ -19,7 +19,6 @@ export default class NewsletterPieChart extends Vue {
   // Change Input
   @Watch('dataStatistic')
   updateData() {
-    console.log('-- dataStatistic 1', this.dataStatistic)
   }
 }
 </script>
