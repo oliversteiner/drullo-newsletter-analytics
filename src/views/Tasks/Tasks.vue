@@ -1,9 +1,6 @@
 <template>
   <div class="tasks">
     <h1>Tasks</h1>
-<!--
-     <pre v-text="relatedItemList"/>
--->
 
     <TaskRelatedItem
       v-for="relatedItem in relatedItemList"

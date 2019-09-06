@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import store from '@/store'
+import store, { NewsletterStore, SubscriberStore } from '@/store'
 
 Vue.use(Router)
 
@@ -29,11 +29,9 @@ const router = new Router({
   ],
 })
 
-const waitForStorageToBeReady = async (to, from, next) => {
-  await store.restored
+/*const waitForStorageToBeReady = async (to, from, next) => {
   next()
 }
-router.beforeEach(waitForStorageToBeReady)
-
+router.beforeEach(waitForStorageToBeReady)*/
 
 export default router

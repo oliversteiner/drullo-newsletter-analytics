@@ -1,16 +1,5 @@
 <template>
   <div class="analytics">
-    <!-- Loading Spinner -->
-    <div v-if="loading" class="loading">
-      <div class="loading-icon">
-        <font-awesome-icon icon="circle-notch" spin size="lg" />
-      </div>
-      <div class="loading-text">
-        aktualisiere Empfängerdaten ...
-      </div>
-
-      <div class="loading-count">{{ loadingState }} von {{ numberOfAllSubscribers }}</div>
-    </div>
 
     <h1>Analytics</h1>
 
@@ -18,9 +7,6 @@
       <div class="loading">
         <div class="loading-icon">
           <font-awesome-icon icon="circle-notch" spin size="lg" />
-        </div>
-        <div class="loading-text">
-          lade Newsletter Daten ...
         </div>
       </div>
     </div>
@@ -111,8 +97,7 @@
       <!-- timeline -->
       <NewsletterTimeline :subscribers="subscriberList"></NewsletterTimeline>
 
-      <!-- Test  -->
-      <!-- <CommitChart></CommitChart>-->
+
 
       <!-- Raw Data -->
       <div class="raw-data">
@@ -322,22 +307,30 @@ export default class Analytics extends Vue {
   }
 
   @Watch('subGroupId')
-  func() {
+  subGroupMatch() {
     this.updateStatistic()
   }
 
-  async created() {
-    eventBus.$on('all Members', (data: number) => {
-      this.numberOfAllSubscribers = data
+  private mounted() {
+    // Close Popup if clickt outside of Popup
+    document.addEventListener('click', this.onClickOutside)
+
+    // Global press esc
+    hotkeys('esc', () => {
+      this.isOpenSelector = false
     })
-    eventBus.$on('loading Members', (data: number) => {
-      this.loadingState = data
-    })
+  }
+
+  private async created() {
+
+
+
+
     // Newsletter
-    await NewsletterStore.refresh()
+     await NewsletterStore.refresh()
 
     // Subscribers
-    await SubscriberStore.refresh()
+     await SubscriberStore.refresh()
 
     // Response
     this.loading = false
@@ -352,17 +345,7 @@ export default class Analytics extends Vue {
     this.updateStatistic()
   }
 
-  mounted() {
-    // Close Popup if clickt outside of Popup
-    document.addEventListener('click', this.onClickOutside)
-
-    // Global press esc
-    hotkeys('esc', () => {
-      this.isOpenSelector = false
-    })
-  }
-
-  beforeDestroy() {
+  private beforeDestroy() {
     // remove EventListeners
     document.removeEventListener('click', this.onClickOutside)
   }

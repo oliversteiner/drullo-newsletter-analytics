@@ -239,10 +239,10 @@ export interface SubscriberStatus {
 }
 
 export interface SubscriberTimeline {
-  send: { t: Date; y: number; }[]
-  open: { t: Date; y: number; }[]
-  unsubscribe: { t: Date; y: number; }[]
-  error: { t: Date; y: number; }[]
+  send: { t: Date; y: number }[]
+  open: { t: Date; y: number }[]
+  unsubscribe: { t: Date; y: number }[]
+  error: { t: Date; y: number }[]
   label: string[]
   timestamp?: number[]
 }
@@ -252,4 +252,12 @@ interface Statistic {
   open: number
   unsubscribe: number
   error: number
+}
+
+interface StatusMessage {
+  module: string
+  status: 'loading' | 'start' | 'finish' | 'error'
+  progress?: string | number
+  count?: number
+  message?: string
 }

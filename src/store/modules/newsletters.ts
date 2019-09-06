@@ -20,6 +20,7 @@ export default class NewslettersModule extends VuexModule implements INewsletter
 
   @Mutation
   public async refresh() {
+
     const listFromServer = await api.getNewsletterList()
     const items = listFromServer.newsletters
     const newsletters: Newsletter[] = []
