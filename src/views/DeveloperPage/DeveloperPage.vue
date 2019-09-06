@@ -43,11 +43,8 @@ export default class DeveloperPage extends Vue {
       error: [],
     }
     // no Data
-    if (!subscribers) return timeline
-
     const subscribers = this.filterdSubscribers
-
-    console.log('Subscriber:', subscribers[0])
+    if (!subscribers) return timeline
 
     let sendTSs: number[] = []
     let TimelineInHourTS: number[] = []
@@ -61,8 +58,6 @@ export default class DeveloperPage extends Vue {
       //  timeline.push(message)
 
       // Send Timeline
-      // console.log('subscriber.data', subscriber.data[0])
-
       const data = subscriber.data[0]
 
       // Send
@@ -122,8 +117,6 @@ export default class DeveloperPage extends Vue {
       TimelineInHourTS.push(newTS)
     }
 
-    console.log('TimelineInHour:', TimelineInHour)
-
     TimelineInHour.forEach((stepH: string) => {
       // send
       const find1 = TimelineInHourSend.filter(item => item.time == stepH)
@@ -147,12 +140,7 @@ export default class DeveloperPage extends Vue {
     // Sort by hour key
     TimelineInHourOpen.sort((a, b) => a.time.localeCompare(b.time))
 
-    console.log('TimelineInHourSend', TimelineInHourSend)
-    console.log('TimelineInHourOpen', TimelineInHourOpen)
-    console.log('TimelineInHourUnsu', TimelineInHourUnsu)
-
     // build chartjs axis:
-
     const timestampAxis = TimelineInHourTS
     const sendAxis = TimelineInHourSend.map(item => {
       return item.count
@@ -176,13 +164,12 @@ export default class DeveloperPage extends Vue {
   }
 
   get filterdSubscribers(): Subscriber[] {
-    // console.log('newSubscribers', subscribers.list)
 
     return getfilterdSubscribers(subscribers.list, this.newsletterId, this.subGroupId)
   }
 
   async create() {
-    await subscribers.refreshSubscriberList()
+    await subscribers.refresh()
   }
 }
 </script>

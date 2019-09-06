@@ -31,7 +31,6 @@ export default class App extends Vue {
   created() {
     eventBus.$on('theme', (themeID: string) => {
       this.theme = themeID
-      console.log('Theme Switch:', this.theme)
     })
   }
 }

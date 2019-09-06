@@ -91,7 +91,6 @@ export default class PieChart extends Vue<Line> {
     // Overwriting base render method with actual data.
     const chartData = this.chartData
 
-    console.log('this.chartData', this.chartData)
 
     this.renderChart(chartData, this.chartOptions)
   }
@@ -99,14 +98,11 @@ export default class PieChart extends Vue<Line> {
   // Change Input
   @Watch('stl')
   private updateData(): void {
-    console.log('Linechart Update', this.stl)
-
     this.renderData()
   }
 
   // Mounted
   public mounted(): void {
-    console.log('Linechart Mounted', this.stl.send)
     this.renderData()
   }
 }

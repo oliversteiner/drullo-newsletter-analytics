@@ -70,20 +70,14 @@ export default class SubscriberTable extends Vue {
       { id: 5, name: 'Dan', age: 40, createdAt: '2011-10-21', score: 0.03343 },
       { id: 6, name: 'John', age: 20, createdAt: '2011-10-31', score: 0.03343 },
     ]
-
     this.subscriberList.map((subscriber: Subscriber) => {
       let row = {
         id: subscriber.id,
-        first_name: subscriber.address.first_name,
+        firstName: subscriber.address.first_name,
         last_name: subscriber.address.last_name,
-
       }
-
       rows.push(row)
     })
-
-    console.log(rows)
-
     return rows
   }
 }

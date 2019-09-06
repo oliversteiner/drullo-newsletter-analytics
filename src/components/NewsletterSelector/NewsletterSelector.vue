@@ -48,9 +48,8 @@ export default class NewsletterSelector extends Vue {
   @Prop() newsletterListUnSend!: Newsletter[]
   @Prop() selectedNewsletter!: number
 
-  changeItem(newsletterID: number) {
-    console.log('change current Newsletter ID', newsletterID)
-    this.$emit('changeNewsletter', newsletterID)
+  changeItem(newsletterId: number) {
+    this.$emit('changeNewsletter', newsletterId)
   }
 }
 </script>

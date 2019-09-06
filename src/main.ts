@@ -42,7 +42,7 @@ library.add(
 )
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 
-// Global Vars / Theme
+// Global Vars / Theme // TODO remove?
 Vue.use(VueGlobalVar, {
   globals: {
     $theme: 'dark',

@@ -14,6 +14,7 @@ export const enum TaskStatusMessage {
   DONE = 'beendet',
   WARNING = 'beendet mit Fehlern',
   ERROR = 'nicht ausgeführt',
+  SAVE = 'Jetzt ausführen',
 }
 
 export const enum EnumsSubscriberStatus {

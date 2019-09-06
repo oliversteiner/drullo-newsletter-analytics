@@ -1,9 +1,58 @@
 import Vue from 'vue'
-import Vuex from 'vuex'
+import Vuex, { Payload } from 'vuex'
+import VuexPersistence from 'vuex-persist'
+import { getModule } from 'vuex-module-decorators'
+import { Newsletter, Subscriber, SubscriberGroup, Task, TaskRelated } from '@/models/models'
+import SubscriberModule from '@/store/modules/subscribers'
+import TasksModule from '@/store/modules/tasks'
+import NewslettersModule from '@/store/modules/newsletters'
+
 Vue.use(Vuex)
 
-export default new Vuex.Store({
-  state: {},
-  mutations: {},
-  actions: {},
+interface SubscriberState {
+  list: Subscriber[]
+  groups: SubscriberGroup[]
+  count: number
+}
+
+interface TasksState {
+  list: Task[]
+  relatedList: TaskRelated[]
+  count: number
+}
+
+interface NewsletterState {
+  list: Newsletter[]
+  count: number
+}
+
+export interface State {
+  subscriber: SubscriberState
+  tasks: TasksState
+  newsletter: NewsletterState
+}
+
+const vuexLocal = new VuexPersistence<State>({
+  storage: window.localStorage,
+
+  // Function that passes the state and returns the state with only the objects you want to store.
+  //  reducer: state => ({
+  //  keepThisModule: state.keepThisModule,
+  //  keepThisModuleToo: state.keepThisModuleToo,
+  // getRidOfThisModule: state.getRidOfThisModule
+  // }),
 })
+
+const store = new Vuex.Store<State>({
+  modules: {
+    subscriber: SubscriberModule,
+    tasks: TasksModule,
+    newsletter: NewslettersModule,
+  },
+  plugins: [vuexLocal.plugin],
+})
+
+export default store
+export const SubscriberStore = getModule(SubscriberModule, store)
+export const TasksStore = getModule(TasksModule, store)
+export const NewsletterStore = getModule(NewslettersModule, store)
