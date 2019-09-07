@@ -15,6 +15,8 @@ import {
   StatusMessage,
 } from '../models/models'
 import { eventBus } from '@/main'
+import { SubscriberStore } from '@/store/index'
+import subscribers from '@/store/modules/subscribers'
 
 export const smmgApi = axios.create({
   baseURL: process.env.VUE_APP_HOST + '/smmg',
@@ -46,6 +48,21 @@ export async function getSubscriberCount() {
 export async function getSubscriberGroups() {
   const response = await smmgApi.get('/api/subscriberGroups')
   return response.data as SubscriberGroupsResponse
+}
+
+export async function getUpdatedSubscribers() {
+  // search in localstorage for latest updated item
+  const allChangedTS: number[] = SubscriberStore.list.map(subscribers => {
+    return subscribers.changedTs as number
+  })
+  const latestChanged = Math.max(...allChangedTS)
+
+  console.log('allChangedTS', allChangedTS)
+  console.log('latestChanged', latestChanged)
+
+  const response = await smmgApi.get('/api/members/sync/'+ latestChanged)
+
+
 }
 
 export async function getAllSubscribers() {

@@ -26,12 +26,19 @@ export default class SubscriberModule extends VuexModule implements ISubscriberM
     return await api.getSubscriberGroups()
   }
 
+  @MutationAction
+  public async updateFromServer(){
+    return await api.getUpdatedSubscribers()
+  }
+
+
   @Mutation
   public async refresh() {
     // ------------------  Subscribers  ------------------
 
-    if (SubscriberStore.count == 0) {
       const listFromServer = await api.getAllSubscribers()
+
+    if (SubscriberStore.count == 0) {
       const members = listFromServer.members
 
       const subscribers: Subscriber[] = []

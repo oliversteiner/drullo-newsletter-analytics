@@ -24,7 +24,7 @@ export default class SubscriberTable extends Vue {
       },
       {
         label: 'Vorname',
-        field: 'first_name',
+        field: 'firstName',
         filterOptions: {
           enabled: true, // enable filter for this column
           trigger: 'enter', //only trigger on enter not on keyup
@@ -32,7 +32,7 @@ export default class SubscriberTable extends Vue {
       },
       {
         label: 'Nachname',
-        field: 'last_name',
+        field: 'lastName',
         filterOptions: {
           enabled: true, // enable filter for this column
           trigger: 'enter', //only trigger on enter not on keyup
