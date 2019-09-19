@@ -1,7 +1,7 @@
 import { Line } from 'vue-chartjs'
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
-import { SubscriberTimeline } from '@/models/models'
-import Colors from '@/models/colors'
+import ColorClass from '@/_models/colorClass'
+import { SubscriberTimeline } from '@/_models/SubscriberClass'
 
 // @ts-ignore
 @Component({
@@ -10,9 +10,12 @@ import Colors from '@/models/colors'
 export default class PieChart extends Vue<Line> {
   @Prop() private stl!: SubscriberTimeline
 
-  private colors = new Colors()
+  private colors = new ColorClass()
 
   private get chartData(): any {
+    if (!this.stl) {
+      return 0
+    }
     const labels = this.stl.label
     const datasets = [
       {
@@ -90,7 +93,6 @@ export default class PieChart extends Vue<Line> {
   private renderData(): void {
     // Overwriting base render method with actual data.
     const chartData = this.chartData
-
 
     this.renderChart(chartData, this.chartOptions)
   }
