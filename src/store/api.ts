@@ -1,22 +1,12 @@
 import axios from 'axios'
-import {
-  UserSubmit,
-  UserResponse,
-  User,
-  Profile,
-  ProfileResponse,
-  UserForUpdate,
-  TasksResponse,
-  MolloMessageResponse,
-  MemberResponse,
-  Member,
-  SubscriberCountResponse,
-  SubscriberGroupsResponse,
-  StatusMessage,
-} from '../models/models'
+
 import { eventBus } from '@/main'
 import { SubscriberStore } from '@/store/index'
-import subscribers from '@/store/modules/subscribers'
+import { TasksResponse } from '@/_models/TaskClass'
+import { MolloMessageResponse } from '@/_models/NewsletterClass'
+import { Member, MemberResponse, SubscriberCountResponse, SubscriberGroupsResponse } from '@/_models/SubscriberClass'
+import { Profile, ProfileResponse, User, UserForUpdate, UserResponse, UserSubmit } from '@/_models/models'
+import { StatusMessage } from '@/_models/MessageClass'
 
 export const smmgApi = axios.create({
   baseURL: process.env.VUE_APP_HOST + '/smmg',
@@ -57,12 +47,7 @@ export async function getUpdatedSubscribers() {
     return subscribers.changedTs as number
   })
   const latestChanged = Math.max(...allChangedTS)
-
-  console.log('allChangedTS', allChangedTS)
-  console.log('latestChanged', latestChanged)
-
-  const response = await smmgApi.get('/api/members/sync/' + latestChanged)
-  return response
+  return await smmgApi.get('/api/members/sync/' + latestChanged)
 }
 
 export async function getAllSubscribers() {
@@ -117,13 +102,14 @@ export async function getAllSubscribers() {
   allResponses.map(response => {
     console.warn('-- Response Members', response.members.length)
 
-    response.members.map(member => {
+    response.members.map((member: Member) => {
       members.push(member)
     })
   })
 
   statusMessage = { module: 'subscribers', status: 'finish' }
   eventBus.$emit('LOADING_DATA', statusMessage)
+
   // build Request Response
   const result: MemberResponse = {
     count: memberLength,

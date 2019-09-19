@@ -1,7 +1,8 @@
 import { Moment } from 'moment'
 import { TaskStatus, TaskStatusMessage } from '@/enums'
 import { Subscribers } from '@/_models/SubscriberClass'
-import { Message, Range } from '@/_models/models'
+import { Range } from '@/_models/models'
+import { Message } from '@/_models/MessageClass'
 
 export interface TasksResponse {
   tasks: (Task)[]

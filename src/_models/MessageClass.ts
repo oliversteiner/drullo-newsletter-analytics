@@ -4,7 +4,7 @@ export interface Message {
   category: string
 }
 
-interface StatusMessage {
+export interface StatusMessage {
   module: string
   status: 'loading' | 'start' | 'finish' | 'error'
   progress?: string | number
