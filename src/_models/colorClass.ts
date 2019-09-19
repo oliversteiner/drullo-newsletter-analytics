@@ -1,23 +1,22 @@
-export interface ColorsInterface {
-  send: ColorsItemInterface
-  open: ColorsItemInterface
-  unsubscribe: ColorsItemInterface
-  error: ColorsItemInterface
+export interface Color {
+  send: ColorItemInterface
+  open: ColorItemInterface
+  unsubscribe: ColorItemInterface
+  error: ColorItemInterface
 }
 
-export interface ColorsItemInterface {
+export interface ColorItemInterface {
   border: string
   background: string
 }
 
-class Colors implements ColorsInterface {
-  public send: ColorsItemInterface
-  public open: ColorsItemInterface
-  public unsubscribe: ColorsItemInterface
-  public error: ColorsItemInterface
+export default class ColorClass implements Color {
+  public send: ColorItemInterface
+  public open: ColorItemInterface
+  public unsubscribe: ColorItemInterface
+  public error: ColorItemInterface
 
   public constructor() {
-    // TODO: add Dark-Mode switch
     this.send = {
       border: 'rgba(255,255,255,0.21)',
       background: 'rgba(255,255,255,0.13)',
@@ -40,4 +39,3 @@ class Colors implements ColorsInterface {
   }
 }
 
-export default Colors

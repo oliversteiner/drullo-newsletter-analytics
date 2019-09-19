@@ -1,9 +1,8 @@
 import { Action, Module, Mutation, MutationAction, VuexModule } from 'vuex-module-decorators'
 import store, { SubscriberStore } from '@/store'
 import * as api from '@/store/api'
-import { Subscriber, SubscriberGroup } from '@/models/models'
 import { AxiosResponse } from 'axios'
-import { convertMemberToSubscribers } from '@/models/Subscriber'
+import SubscriberClass, { Subscriber, SubscriberGroup } from '@/_models/SubscriberClass'
 
 // eslint-disable-next-line @typescript-eslint/interface-name-prefix
 export interface ISubscriberModule {
@@ -47,7 +46,7 @@ export default class SubscriberModule extends VuexModule implements ISubscriberM
 
       const members = listFromServer.members
 
-      const subscribers = convertMemberToSubscribers(members)
+      const subscribers = SubscriberClass.convertMemberToSubscribers(members)
       this.list = subscribers
       this.count = subscribers.length
 
