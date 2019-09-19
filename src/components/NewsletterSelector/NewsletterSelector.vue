@@ -19,13 +19,13 @@
       </li>
     </ul>
     <!-- ============= UnSend ============= -->
-    <div class="divider-un-send">Noch nicht gesended</div>
+    <div class="divider-un-send">Noch nicht gesendet</div>
     <ul>
       <li
-        v-for="(newsletter) in newsletterListUnSend"
+        v-for="newsletter in newsletterListUnSend"
         :key="newsletter.id"
-        @click="changeItem(newsletter.id)"
         :class="{ active: selectedNewsletter === newsletter.id }"
+        @click="changeItem(newsletter.id)"
       >
         <div class="wrapper">
           <!-- Send Date -->

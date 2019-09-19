@@ -45,6 +45,7 @@ export async function getSubscriberCount() {
   const response = await smmgApi.get('/api/members/count')
   return response.data as SubscriberCountResponse
 }
+
 export async function getSubscriberGroups() {
   const response = await smmgApi.get('/api/subscriberGroups')
   return response.data as SubscriberGroupsResponse
@@ -60,9 +61,8 @@ export async function getUpdatedSubscribers() {
   console.log('allChangedTS', allChangedTS)
   console.log('latestChanged', latestChanged)
 
-  const response = await smmgApi.get('/api/members/sync/'+ latestChanged)
-
-
+  const response = await smmgApi.get('/api/members/sync/' + latestChanged)
+  return response
 }
 
 export async function getAllSubscribers() {
@@ -170,6 +170,8 @@ export async function updateUser(user: UserForUpdate): Promise<User> {
   return (response.data as UserResponse).user
 }
 
+// Helper
+// --------------------------------------- //
 function wait(ms: number) {
   var start = new Date().getTime()
   var end = start

@@ -18,7 +18,7 @@ import AppFooter from './components/AppFooter.vue'
 import AppNavbar from './components/AppNavbar.vue'
 import ThemeSwitcher from '@/components/ThemeSwitcher/ThemeSwitcher.vue'
 import { eventBus } from '@/main'
-import { SubscriberStore } from '@/store'
+import {NewsletterStore, SubscriberStore} from '@/store'
 import StatusMessages from '@/components/StatusMesages/StatusMessages.vue'
 
 @Component({
@@ -36,6 +36,9 @@ export default class App extends Vue {
     eventBus.$on('theme', (themeID: string) => {
       this.theme = themeID
     })
+
+    // Newsletter
+    await NewsletterStore.refresh()
 
     // Subscribers
     await SubscriberStore.refresh()

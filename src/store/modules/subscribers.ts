@@ -1,8 +1,9 @@
 import { Action, Module, Mutation, MutationAction, VuexModule } from 'vuex-module-decorators'
 import store, { SubscriberStore } from '@/store'
 import * as api from '@/store/api'
-import { Member, Subscriber, SubscriberCountResponse, SubscriberGroup, SubscriberGroupsResponse } from '@/models/models'
-import getSubscriberStatus from '@/_helper/subscriberStatus'
+import { Subscriber, SubscriberGroup } from '@/models/models'
+import { AxiosResponse } from 'axios'
+import { convertMemberToSubscribers } from '@/models/Subscriber'
 
 // eslint-disable-next-line @typescript-eslint/interface-name-prefix
 export interface ISubscriberModule {
@@ -22,69 +23,37 @@ export default class SubscriberModule extends VuexModule implements ISubscriberM
   public count: number = 0
 
   @Action({ commit: 'getSubscriberGroups' })
-  async loadSubscriberGroups() {
+  public async loadSubscriberGroups() {
     return await api.getSubscriberGroups()
   }
 
+  // @ts-ignore
   @MutationAction
-  public async updateFromServer(){
+  public async updateFromServer(): Promise<AxiosResponse> {
     return await api.getUpdatedSubscribers()
   }
 
-
   @Mutation
-  public async refresh() {
+  public async refresh(): Promise<void> {
     // ------------------  Subscribers  ------------------
 
+    const update = await api.getUpdatedSubscribers()
+
+    console.log('Subscriber Changes From Server:', update.data.count)
+    console.log('Subscribers in LocalStore:', SubscriberStore.count)
+
+    if (SubscriberStore.count == 0 || update.data.count > 0) {
       const listFromServer = await api.getAllSubscribers()
 
-    if (SubscriberStore.count == 0) {
       const members = listFromServer.members
 
-      const subscribers: Subscriber[] = []
-
-      if (members) {
-        members.forEach((member: Member) => {
-          let duplicate = false
-          const subscriber: Subscriber = {
-            id: member.id,
-            contact: member.contact,
-            address: member.address,
-            error: false,
-            read: false,
-            newsletter: member.newsletter,
-            groups: member.groups,
-            origin: member.origin,
-            data: member.data,
-            status: getSubscriberStatus(member.data),
-          }
-
-          subscriber.createdTs = member.created
-          subscriber.changedTs = member.changed
-          subscriber.created = new Date(member.created * 1000)
-          subscriber.changed = new Date(member.changed * 1000)
-
-          // check on duplicates
-          subscribers.forEach((subscriber: Subscriber) => {
-            if (subscriber.id == member.id) {
-              duplicate = true
-            }
-          })
-
-          // Add new Subscriber to list
-          if (!duplicate) {
-            subscribers.push(subscriber)
-          }
-        })
-      }
+      const subscribers = convertMemberToSubscribers(members)
       this.list = subscribers
       this.count = subscribers.length
 
       // ------------------  Subscriber Groups  ------------------
       const groupResponse = await api.getSubscriberGroups()
       this.groups = groupResponse.subscriberGroups
-    } else {
-      true
     }
   }
 }

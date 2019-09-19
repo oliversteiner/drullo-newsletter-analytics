@@ -1,6 +1,5 @@
 <template>
   <div class="analytics">
-
     <h1>Analytics</h1>
 
     <div v-if="!newsletter">
@@ -39,7 +38,7 @@
               </h2>
 
               <!-- Newletter selector -->
-              <div v-show="isOpenSelector" class="selector-wrapper ">
+              <div v-if="isOpenSelector" class="selector-wrapper ">
                 <NewsletterSelector
                   ref="test-ref"
                   :newsletter-list-send="newsletterListSortedSend.send"
@@ -97,8 +96,6 @@
       <!-- timeline -->
       <NewsletterTimeline :subscribers="subscriberList"></NewsletterTimeline>
 
-
-
       <!-- Raw Data -->
       <div class="raw-data">
         <!-- Number of Subscibers-->
@@ -148,12 +145,13 @@ export default class Analytics extends Vue {
   private currentNewsletter!: Newsletter
 
   changeNewsletter(newsletterId: number) {
+    // close Selector
+    this.isOpenSelector = false
+
     this.newsletterId = newsletterId
     this.currentNewsletter = this.getNewsletterById(newsletterId)
     this.subGroupId = this.getGroupsFromNewsletter()
 
-    // close Selector
-    this.isOpenSelector = false
     console.log('changeNewsletter', this.isOpenSelector)
   }
 
@@ -312,7 +310,7 @@ export default class Analytics extends Vue {
   }
 
   private mounted() {
-    // Close Popup if clickt outside of Popup
+    // Close Popup if  outside click of Popup
     document.addEventListener('click', this.onClickOutside)
 
     // Global press esc
@@ -322,15 +320,6 @@ export default class Analytics extends Vue {
   }
 
   private async created() {
-
-
-
-
-    // Newsletter
-     await NewsletterStore.refresh()
-
-    // Subscribers
-     await SubscriberStore.refresh()
 
     // Response
     this.loading = false
