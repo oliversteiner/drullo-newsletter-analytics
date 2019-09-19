@@ -13,8 +13,8 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator'
 import { eventBus } from '@/main'
-import newsletters from '@/store/modules/newsletters'
-import subscribers from '@/store/modules/subscribers'
+import newsletters from '@/store/modules/NewslettersModule'
+import subscribers from '@/store/modules/SubscriberModule'
 import SubscriberTable from '@/components/SubscriberTable/SubscriberTable.vue'
 import { SubscriberStore } from '@/store'
 import { StatusMessage } from '@/models/models'

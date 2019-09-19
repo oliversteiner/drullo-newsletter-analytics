@@ -1,7 +1,7 @@
 import { getModule, Module, MutationAction, VuexModule } from 'vuex-module-decorators'
 import store from '@/store'
-import { Profile, User, UserSubmit, UserForUpdate } from '../../models/models'
 import { fetchProfile, fetchUser, loginUser, updateUser, setJWT } from '../api'
+import { Profile, User, UserForUpdate, UserSubmit } from '@/_models/models'
 
 @Module({
   namespaced: true,
@@ -10,13 +10,14 @@ import { fetchProfile, fetchUser, loginUser, updateUser, setJWT } from '../api'
   dynamic: true,
 })
 class UsersModule extends VuexModule {
-  user: User | null = null
-  profile: Profile | null = null
+  private user: User | null = null
+  private profile: Profile | null = null
 
-  get username() {
+  public get username() {
     return (this.user && this.user.username) || null
   }
 
+  // @ts-ignore
   @MutationAction
   async login(userSubmit: UserSubmit) {
     const user = await loginUser(userSubmit)
@@ -24,18 +25,21 @@ class UsersModule extends VuexModule {
     return { user }
   }
 
+  // @ts-ignore
   @MutationAction
   async loadProfile(username: string) {
     const profile = await fetchProfile(username)
     return { profile }
   }
 
+  // @ts-ignore
   @MutationAction
   async loadUser() {
     const user = await fetchUser()
     return { user }
   }
 
+  // @ts-ignore
   @MutationAction
   async updateSelfProfile(userUpdateFields: UserForUpdate) {
     const user = await updateUser(userUpdateFields)

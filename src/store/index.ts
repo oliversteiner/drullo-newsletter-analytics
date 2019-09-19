@@ -3,9 +3,9 @@ import Vuex, { Payload } from 'vuex'
 import VuexPersistence from 'vuex-persist'
 import { getModule } from 'vuex-module-decorators'
 import { Newsletter, Subscriber, SubscriberGroup, Task, TaskRelated } from '@/models/models'
-import SubscriberModule from '@/store/modules/subscribers'
-import TasksModule from '@/store/modules/tasks'
-import NewslettersModule from '@/store/modules/newsletters'
+import SubscriberModule from '@/store/modules/SubscriberModule'
+import TasksModule from '@/store/modules/TasksModule'
+import NewslettersModule from '@/store/modules/NewslettersModule'
 
 Vue.use(Vuex)
 

@@ -1,10 +1,9 @@
 import { getModule, Module, MutationAction, VuexModule, Mutation } from 'vuex-module-decorators'
 import store from '@/store'
 import * as api from '@/store/api'
-import { MolloMessage, Newsletter, Task } from '@/models/models'
+import { MolloMessage, Newsletter } from '@/_models/NewsletterClass'
 
-// eslint-disable-next-line @typescript-eslint/interface-name-prefix
-interface INewslettersModule {
+interface NewslettersModuleInterface {
   list: Newsletter[]
   count: number
 }
@@ -14,13 +13,12 @@ interface INewslettersModule {
   name: 'newsletter',
   store,
 })
-export default class NewslettersModule extends VuexModule implements INewslettersModule {
+export default class NewslettersModule extends VuexModule implements NewslettersModuleInterface {
   public list: Newsletter[] = []
   public count: number = 0
 
   @Mutation
   public async refresh() {
-
     const listFromServer = await api.getNewsletterList()
     const items = listFromServer.newsletters
     const newsletters: Newsletter[] = []

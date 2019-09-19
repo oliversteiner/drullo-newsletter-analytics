@@ -4,8 +4,7 @@ import * as api from '@/store/api'
 import { AxiosResponse } from 'axios'
 import SubscriberClass, { Subscriber, SubscriberGroup } from '@/_models/SubscriberClass'
 
-// eslint-disable-next-line @typescript-eslint/interface-name-prefix
-export interface ISubscriberModule {
+export interface SubscriberModuleInterface {
   list: Subscriber[]
   groups: SubscriberGroup[]
   count: number
@@ -16,7 +15,7 @@ export interface ISubscriberModule {
   name: 'subscriber',
   store,
 })
-export default class SubscriberModule extends VuexModule implements ISubscriberModule {
+export default class SubscriberModule extends VuexModule implements SubscriberModuleInterface {
   public list: Subscriber[] = []
   public groups: SubscriberGroup[] = []
   public count: number = 0
