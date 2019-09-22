@@ -24,7 +24,6 @@ import { Subscriber } from '@/_models/SubscriberClass'
 export default class SubscriberListAll extends Vue {
   @Prop() subscribers!: Subscriber[]
   @Prop() all!: number
-
   private debug = false
 }
 </script>

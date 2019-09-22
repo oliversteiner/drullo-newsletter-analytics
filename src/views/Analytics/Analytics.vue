@@ -117,8 +117,6 @@
       <!-- Subscribers with warning -->
       <SubscriberListWarning :subscribers="subscriberList" :all="numberOfAllSubscribers"></SubscriberListWarning>
 
-      <!--  All Subscribers -->
-      <SubscriberListAll :subscribers="subscriberList" :all="numberOfAllSubscribers"></SubscriberListAll>
     </div>
   </div>
 </template>
