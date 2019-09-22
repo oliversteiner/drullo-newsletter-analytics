@@ -2,7 +2,6 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-import VueMoment from 'vue-moment'
 import VueGlobalVar from 'vue-global-var'
 import 'vue-good-table/dist/vue-good-table.css'
 
@@ -23,6 +22,9 @@ import { faSun } from '@fortawesome/free-solid-svg-icons/faSun'
 import { faMoon } from '@fortawesome/free-solid-svg-icons/faMoon'
 import { faCircleNotch } from '@fortawesome/free-solid-svg-icons/faCircleNotch'
 import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons/faExclamationCircle'
+
+// Moment
+import moment from 'moment'
 
 library.add(
   faCaretDown,
@@ -53,8 +55,11 @@ Vue.use(VueGlobalVar, {
 Vue.config.performance = true
 Vue.config.productionTip = false
 
-// Moment
-Vue.use(VueMoment as any)
+// Moment with Locale
+require('moment/locale/de-ch')
+Vue.use(require('vue-moment'), {
+  moment,
+})
 
 // Global Events / Emits
 export const eventBus = new Vue()
