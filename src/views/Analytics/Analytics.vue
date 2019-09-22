@@ -73,19 +73,37 @@
       </div>
 
       <!--  List -->
-      <div class="box box-list">
+      <div class="box box-legend">
         <table>
           <tr>
-            <th>Versendete Newsletter:</th>
+            <td><span class="subscriber-status none "></span></td>
+            <td>Empfänger:</td>
+            <td>{{ statistic.subscribers }}</td>
+          </tr>
+          <tr>
+            <td><span class="subscriber-status send "></span></td>
+            <td>Versendet:</td>
             <td>{{ statistic.send }}</td>
           </tr>
           <tr>
-            <th>angesehen:</th>
+            <td><span class="subscriber-status unconfirmed "></span></td>
+            <td>Unbestätigt:</td>
+            <td>{{ statistic.send - statistic.open }}</td>
+          </tr>
+          <tr>
+            <td><span class="subscriber-status open "></span></td>
+            <td>angesehen:</td>
             <td>{{ statistic.open }}</td>
           </tr>
           <tr>
-            <th>Abmeldungen:</th>
+            <td><span class="subscriber-status unsubscribe "></span></td>
+            <td>Abmeldungen:</td>
             <td>{{ statistic.unsubscribe }}</td>
+          </tr>
+          <tr>
+            <td><span class="subscriber-status error "></span></td>
+            <td>Fehlerhaft:</td>
+            <td>{{ statistic.error }}</td>
           </tr>
         </table>
       </div>
@@ -96,63 +114,47 @@
       <!-- timeline -->
       <NewsletterTimeline :subscribers="subscriberList"></NewsletterTimeline>
 
-      <!-- Raw Data -->
-      <div class="raw-data">
-        <!-- Number of Subscibers-->
-        <div>{{ subscriberList.length }} von {{ numberOfAllSubscribers }} Empfänger</div>
+      <!-- Subscribers with warning -->
+      <SubscriberListWarning :subscribers="subscriberList" :all="numberOfAllSubscribers"></SubscriberListWarning>
 
-        <!-- List -->
-        <ul class="subscriber-list">
-          <li v-for="subscriber in subscriberList" :key="subscriber.id + '-analytics'">
-            <div class="subscriber-list-wrapper">
-              <div class="subscriber-status" :class="subscriber.currentStatus"></div>
-              <div v-if="debug">{{ subscriber.id }} -</div>
-              <div>{{ subscriber.contact.email }}</div>
-            </div>
-          </li>
-        </ul>
-      </div>
-
-      <RawDataList />
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component, Watch, Ref } from 'vue-property-decorator'
-import RawDataList from '@/components/RawDataList/RawDataList.vue'
-import { eventBus } from '@/main'
-import { MolloMemberData, Newsletter, Statistic, Subscriber } from '@/models/models'
 import hotkeys from 'hotkeys-js'
 import { EnumsSubscriberStatus } from '@/enums'
 import NewsletterSelector from '@/components/NewsletterSelector/NewsletterSelector.vue'
 import NewsletterPieChart from '@/components/NewsletterPieChart/NewsletterPieChart.vue'
 import NewsletterTimeline from '@/components/NewsletterTimeline/NewsletterTimeline.vue'
 import { NewsletterStore, SubscriberStore } from '@/store'
+import { Statistic } from '@/_models/models'
+import { Newsletter } from '@/_models/NewsletterClass'
+import { MolloMemberData, Subscriber } from '@/_models/SubscriberClass'
+import SubscriberListAll from '@/components/SubscriberList/SubscriberListAll.vue'
+import SubscriberListWarning from '@/components/SubscriberList/SubscriberListWarning.vue'
 
 @Component({
-  components: { RawDataList, NewsletterTimeline, NewsletterPieChart, NewsletterSelector },
+  components: { SubscriberListWarning, SubscriberListAll, NewsletterTimeline, NewsletterPieChart, NewsletterSelector },
 })
 export default class Analytics extends Vue {
-  private debug = false
   private isOpenSelector: boolean = false
   private loading: boolean = true
   private loadingState: number = 0
-  private numberOfAllSubscribers: number = 0
   private newsletterId: number = 0
   private subGroupId: number = 0
-  private statistic: Statistic = { send: 0, open: 0, unsubscribe: 0, error: 0 }
+  private statistic: Statistic = { subscribers: 0, send: 0, open: 0, unsubscribe: 0, error: 0 }
   private currentNewsletter!: Newsletter
 
   changeNewsletter(newsletterId: number) {
     // close Selector
     this.isOpenSelector = false
 
+    // set selected Newsletter
     this.newsletterId = newsletterId
     this.currentNewsletter = this.getNewsletterById(newsletterId)
     this.subGroupId = this.getGroupsFromNewsletter()
-
-    console.log('changeNewsletter', this.isOpenSelector)
   }
 
   getNewsletterById(newsletterId: number) {
@@ -165,6 +167,10 @@ export default class Analytics extends Vue {
 
   onClose() {
     this.isOpenSelector = false
+  }
+
+  get numberOfAllSubscribers() {
+    return SubscriberStore.count
   }
 
   toggleSelector() {
@@ -259,7 +265,7 @@ export default class Analytics extends Vue {
   }
 
   updateStatistic() {
-    let statistic: Statistic = { open: 0, send: 0, unsubscribe: 0, error: 0 }
+    let statistic: Statistic = { subscribers: 0, unconfirmed: 0, open: 0, send: 0, unsubscribe: 0, error: 0 }
 
     SubscriberStore.list.forEach((subscriber: Subscriber) => {
       // MolloMessages send?
@@ -268,8 +274,12 @@ export default class Analytics extends Vue {
         subscriber.data.forEach((item: MolloMemberData) => {
           if (item && item.messageId && item.messageId === this.newsletterId) {
             // Send
-            statistic.send++
+            statistic.subscribers++
 
+            // Send
+            if (item.send) {
+              statistic.send++
+            }
             // Open
             if (item.open) {
               statistic.open++
@@ -287,6 +297,7 @@ export default class Analytics extends Vue {
           }
         })
       }
+      statistic.unconfirmed = statistic.send - (statistic.open + statistic.unsubscribe + statistic.error)
     })
     this.statistic = statistic
   }
@@ -297,6 +308,7 @@ export default class Analytics extends Vue {
   }
 
   @Ref('collapsibles') readonly collapsibles!: HTMLElement
+
   onClickOutside(event: MouseEvent) {
     this.isOpenSelector = false
     if (!this.collapsibles || this.collapsibles.contains(event.target as HTMLElement)) {
@@ -320,7 +332,6 @@ export default class Analytics extends Vue {
   }
 
   private async created() {
-
     // Response
     this.loading = false
 

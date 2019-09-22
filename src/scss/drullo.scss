@@ -1,8 +1,14 @@
-h1, h2, h3, h4, p, div, ul, li{
+h1,
+h2,
+h3,
+h4,
+p,
+div,
+ul,
+li {
   font-family: Roboto-Regular, sans-serif;
   text-align: left;
 }
-
 
 h2 {
   color: #787878;
@@ -13,7 +19,6 @@ h2 {
   margin-left: 5px;
 }
 
-
 .btn {
   cursor: pointer;
   padding: 5px 9px;
@@ -22,11 +27,10 @@ h2 {
   color: gray;
   margin: 3px;
 
-  &:hover{
+  &:hover {
     color: black;
   }
 }
-
 
 .btn-link {
   &:hover {
@@ -38,7 +42,6 @@ h2 {
     color: whitesmoke;
   }
 }
-
 
 .btn-outline {
   border: 1px solid #9d9d9d;
@@ -52,9 +55,7 @@ h2 {
     background-color: rgba(0, 0, 0, 0.5);
     color: whitesmoke;
   }
-
 }
-
 
 /* Tooltip container */
 .tooltip {
@@ -76,6 +77,48 @@ h2 {
   margin-top: -30px;
 }
 
-.label-hidden{
+.label-hidden {
   display: none;
+}
+
+.subscriber-status {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  border: 1px solid gray; /* Debug */
+  margin-right: 10px;
+
+  &.unconfirmed {
+    background-color: $subscriber-unconfirmed;
+    border-color: transparent;
+  }
+
+  &.none {
+    border-color: $subscriber-unconfirmed;
+  }
+
+  &.default {
+    border-color: $subscriber-default;
+  }
+
+  &.send {
+    background-color: $subscriber-send;
+    border-color: transparent;
+  }
+
+  &.open {
+    background-color: $subscriber-open;
+    border-color: transparent;
+  }
+
+  &.unsubscribe {
+    background-color: $subscriber-unsubscribe;
+    border-color: transparent;
+  }
+
+  &.error {
+    background-color: $subscriber-error;
+    border-color: transparent;
+  }
 }

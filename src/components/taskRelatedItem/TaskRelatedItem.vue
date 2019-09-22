@@ -10,7 +10,7 @@
           <table class="table-related-info">
             <tr>
               <th>Gesendet:</th>
-              <td>12.August</td>
+              <td>{{ relatedItem.message.sendDate | moment('calendar') }}</td>
             </tr>
             <tr>
               <th>Kategorie:</th>
@@ -43,7 +43,7 @@
         <!-- List Preview Cards -->
         <div v-if="!isLargeCardOpen" class="box-task-card-preview-list" @click="largeCardToggle">
           <task-item-preview
-            v-for="taskItemPreview in taskItemList"
+            v-for="taskItemPreview in relatedTasksList"
             :key="taskItemPreview.id"
             :task-item-preview="taskItemPreview"
           />
@@ -51,7 +51,7 @@
 
         <!-- List Large Cards -->
         <div v-if="isLargeCardOpen" class="box-task-card-large-list">
-          <task-item v-for="taskItem in taskItemList" :key="taskItem.id" :task-item="taskItem" />
+          <task-item v-for="taskItem in relatedTasksList" :key="taskItem.id" :task-item="taskItem" />
         </div>
       </main>
     </div>
@@ -61,9 +61,9 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator'
 import TaskItem from '@/components/taskItem/TaskItem.vue'
-import { TaskRelated } from '@/models/models'
 import TaskItemPreview from '@/components/taskItem/TaskItemPreview.vue'
-import { TasksStore } from '@/store'
+import { NewsletterStore, TasksStore } from '@/store'
+import { TaskRelated } from '@/_models/TaskClass'
 
 @Component({
   components: {
@@ -76,22 +76,28 @@ export default class TaskRelatedItem extends Vue {
 
   isLargeCardOpen: boolean = false
 
-  get taskItemList() {
+  get relatedTasksList() {
     const relatedItem = this.relatedItem
 
     if (relatedItem && relatedItem.related) {
       return TasksStore.list.filter(task => {
         return task.related === relatedItem.related
       })
+    } else {
+      return []
     }
   }
 
+  get newsletterList() {
+    return NewsletterStore.list
+  }
+
   get numberOfTasks() {
-    return TasksStore.count
+    return this.relatedTasksList.length
   }
 
   get numberOfTasksDone(): number {
-    return TasksStore.list.filter(task => task.done).length
+    return this.relatedTasksList.filter(task => task.done).length
   }
 
   largeCardToggle(): void {

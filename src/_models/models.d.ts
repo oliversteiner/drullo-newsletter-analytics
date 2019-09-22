@@ -68,6 +68,8 @@ export interface ProfileResponse {
 }
 
 interface Statistic {
+  subscribers: number
+  unconfirmed: number
   send: number
   open: number
   unsubscribe: number

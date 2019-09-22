@@ -2,6 +2,7 @@ export interface Message {
   id: number
   title: string
   category: string
+  sendDate: Date
 }
 
 export interface StatusMessage {

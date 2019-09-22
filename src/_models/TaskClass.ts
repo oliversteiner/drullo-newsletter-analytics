@@ -3,6 +3,8 @@ import { TaskStatus, TaskStatusMessage } from '@/enums'
 import { Subscribers } from '@/_models/SubscriberClass'
 import { Range } from '@/_models/models'
 import { Message } from '@/_models/MessageClass'
+import { NewsletterStore } from '@/store'
+import { Newsletter } from '@/_models/NewsletterClass'
 
 export interface TasksResponse {
   tasks: (Task)[]
@@ -64,9 +66,15 @@ export default class TaskClass {
     let counterUndoneTasks = 0
     let taskList: Task[] = []
 
+    const newsletterList = NewsletterStore.list
+
     molloTasks.forEach((task: Task) => {
       // Working
       task.working = false
+
+      // Newsletter
+      const newsletter = newsletterList.filter((item: Newsletter) => item.id === task.message.id)
+      task.message.sendDate = newsletter[0].send
 
       // Date
       task.createdMoment = moment.unix(task.created)
@@ -75,7 +83,6 @@ export default class TaskClass {
 
       // if Task is undone change runMoment to next possible Time
       if (!task.done) {
-        moment.locale('de')
 
         // next full hour and 5 minutes (14:05)
         const now = new Date()

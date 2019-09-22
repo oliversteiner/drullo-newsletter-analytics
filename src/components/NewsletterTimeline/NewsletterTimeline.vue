@@ -7,8 +7,8 @@
 <script lang="ts">
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
 import LineChart from '@/components/NewsletterTimeline/LineChart'
-import { Subscriber, SubscriberTimeline } from '@/models/models'
 import getSubscriberTimeline from '@/_helper/subscriberTimeline'
+import { Subscriber, SubscriberTimeline } from '@/_models/SubscriberClass'
 
 // @ts-ignore
 @Component({

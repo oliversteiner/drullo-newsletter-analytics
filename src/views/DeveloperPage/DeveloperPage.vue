@@ -1,21 +1,22 @@
 <template>
   <div class="developer-page">
     <h1>Develop</h1>
+
+    <!--  All Subscribers -->
+    <SubscriberListDynamic></SubscriberListDynamic>
   </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator'
-import VueJsonPretty from 'vue-json-pretty'
 import { SubscriberStore } from '@/store'
+import SubscriberListDynamic from '@/components/SubscriberList/SubscriberListDynamic.vue'
 
 @Component({
-  components: { VueJsonPretty },
+  components: { SubscriberListDynamic },
 })
 export default class DeveloperPage extends Vue {
-  async created() {
-    await SubscriberStore.updateFromServer()
-  }
+
 }
 </script>
 
