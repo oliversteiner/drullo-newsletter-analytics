@@ -79,20 +79,6 @@
     color: white;
   }
 
-  .raw-data {
-    margin: 20px;
-
-    ul {
-      list-style-type: none;
-    }
-  }
-
-  .raw-data li {
-    display: inline-block;
-    width: 400px;
-    padding: 5px 0;
-    overflow: hidden;
-  }
 
   /* Dark Mode */
   @media (prefers-color-scheme: dark) {
@@ -101,41 +87,5 @@
     }
   }
 }
-.subscriber-list-wrapper{
-  display: flex;
-}
-.subscriber-status {
-  width: 20px;
-  height: 20px;
-  border-radius: 10px;
-  border: 1px solid gray; /* Debug */
-  margin-right: 10px;
 
-   &.none{
-    border-color: #2c3e50;
-
-  }
-
-   &.send{
-     background-color: white;
-     border-color: transparent;
-  }
-
-   &.open{
-    background-color: #4caf50;
-     border-color: transparent;
-
-   }
-
-   &.unsubscribe{
-     background-color: purple;
-     border-color: transparent;
-
-   }
-   &.error{
-     background-color: red;
-     border-color: transparent;
-
-   }
-}
 

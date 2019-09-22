@@ -1,6 +1,6 @@
 import { Line } from 'vue-chartjs'
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
-import ColorClass from '@/_models/colorClass'
+import ColorClass from '@/_models/ColorClass'
 import { SubscriberTimeline } from '@/_models/SubscriberClass'
 
 // @ts-ignore
@@ -61,8 +61,9 @@ export default class PieChart extends Vue<Line> {
     maintainAspectRatio: false,
     hoverMode: 'index',
     stacked: false,
+    legend: { display: false },
     title: {
-      display: true,
+      display: false,
       text: 'Tagesverlauf',
     },
     scales: {

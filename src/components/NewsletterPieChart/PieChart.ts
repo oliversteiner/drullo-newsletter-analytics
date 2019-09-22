@@ -1,51 +1,65 @@
 // CommitChart.ts
 import { Pie } from 'vue-chartjs'
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
-import { Statistic } from '@/models/models'
-import Colors from '@/models/colors'
+import { Statistic } from '@/_models/models'
+import ColorClass from '@/_models/ColorClass'
 
 // @ts-ignore
 @Component({
   extends: Pie, // this is important to add the functionality to your component
 })
 export default class PieChart extends Vue<Pie> {
-  @Prop() private chartData!: Statistic
+  @Prop() private dataStatistic!: Statistic
 
-  private colors = new Colors()
+  private colors = new ColorClass()
 
-  private renderData() {
-    // Overwriting base render method with actual data.
+  private get chartData() {
+    if (!this.dataStatistic) {
+      return false
+    }
 
-    const unread = this.chartData.send - ( this.chartData.open+ this.chartData.unsubscribe+ this.chartData.error)
+    const labels = ['Ungelesen', 'Geöffnet', 'Abmeldungen', 'Fehler']
+    const datasets = [
+      {
+        label: '',
+        backgroundColor: [
+          this.colors.send.background,
+          this.colors.open.background,
+          this.colors.unsubscribe.background,
+          this.colors.error.background,
+        ],
+        borderColor: [
+          this.colors.send.border,
+          this.colors.open.border,
+          this.colors.unsubscribe.border,
+          this.colors.error.border,
+        ],
+        data: [
+          this.dataStatistic.unconfirmed,
+          this.dataStatistic.open,
+          this.dataStatistic.unsubscribe,
+          this.dataStatistic.error,
+        ],
+      },
+    ]
 
-    this.renderChart({
-      labels: ['Ungelesen', 'Geöffnet', 'Abmeldungen', 'Fehler'],
-      datasets: [
-        {
-          label: '',
-          backgroundColor: [
-            this.colors.send.background,
-            this.colors.open.background,
-            this.colors.unsubscribe.background,
-            this.colors.error.background,
-          ],
-          borderColor: [
-            this.colors.send.border,
-            this.colors.open.border,
-            this.colors.unsubscribe.border,
-            this.colors.error.border,
-          ],
-          data: [unread, this.chartData.open, this.chartData.unsubscribe, this.chartData.error],
-        },
-      ],
-      borderWidth: 0,
-    })
+    return { labels, datasets }
   }
 
+  private chartOptions = {
+    legend: { display: false },
+    title: {
+      display: false,
+    },
+  }
 
+  private renderData(): void {
+    // Overwriting base render method with actual data.
+    this.renderChart(this.chartData, this.chartOptions)
+  }
 
   // Change Input
-  @Watch('chartData')
+  @Watch('dataStatistic')
   updateData() {
     this.renderData()
   }
