@@ -61,6 +61,9 @@ Vue.use(require('vue-moment'), {
   moment,
 })
 
+// fixed header in Subscriber list
+require('moment/locale/de-ch')
+
 // Global Events / Emits
 export const eventBus = new Vue()
 

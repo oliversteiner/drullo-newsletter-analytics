@@ -18,17 +18,7 @@
 }
 .subscriber-list-dynamic{
 
-.toolbar{
-  position:fixed; /* fixing the position takes it out of html flow - knows
-                   nothing about where to locate itself except by browser
-                   coordinates */
-  left:0;           /* top left corner should start at leftmost spot */
-  top:50;            /* top left corner should start at topmost spot */
-  width:100vw;      /* take up the full browser width */
-  z-index:200;  /* high z index so other content scrolls underneath */
-  height:50px;     /* define height for content */
-  background-color: black;
-}
+
 
 ul.subscriber-list-table {
   border: silver solid 1px;
@@ -57,4 +47,11 @@ td.list-item {
     }
   }
 }
+
+
+  .toolbar{
+    background-color: #1f1f1f;
+    margin-bottom: 20px;
+    padding: 10px;
+  }
 }

@@ -1,6 +1,6 @@
 <template>
   <div class="app-navbar">
-    <div class="fixed-header">
+    <div class="">
       <nav class="navbar">
         <ul class="navbar nav">
           <!-- Tasks-->

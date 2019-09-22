@@ -1,67 +1,70 @@
 <template>
   <div class="subscriber-list-dynamic">
+    <scroll-fixed-header :fixed.sync="fixed" :threshold="100">
+      <div class="toolbar">
+        <div>
+          <!-- Filter Test -->
+          <button @click="setFilter('test', '')">
+            Filtertest
+          </button>
 
-    <div class="toolbar">
-    <div>
-      <!-- Filter Test -->
-      <button @click="setFilter('test', '')">
-        Filtertest
-      </button>
+          <!-- Status Test -->
+          <button @click="setFilter('status', ['open'])">
+            Status, send
+          </button>
 
-      <!-- Status Test -->
-      <button @click="setFilter('status', ['open'])">
-        Status, send
-      </button>
+          <!-- Filter Group  -->
+          <button @click="setFilter('groups', [22])">
+            Filter Group 64, 22
+          </button>
 
-      <!-- Filter Group  -->
-      <button @click="setFilter('groups', [22])">
-        Filter Group 64, 22
-      </button>
+          <!-- Clear all filters  -->
+          <button @click="setFilter('clear')">
+            Clear all Filters
+          </button>
 
-      <!-- Clear all filters  -->
-      <button @click="setFilter('clear')">
-        Clear all Filters
-      </button>
+          <!-- fulltext  -->
+          <input v-model="fullText" type="text" @keyup.enter="setFilter('fulltext')" />
+          <button @click="setFilter('fulltext')">
+            fulltext
+          </button>
+        </div>
+      </div>
+    </scroll-fixed-header>
 
-      <!-- fulltext  -->
-      <input v-model="fullText" type="text" @keyup.enter="setFilter('fulltext')" >
-      <button @click="setFilter('fulltext')">
-        fulltext
-      </button>
-    </div>
-    </div>
     <!-- Number of Subscibers-->
     <div>{{ subsribersfilterd.length }} von {{ numberOfAllSubscribers }} Empfänger</div>
 
     <!-- List -->
     <div class="subscriber-list-scroll">
-    <table class="subscriber-list-table">
-      <tr
-        v-for="subscriber in subsribersfilterd"
-        :key="subscriber.id + '-analytics'"
-        class="list-row"
-        @dblclick="edit(subscriber)"
-      >
-        <td class="list-item list-item-status">
-          <div class=" subscriber-status" :class="subscriber.currentStatus" />
-        </td>
-        <td v-if="debug" class="list-item list-item-id">{{ subscriber.id }} -</td>
-        <td class="list-item list-item-first-name">
-          {{ subscriber.address.first_name }}
-        </td>
-        <td class="list-item list-item-last-name">
-          {{ subscriber.address.last_name }}
-        </td>
-        <td class="list-item list-item-email ">
-          {{ subscriber.contact.email }}
-        </td>
-        <td class="list-item list-item-groups">
-          <ul v-for="group in subscriber.groups" :key="subscriber.id + '-' + group.id">
-            <li>{{ group.name }}</li>
-          </ul>
-        </td>
-      </tr>
-    </table></div>
+      <table class="subscriber-list-table">
+        <tr
+          v-for="subscriber in subsribersfilterd"
+          :key="subscriber.id + '-analytics'"
+          class="list-row"
+          @dblclick="edit(subscriber)"
+        >
+          <td class="list-item list-item-status">
+            <div class=" subscriber-status" :class="subscriber.currentStatus" />
+          </td>
+          <td v-if="debug" class="list-item list-item-id">{{ subscriber.id }} -</td>
+          <td class="list-item list-item-first-name">
+            {{ subscriber.address.first_name }}
+          </td>
+          <td class="list-item list-item-last-name">
+            {{ subscriber.address.last_name }}
+          </td>
+          <td class="list-item list-item-email ">
+            {{ subscriber.contact.email }}
+          </td>
+          <td class="list-item list-item-groups">
+            <ul v-for="group in subscriber.groups" :key="subscriber.id + '-' + group.id">
+              <li>{{ group.name }}</li>
+            </ul>
+          </td>
+        </tr>
+      </table>
+    </div>
   </div>
 </template>
 
@@ -70,8 +73,11 @@ import { Vue, Component, Prop } from 'vue-property-decorator'
 import { SubscriberStore } from '@/store'
 import { Subscriber, SubscriberGroup, SubscriberStatus } from '@/_models/SubscriberClass'
 import { EnumsSubscriberStatus } from '@/enums'
+import ScrollFixedHeader from '@/components/ScrollFixedHeader/scrollFixedHeader.vue'
 
-@Component
+@Component({
+  components: { ScrollFixedHeader },
+})
 export default class SubscriberListDynamic extends Vue {
   private debug = true
 
@@ -84,6 +90,10 @@ export default class SubscriberListDynamic extends Vue {
   private fullText: string = ''
   private status: string[] = []
 
+  // fixed header
+  private fixed = false
+
+  // Subscribers
   private edit(subscriber: Subscriber) {
     alert(subscriber.address.first_name)
   }
