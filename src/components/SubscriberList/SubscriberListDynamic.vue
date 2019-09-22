@@ -25,7 +25,8 @@
       </button>
 
       <!-- fulltext  -->
-      <button @click="setFilter('fulltext', 'anton')">
+      <input v-model="fullText" @keyup.enter="setFilter('fulltext')" type="text" />
+      <button @click="setFilter('fulltext')">
         fulltext
       </button>
     </div>
@@ -83,9 +84,6 @@ export default class SubscriberListDynamic extends Vue {
         break
       case 'groups':
         this.groups = items as number[]
-        break
-      case 'fulltext':
-        this.fullText = items as string
         break
       default:
         break
@@ -195,11 +193,9 @@ export default class SubscriberListDynamic extends Vue {
       const value1 = value.toString().toLowerCase()
 
       if (value1.search(searchtext) != -1) {
-        console.warn('Treffer:', key + ' - ' + value)
         result = true
       }
     })
-    console.log(result)
     return result
   }
 
