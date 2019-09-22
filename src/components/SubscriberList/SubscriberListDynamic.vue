@@ -1,8 +1,7 @@
 <template>
   <div class="subscriber-list-dynamic">
-    <!-- Number of Subscibers-->
-    <div>{{ subsribersfilterd.length }} von {{ numberOfAllSubscribers }} Empfänger</div>
 
+    <div class="toolbar">
     <div>
       <!-- Filter Test -->
       <button @click="setFilter('test', '')">
@@ -25,25 +24,44 @@
       </button>
 
       <!-- fulltext  -->
-      <input v-model="fullText" @keyup.enter="setFilter('fulltext')" type="text" />
+      <input v-model="fullText" type="text" @keyup.enter="setFilter('fulltext')" >
       <button @click="setFilter('fulltext')">
         fulltext
       </button>
     </div>
-
+    </div>
     <!-- Number of Subscibers-->
     <div>{{ subsribersfilterd.length }} von {{ numberOfAllSubscribers }} Empfänger</div>
 
     <!-- List -->
-    <ul class="subscriber-list">
-      <li v-for="subscriber in subsribersfilterd" :key="subscriber.id + '-analytics'">
-        <div class="subscriber-list-wrapper">
-          <div class="subscriber-status" :class="subscriber.currentStatus" />
-          <div v-if="debug">{{ subscriber.id }} -</div>
-          <div>{{ subscriber.contact.email }}</div>
-        </div>
-      </li>
-    </ul>
+    <div class="subscriber-list-scroll">
+    <table class="subscriber-list-table">
+      <tr
+        v-for="subscriber in subsribersfilterd"
+        :key="subscriber.id + '-analytics'"
+        class="list-row"
+        @dblclick="edit(subscriber)"
+      >
+        <td class="list-item list-item-status">
+          <div class=" subscriber-status" :class="subscriber.currentStatus" />
+        </td>
+        <td v-if="debug" class="list-item list-item-id">{{ subscriber.id }} -</td>
+        <td class="list-item list-item-first-name">
+          {{ subscriber.address.first_name }}
+        </td>
+        <td class="list-item list-item-last-name">
+          {{ subscriber.address.last_name }}
+        </td>
+        <td class="list-item list-item-email ">
+          {{ subscriber.contact.email }}
+        </td>
+        <td class="list-item list-item-groups">
+          <ul v-for="group in subscriber.groups" :key="subscriber.id + '-' + group.id">
+            <li>{{ group.name }}</li>
+          </ul>
+        </td>
+      </tr>
+    </table></div>
   </div>
 </template>
 
@@ -55,15 +73,20 @@ import { EnumsSubscriberStatus } from '@/enums'
 
 @Component
 export default class SubscriberListDynamic extends Vue {
+  private debug = true
+
   private fullSubscriberList: Subscriber[] = []
   private subsribersfilterd: Subscriber[] = []
 
   private clear = false
-  private debug = false
   private test = false
   private groups: number[] = []
   private fullText: string = ''
   private status: string[] = []
+
+  private edit(subscriber: Subscriber) {
+    alert(subscriber.address.first_name)
+  }
 
   private setFilter(filter: string, items: any) {
     switch (filter) {

@@ -15,5 +15,46 @@
   .subscriber-list-wrapper {
     display: flex;
   }
+}
+.subscriber-list-dynamic{
 
+.toolbar{
+  position:fixed; /* fixing the position takes it out of html flow - knows
+                   nothing about where to locate itself except by browser
+                   coordinates */
+  left:0;           /* top left corner should start at leftmost spot */
+  top:50;            /* top left corner should start at topmost spot */
+  width:100vw;      /* take up the full browser width */
+  z-index:200;  /* high z index so other content scrolls underneath */
+  height:50px;     /* define height for content */
+  background-color: black;
+}
+
+ul.subscriber-list-table {
+  border: silver solid 1px;
+  list-style-type: none;
+}
+
+tr.list-row{
+  border-bottom: 1px silver solid;
+}
+
+
+
+td.list-item {
+  font-size: 0.9rem;
+  vertical-align: center;
+  min-height: 33px;
+  margin-right: 10px;
+  border-bottom: 1px #383838 solid;
+
+  &-groups ul{
+    margin: 0;
+    padding: 0;
+    li {
+      margin: 0;
+      padding: 0;
+    }
+  }
+}
 }
