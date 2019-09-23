@@ -19,7 +19,7 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator'
 import { eventBus } from '@/main'
-import { StatusMessage } from '@/models/models'
+import { StatusMessage } from '@/_models/models'
 
 @Component({})
 export default class StatusMessages extends Vue {

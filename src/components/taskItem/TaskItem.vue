@@ -149,7 +149,7 @@ import {TaskStatus} from '@/enums';
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator'
-import { Task } from '@/models/models'
+import { Task } from '@/_models/models'
 import { smmgApi } from '@/store/api'
 import { TaskStatusMessage } from '@/enums'
 

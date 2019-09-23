@@ -40,7 +40,7 @@
 </template>
 <script lang="ts">
 import { Vue, Component, Prop, Model } from 'vue-property-decorator'
-import { Newsletter } from '@/models/models'
+import { Newsletter } from '@/_models/models'
 
 @Component
 export default class NewsletterSelector extends Vue {

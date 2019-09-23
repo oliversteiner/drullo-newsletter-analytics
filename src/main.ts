@@ -2,8 +2,6 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-import VueGlobalVar from 'vue-global-var'
-import 'vue-good-table/dist/vue-good-table.css'
 
 // Font Awesome
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
@@ -44,12 +42,7 @@ library.add(
 )
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 
-// Global Vars / Theme // TODO remove?
-Vue.use(VueGlobalVar, {
-  globals: {
-    $theme: 'dark',
-  },
-})
+
 
 // Config
 Vue.config.performance = true

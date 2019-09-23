@@ -4,7 +4,7 @@ https://github.com/TriDiamond/vuejs-scroll-fixed-header
 rebuild for TS: oliver@mollo.ch
 -->
 <template>
-  <div :class="{ 'scroll-fixed-header': true, 'is-fixed': fixed }">
+  <div :class="[{ 'scroll-fixed-header': true, 'is-fixed': fixed }, userClass]">
     <slot></slot>
   </div>
 </template>
@@ -16,6 +16,7 @@ import { Vue, Component, Prop } from 'vue-property-decorator'
 export default class ScrollFixedHeader extends Vue {
   @Prop() threshold!: number
   @Prop() fixed!: boolean
+  @Prop() userClass!: string
 
   tag: string = '' // target html tag
   check: any = null
@@ -88,9 +89,6 @@ export default class ScrollFixedHeader extends Vue {
 <style scoped>
 .scroll-fixed-header.is-fixed {
   position: fixed;
-  top: 0;
-  left: 0;
   z-index: 199;
-  width: 100%;
 }
 </style>
