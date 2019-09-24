@@ -17,10 +17,10 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator'
-import { Subscriber } from '@/_models/SubscriberClass'
+  import { Component, Prop, Vue } from 'vue-property-decorator'
+  import { Subscriber } from '@/_models/SubscriberClass'
 
-@Component
+  @Component
 export default class SubscriberListAll extends Vue {
   @Prop() subscribers!: Subscriber[]
   @Prop() all!: number

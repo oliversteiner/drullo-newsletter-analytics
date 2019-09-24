@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
+import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
 import PieChart from '@/components/NewsletterPieChart/PieChart'
 import { Statistic } from '@/_models/models'
 
@@ -18,8 +18,7 @@ export default class NewsletterPieChart extends Vue {
 
   // Change Input
   @Watch('dataStatistic')
-  updateData() {
-  }
+  updateData() {}
 }
 </script>
 

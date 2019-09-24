@@ -148,12 +148,12 @@ import {TaskStatus} from '@/enums';
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator'
-import { Task } from '@/_models/models'
-import { smmgApi } from '@/store/api'
-import { TaskStatusMessage } from '@/enums'
+  import { Component, Prop, Vue } from 'vue-property-decorator'
+  import { smmgApi } from '@/store/api'
+  import { TaskStatusMessage } from '@/enums'
+  import { Task } from '@/_models/TaskClass';
 
-@Component
+  @Component
 export default class TaskItem extends Vue {
   @Prop() taskItem!: Task
 

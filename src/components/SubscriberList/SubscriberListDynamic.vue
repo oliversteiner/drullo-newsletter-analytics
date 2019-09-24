@@ -29,21 +29,18 @@
             fulltext
           </button>
         </div>
-        <!-- Number of Subscibers-->
-        <div class="toolbar-info">{{ subscribersFilterd.length }} von {{ numberOfAllSubscribers }} Empfänger</div>
+        <!-- Number of Subscribers-->
+        <div class="toolbar-info">{{ subscribersFiltered.length }} von {{ numberOfAllSubscribers }} Empfänger</div>
       </div>
     </scroll-fixed-header>
 
     <!-- List -->
     <div class="layout-list-and-sidebar">
-      <div class="layout-sidebar">
+      <div class="layout-sidebar" :class="{ open: isSidebarOpen }">
         <scroll-fixed-header :fixed.sync="fixed" :threshold="100" user-class="fixed-sidebar">
-          <div class="editor-window">
-            <div v-if="currentSubscriber">
-              <h2>{{ currentSubscriber.address.first_name }} {{ currentSubscriber.address.last_name }}</h2>
-              <div>{{ currentSubscriber.address.street_and_number }}</div>
-              <div>{{ currentSubscriber.address.zip_code }} {{ currentSubscriber.address.city }}</div>
-            </div>
+          <button @click="isSidebarOpen = !isSidebarOpen">Toggel Sidebar</button>
+          <div v-show="isSidebarOpen" class="editor-window">
+            <SubscriberEdit :subscriber-id="currentSubscriberID"> </SubscriberEdit>
           </div>
         </scroll-fixed-header>
       </div>
@@ -51,7 +48,7 @@
       <div class="layout-list">
         <table class="subscriber-list-table">
           <tr
-            v-for="subscriber in subscribersFilterd"
+            v-for="subscriber in subscribersFiltered"
             :key="subscriber.id + '-analytics'"
             class="list-row"
             :class="checkActive(subscriber)"
@@ -61,10 +58,10 @@
             </td>
             <td v-if="debug" class="list-item list-item-id">{{ subscriber.id }}</td>
             <td class="list-item list-item-first-name" @click="editSubscriber(subscriber)">
-              {{ subscriber.address.first_name }}
+              {{ subscriber.personal.firstName }}
             </td>
             <td class="list-item list-item-last-name" @click="editSubscriber(subscriber)">
-              {{ subscriber.address.last_name }}
+              {{ subscriber.personal.lastName }}
             </td>
             <td class="list-item list-item-email" @click="editSubscriber(subscriber)">
               {{ subscriber.contact.email }}
@@ -82,42 +79,48 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator'
+import { Component, Vue } from 'vue-property-decorator'
 import { SubscriberStore } from '@/store'
-import { Subscriber, SubscriberGroup, SubscriberStatus } from '@/_models/SubscriberClass'
+import { Subscriber, SubscriberStatus } from '@/_models/SubscriberClass'
 import { EnumsSubscriberStatus } from '@/enums'
 import ScrollFixedHeader from '@/components/ScrollFixedHeader/scrollFixedHeader.vue'
+import SubscriberEdit from '@/components/SubscriberEdit/SubscriberEdit.vue'
+import { SubscriberGroupTerm } from '@/_models/mollo'
 
 @Component({
-  components: { ScrollFixedHeader },
+  components: { ScrollFixedHeader, SubscriberEdit },
 })
 export default class SubscriberListDynamic extends Vue {
   private debug = true
 
   private fullSubscriberList: Subscriber[] = []
-  private subscribersFilterd: Subscriber[] = []
-  private currentSubscriber: Subscriber | boolean = false
+  private subscribersFiltered: Subscriber[] = []
+  private currentSubscriber: Subscriber | null = null
+  private currentSubscriberID: number = 0
 
   private clear = false
   private test = false
   private groups: number[] = []
   private fullText: string = ''
   private status: string[] = []
+  private isSidebarOpen = false
 
   // fixed header
   private fixed = false
 
   // Subscribers
   private editSubscriber(subscriber: Subscriber) {
+    this.isSidebarOpen = true
     this.currentSubscriber = subscriber
+    this.currentSubscriberID = subscriber.id
   }
 
-  private toggleTag(subscriber: Subscriber, group: SubscriberGroup) {
+  private toggleTag(subscriber: Subscriber, group: SubscriberGroupTerm) {
     alert('toggleTag')
   }
 
   checkActive(subscriber: Subscriber) {
-    if (subscriber.id == this.currentSubscriber.id) {
+    if (this.currentSubscriber && this.currentSubscriber.id == subscriber.id) {
       return 'active'
     }
   }
@@ -152,11 +155,6 @@ export default class SubscriberListDynamic extends Vue {
     console.log('filterResults')
     let subscriberList = this.fullSubscriberList
 
-    if (this.test) {
-      console.log('-- Filter Test:', this.test)
-      subscriberList = subscriberList.filter(subscriber => this.filterTest(subscriber.contact.email))
-    }
-
     if (this.status.length > 0) {
       console.log('-- Filter Status:', this.status)
       subscriberList = subscriberList.filter(subscriber => this.filterStatus(subscriber.status))
@@ -178,11 +176,11 @@ export default class SubscriberListDynamic extends Vue {
       subscriberList = this.fullSubscriberList
     }
 
-    this.subscribersFilterd = subscriberList
+    this.subscribersFiltered = subscriberList
   }
 
   get subscriberList() {
-    return this.subscribersFilterd
+    return this.subscribersFiltered
   }
 
   get numberOfAllSubscribers() {
@@ -204,7 +202,7 @@ export default class SubscriberListDynamic extends Vue {
    *
    * @param groups
    */
-  private filterGroups(groups: SubscriberGroup[]) {
+  private filterGroups(groups: SubscriberGroupTerm[]) {
     const groupIDs = groups.map(group => {
       return group.id
     })
@@ -241,14 +239,20 @@ export default class SubscriberListDynamic extends Vue {
       .trim()
       .toLowerCase()
 
-    const email = subscriber.contact.email
-    email.toString().toLowerCase()
-    if (email.search(searchtext) != -1) return true
+    // search in email
+    if (subscriber.contact && subscriber.contact.email) {
+      const email = subscriber.contact.email
+      email.toString().toLowerCase()
+      if (email.search(searchtext) != -1) return true
+    }
 
     let result = false
-    Object.entries(subscriber.address).forEach(([key, value]) => {
-      const value1 = value.toString().toLowerCase()
+    let searchPlaces = {}
+    searchPlaces = Object.assign(searchPlaces, subscriber.personal, subscriber.address)
 
+    Object.entries(searchPlaces).forEach(([key, value]) => {
+      // @ts-ignore
+      const value1 = value.toString().toLowerCase()
       if (value1.search(searchtext) != -1) {
         result = true
       }
@@ -259,7 +263,8 @@ export default class SubscriberListDynamic extends Vue {
   created() {
     const subList = SubscriberStore.list
     this.fullSubscriberList = subList
-    this.subscribersFilterd = subList
+    this.subscribersFiltered = subList
+    // this.currentSubscriber = subList[0]
   }
 }
 </script>

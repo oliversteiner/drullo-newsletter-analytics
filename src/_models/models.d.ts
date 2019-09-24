@@ -3,32 +3,6 @@ export interface Range {
   to: number
 }
 
-interface Category {
-  id: number
-  name: string
-}
-
-interface Origin {
-  id: number
-  name: string
-}
-
-interface Contact {
-  phone: string
-  phone_2: string
-  mobile: string
-  email: string
-}
-
-interface Address {
-  first_name: string
-  last_name: string
-  street_and_number: string
-  zip_code: string
-  city: string
-  birthday: string
-}
-
 // ------------------------- //
 
 export interface Profile {

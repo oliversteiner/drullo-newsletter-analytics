@@ -10,10 +10,10 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator'
-import { eventBus } from '@/main'
+  import { Component, Vue } from 'vue-property-decorator'
+  import { eventBus } from '@/main'
 
-@Component({})
+  @Component({})
 export default class ThemeSwitcher extends Vue {
   private themes = [
     { id: 'dark', name: 'Dark Mode' },

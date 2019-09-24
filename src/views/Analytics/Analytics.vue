@@ -116,7 +116,6 @@
 
       <!-- Subscribers with warning -->
       <SubscriberListWarning :subscribers="subscriberList" :all="numberOfAllSubscribers"></SubscriberListWarning>
-
     </div>
   </div>
 </template>
@@ -131,9 +130,10 @@ import NewsletterTimeline from '@/components/NewsletterTimeline/NewsletterTimeli
 import { NewsletterStore, SubscriberStore } from '@/store'
 import { Statistic } from '@/_models/models'
 import { Newsletter } from '@/_models/NewsletterClass'
-import { MolloMemberData, Subscriber } from '@/_models/SubscriberClass'
+import { Subscriber } from '@/_models/SubscriberClass'
 import SubscriberListAll from '@/components/SubscriberList/SubscriberListAll.vue'
 import SubscriberListWarning from '@/components/SubscriberList/SubscriberListWarning.vue'
+import { MolloMemberTelemetry } from '@/_models/MolloMember'
 
 @Component({
   components: { SubscriberListWarning, SubscriberListAll, NewsletterTimeline, NewsletterPieChart, NewsletterSelector },
@@ -144,7 +144,7 @@ export default class Analytics extends Vue {
   private loadingState: number = 0
   private newsletterId: number = 0
   private subGroupId: number = 0
-  private statistic: Statistic = { subscribers: 0, send: 0, open: 0, unsubscribe: 0, error: 0 }
+  private statistic!: Statistic
   private currentNewsletter!: Newsletter
 
   changeNewsletter(newsletterId: number) {
@@ -270,28 +270,29 @@ export default class Analytics extends Vue {
     SubscriberStore.list.forEach((subscriber: Subscriber) => {
       // MolloMessages send?
 
-      if (subscriber.data) {
-        subscriber.data.forEach((item: MolloMemberData) => {
-          if (item && item.messageId && item.messageId === this.newsletterId) {
+      if (subscriber.telemetry && subscriber.telemetry.length !== 0) {
+
+        subscriber.telemetry.forEach((_telemetry: MolloMemberTelemetry) => {
+          if (_telemetry && _telemetry.messageId && _telemetry.messageId === this.newsletterId) {
             // Send
             statistic.subscribers++
 
             // Send
-            if (item.send) {
+            if (_telemetry.send) {
               statistic.send++
             }
             // Open
-            if (item.open) {
+            if (_telemetry.open) {
               statistic.open++
             }
 
             // unsubscribe
-            if (item.unsubscribe) {
+            if (_telemetry.unsubscribe) {
               statistic.unsubscribe++
             }
 
             // error
-            if (item.error || item.invalidEmail) {
+            if (_telemetry.error || _telemetry.invalidEmail) {
               statistic.error++
             }
           }

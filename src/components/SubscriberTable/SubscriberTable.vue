@@ -3,10 +3,10 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator'
-import { Subscriber } from '@/_models/SubscriberClass'
+  import { Component, Prop, Vue } from 'vue-property-decorator'
+  import { Subscriber } from '@/_models/SubscriberClass'
 
-@Component({
+  @Component({
   components: {},
 })
 export default class SubscriberTable extends Vue {

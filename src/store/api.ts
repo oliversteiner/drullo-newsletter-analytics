@@ -4,9 +4,11 @@ import { eventBus } from '@/main'
 import { SubscriberStore } from '@/store/index'
 import { TasksResponse } from '@/_models/TaskClass'
 import { MolloMessageResponse } from '@/_models/NewsletterClass'
-import { Member, MemberResponse, SubscriberCountResponse, SubscriberGroupsResponse } from '@/_models/SubscriberClass'
+import { SubscriberCountResponse, SubscriberGroupsResponse } from '@/_models/SubscriberClass'
 import { Profile, ProfileResponse, User, UserForUpdate, UserResponse, UserSubmit } from '@/_models/models'
 import { StatusMessage } from '@/_models/MessageClass'
+import { MolloResponse } from '@/_models/mollo'
+import { MolloMember, MolloMemberResponse } from '@/_models/MolloMember'
 
 export const smmgApi = axios.create({
   baseURL: process.env.VUE_APP_HOST + '/smmg',
@@ -28,7 +30,7 @@ export async function getNewsletterList() {
 
 export async function getSubscribersList() {
   const response = await smmgApi.get('/api/members')
-  return response.data as MemberResponse
+  return response.data as MolloMemberResponse
 }
 
 export async function getSubscriberCount() {
@@ -39,6 +41,11 @@ export async function getSubscriberCount() {
 export async function getSubscriberGroups() {
   const response = await smmgApi.get('/api/subscriberGroups')
   return response.data as SubscriberGroupsResponse
+}
+
+export async function updateSubscriber(data: MolloMember) {
+  const response = await smmgApi.post('/api/member/update/', data)
+  return response.data as MolloResponse
 }
 
 export async function getUpdatedSubscribers() {
@@ -83,7 +90,7 @@ export async function getAllSubscribers() {
     eventBus.$emit('LOADING_DATA', statusMessage)
     loadingStatus += range
 
-    return response.data as MemberResponse
+    return response.data as MolloMemberResponse
   }
 
   // collect all requests
@@ -95,14 +102,14 @@ export async function getAllSubscribers() {
       message: "Can't load the Subscriber data",
     }
     eventBus.$emit('LOADING_DATA', statusMessage)
-  })) as MemberResponse[]
+  })) as MolloMemberResponse[]
 
   // assemble all members in one array
-  let members: Member[] = []
+  let members: MolloMember[] = []
   allResponses.map(response => {
     console.warn('-- Response Members', response.members.length)
 
-    response.members.map((member: Member) => {
+    response.members.map((member: MolloMember) => {
       members.push(member)
     })
   })
@@ -111,7 +118,7 @@ export async function getAllSubscribers() {
   eventBus.$emit('LOADING_DATA', statusMessage)
 
   // build Request Response
-  const result: MemberResponse = {
+  const result: MolloMemberResponse = {
     count: memberLength,
     set: range,
     start: 0,

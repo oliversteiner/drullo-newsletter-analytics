@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
+import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
 import { Subscriber } from '@/_models/SubscriberClass'
 
 @Component
@@ -34,9 +34,10 @@ export default class SubscriberListWarning extends Vue {
     this.checkEmail()
   }
 
+  // TODO depricated?
   private checkEmail() {
     console.log('checkEmail')
-    this.subsribersfilterd = this.subscribers.filter(subscriber => check(subscriber.contact.email))
+    // this.subsribersfilterd = this.subscribers.filter(subscriber => check(subscriber.contact.email))
   }
 
   created() {}

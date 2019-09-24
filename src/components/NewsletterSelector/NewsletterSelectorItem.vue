@@ -4,8 +4,8 @@
   </div>
 </template>
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator'
-import { Newsletter } from '@/_models/models'
+import { Component, Prop, Vue } from 'vue-property-decorator'
+import { Newsletter } from '@/_models/NewsletterClass'
 
 @Component
 export default class NewsletterSelectorItem extends Vue {
