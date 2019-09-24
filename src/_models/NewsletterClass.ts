@@ -1,5 +1,4 @@
-import { SubscriberGroup } from '@/_models/SubscriberClass'
-import { Category } from '@/_models/models'
+import { CategoryTerm, SubscriberGroupTerm } from '@/_models/mollo'
 
 export interface Newsletter {
   id: number
@@ -8,9 +7,9 @@ export interface Newsletter {
   created: Date
   changedTs: number
   changed: Date
-  category: Category[]
+  category: CategoryTerm[]
   text: string
-  subscriberGroups: SubscriberGroup[]
+  subscriberGroups: SubscriberGroupTerm[]
   isSend: boolean
   sendTs: number
   send: Date
@@ -30,9 +29,9 @@ export interface MolloMessage {
   title: string
   created: number
   changed: number
-  category: Category[]
+  category: CategoryTerm[]
   text: string
-  subscriberGroups: SubscriberGroup[]
+  subscriberGroups: SubscriberGroupTerm[]
   isSend: boolean
   send: number
   isTemplate: boolean

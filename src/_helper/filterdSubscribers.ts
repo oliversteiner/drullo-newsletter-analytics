@@ -1,5 +1,5 @@
-import { Subscriber } from '@/models/models'
 import { EnumsSubscriberStatus } from '@/enums'
+import { Subscriber } from '@/_models/SubscriberClass'
 
 /**
  *
@@ -7,7 +7,7 @@ import { EnumsSubscriberStatus } from '@/enums'
  * @param newsletterId
  * @param groupId
  */
-export default function getfilterdSubscribers(
+export default function getFilterdSubscribers(
   subscribers: Subscriber[],
   newsletterId: number,
   groupId: number,

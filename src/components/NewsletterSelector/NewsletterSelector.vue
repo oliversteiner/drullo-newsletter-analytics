@@ -39,10 +39,10 @@
   </div>
 </template>
 <script lang="ts">
-import { Vue, Component, Prop, Model } from 'vue-property-decorator'
-import { Newsletter } from '@/models/models'
+  import { Component, Prop, Vue } from 'vue-property-decorator'
+  import { Newsletter } from '@/_models/NewsletterClass'
 
-@Component
+  @Component
 export default class NewsletterSelector extends Vue {
   @Prop() newsletterListSend!: Newsletter[]
   @Prop() newsletterListUnSend!: Newsletter[]

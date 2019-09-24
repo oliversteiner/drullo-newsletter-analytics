@@ -59,13 +59,13 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator'
-import TaskItem from '@/components/taskItem/TaskItem.vue'
-import TaskItemPreview from '@/components/taskItem/TaskItemPreview.vue'
-import { NewsletterStore, TasksStore } from '@/store'
-import { TaskRelated } from '@/_models/TaskClass'
+  import { Component, Prop, Vue } from 'vue-property-decorator'
+  import TaskItem from '@/components/taskItem/TaskItem.vue'
+  import TaskItemPreview from '@/components/taskItem/TaskItemPreview.vue'
+  import { NewsletterStore, TasksStore } from '@/store'
+  import { TaskRelated } from '@/_models/TaskClass'
 
-@Component({
+  @Component({
   components: {
     TaskItem,
     TaskItemPreview,

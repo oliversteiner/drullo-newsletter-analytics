@@ -2,16 +2,19 @@ import Vue from 'vue'
 import Vuex, { Payload } from 'vuex'
 import VuexPersistence from 'vuex-persist'
 import { getModule } from 'vuex-module-decorators'
-import { Newsletter, Subscriber, SubscriberGroup, Task, TaskRelated } from '@/models/models'
 import SubscriberModule from '@/store/modules/SubscriberModule'
 import TasksModule from '@/store/modules/TasksModule'
 import NewslettersModule from '@/store/modules/NewslettersModule'
+import { Newsletter } from '@/_models/NewsletterClass'
+import { Task, TaskRelated } from '@/_models/TaskClass'
+import { Subscriber } from '@/_models/SubscriberClass'
+import { SubscriberGroupTerm } from '@/_models/mollo'
 
 Vue.use(Vuex)
 
 interface SubscriberState {
   list: Subscriber[]
-  groups: SubscriberGroup[]
+  groups: SubscriberGroupTerm[]
   count: number
 }
 

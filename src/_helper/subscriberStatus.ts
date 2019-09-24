@@ -1,5 +1,6 @@
-import { Member, MolloMemberData, SubscriberStatus } from '@/models/models'
 import { EnumsSubscriberStatus } from '@/enums'
+import { SubscriberStatus } from '@/_models/SubscriberClass'
+import { MolloMemberTelemetry } from '@/_models/MolloMember'
 
 /**
  *
@@ -10,16 +11,16 @@ import { EnumsSubscriberStatus } from '@/enums'
  *  - error -> red ( email-address invalide)
  *  - unsubscribe -> viollet
  *  - warning -> orange (not definded)
- * @param data
+ * @param telemetry
  */
-export default function getSubscriberStatus(data: MolloMemberData[]): SubscriberStatus[] {
+export default function getSubscriberStatus(telemetry?: MolloMemberTelemetry[]): SubscriberStatus[] {
   const status: SubscriberStatus[] = []
 
   // no Data
-  if (!data) return status
+  if (!telemetry) return []
 
   // Data
-  data.forEach(data => {
+  telemetry.forEach(telemetry => {
     const message = {
       messageId: 0,
       // Default
@@ -27,21 +28,21 @@ export default function getSubscriberStatus(data: MolloMemberData[]): Subscriber
     }
 
     // Add Message ID
-    if (data.messageId) {
-      message.messageId = data.messageId
+    if (telemetry.messageId) {
+      message.messageId = telemetry.messageId
     }
 
     // Compute Status
 
     // Send
-    if (data.sendTS != 0) message.status = EnumsSubscriberStatus.SEND
-    if (data.send) message.status = EnumsSubscriberStatus.SEND
+    if (telemetry.sendTS != 0) message.status = EnumsSubscriberStatus.SEND
+    if (telemetry.send) message.status = EnumsSubscriberStatus.SEND
 
     // Open
-    if (data.open) message.status = EnumsSubscriberStatus.OPEN
+    if (telemetry.open) message.status = EnumsSubscriberStatus.OPEN
 
     // Unsubscribe
-    if (data.unsubscribe) message.status = EnumsSubscriberStatus.UNSUBSCRIBE
+    if (telemetry.unsubscribe) message.status = EnumsSubscriberStatus.UNSUBSCRIBE
 
     status.push(message)
   })

@@ -8,8 +8,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator'
-import { SubscriberStore } from '@/store'
+import { Vue, Component } from 'vue-property-decorator'
 import SubscriberListDynamic from '@/components/SubscriberList/SubscriberListDynamic.vue'
 
 @Component({

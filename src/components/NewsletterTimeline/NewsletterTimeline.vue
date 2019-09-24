@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
+import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
 import LineChart from '@/components/NewsletterTimeline/LineChart'
 import getSubscriberTimeline from '@/_helper/subscriberTimeline'
 import { Subscriber, SubscriberTimeline } from '@/_models/SubscriberClass'

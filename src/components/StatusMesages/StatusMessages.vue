@@ -17,11 +17,11 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator'
-import { eventBus } from '@/main'
-import { StatusMessage } from '@/models/models'
+  import { Component, Vue } from 'vue-property-decorator'
+  import { eventBus } from '@/main'
+  import { StatusMessage } from '@/_models/MessageClass';
 
-@Component({})
+  @Component({})
 export default class StatusMessages extends Vue {
   private name: string = ''
   private progress: number | string = 0

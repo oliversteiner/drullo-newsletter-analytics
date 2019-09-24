@@ -16,42 +16,143 @@
     display: flex;
   }
 }
-.subscriber-list-dynamic{
 
+// -------------------- Dynamic
 
-
-ul.subscriber-list-table {
-  border: silver solid 1px;
-  list-style-type: none;
-}
-
-tr.list-row{
-  border-bottom: 1px silver solid;
-}
-
-
-
-td.list-item {
-  font-size: 0.9rem;
-  vertical-align: center;
-  min-height: 33px;
-  margin-right: 10px;
-  border-bottom: 1px #383838 solid;
-
-  &-groups ul{
+.subscriber-list-dynamic {
+  table.subscriber-list-table {
+    display: block;
+    width: auto;
+    height: auto;
     margin: 0;
     padding: 0;
-    li {
-      margin: 0;
-      padding: 0;
+    border: none;
+    border-collapse: inherit;
+    border-spacing: 0;
+    border-color: inherit;
+    vertical-align: inherit;
+    text-align: left;
+    font-weight: inherit;
+    -webkit-border-horizontal-spacing: 0;
+    -webkit-border-vertical-spacing: 0;
+  }
+
+  tr.list-row {
+    border-bottom: 1px silver solid;
+
+    &:hover {
+      background-color: #1f1f1f;
+      cursor: pointer;
+    }
+    &:active {
+      background-color: black;
+    }
+    &.active {
+      background-color: #33172b;
     }
   }
+
+  td.list-item {
+    font-size: 0.9rem;
+    vertical-align: center;
+    height: 45px;
+    margin-right: 10px;
+    border-bottom: 1px #383838 solid;
+&-status{
+  padding-left: 15px;
 }
 
+    &-id {
+      padding-right: 20px;
+    }
 
-  .toolbar{
+    &-groups ul {
+      margin: 0;
+      padding: 0;
+
+      li {
+        margin: 0;
+        padding: 0;
+      }
+    }
+  }
+
+  .toolbar {
     background-color: #1f1f1f;
-    margin-bottom: 20px;
     padding: 10px;
+  }
+
+  .toolbar-info {
+    padding: 10px;
+    font-size: 0.8rem;
+  }
+
+  .layout-list-and-sidebar {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .layout-sidebar {
+    display: block;
+    position: relative;
+    width: 50px;
+  }
+  .layout-sidebar.open {
+    width: 420px;
+
+  }
+  .layout-list {
+    flex-grow: 1;
+  }
+
+  .subscriber-list-table {
+    width: 100%;
+  }
+
+  .editor-window {
+    padding: 10px;
+    min-width: 400px;
+    min-height: 200px;
+    background-color: #33172b;
+  }
+
+  .fixed-sidebar.is-fixed {
+    top: 76px;
+    left: 0;
+  }
+
+  .fixed-table-header.is-fixed {
+    top: 0;
+    width: 100%;
+    left: 0;
+    right: 0;
+    box-shadow: -5px 36px 39px -14px rgba(0,0,0,0.43);
+
+  }
+
+  @media screen and (max-width: 992px) {
+    .layout-list-and-sidebar {
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    .fixed-sidebar.is-fixed {
+      top: 50px;
+      left: 0;
+      width: 100%;
+      box-shadow: -5px 36px 39px -14px rgba(0,0,0,0.43);
+
+    }
+
+    .layout-sidebar {
+      display: block;
+      position: relative;
+      width: 100%;
+      background-color: #7e77c8;
+    }
+
+    .editor-window {
+      display: flex;
+    }
   }
 }

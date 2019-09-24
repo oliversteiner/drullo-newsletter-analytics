@@ -37,10 +37,10 @@
 </template>
 
 <script>
-import { Vue, Component } from 'vue-property-decorator'
-import users from '@/store/modules/UsersModule'
+  import { Component, Vue } from 'vue-property-decorator'
+  import users from '@/store/modules/UsersModule'
 
-@Component
+  @Component
 export default class AppNavbar extends Vue {
   get username() {
     return users.username
