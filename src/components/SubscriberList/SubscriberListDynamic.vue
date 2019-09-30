@@ -24,10 +24,15 @@
           </button>
 
           <!-- fulltext  -->
-          <input v-model="fullText" type="text" @keyup.enter="setFilter('fulltext')" />
-          <button @click="setFilter('fulltext')">
-            fulltext
-          </button>
+          <input
+            v-model="fullText"
+            type="text"
+            @keyup.enter="setFilter('fulltext')"
+            placeholder="Suche Name, Adresse"
+          />
+          <span class="btn btn-icon" @click="setFilter('fulltext')">
+            <font-awesome-icon icon="search"></font-awesome-icon>
+          </span>
         </div>
         <!-- Number of Subscribers-->
         <div class="toolbar-info">{{ subscribersFiltered.length }} von {{ numberOfAllSubscribers }} Empfänger</div>
@@ -38,7 +43,10 @@
     <div class="layout-list-and-sidebar">
       <div class="layout-sidebar" :class="{ open: isSidebarOpen }">
         <scroll-fixed-header :fixed.sync="fixed" :threshold="100" user-class="fixed-sidebar">
-          <button @click="isSidebarOpen = !isSidebarOpen">Toggel Sidebar</button>
+          <div class="btn btn-icon" @click="isSidebarOpen = !isSidebarOpen">
+            <font-awesome-icon v-show="isSidebarOpen" icon="chevron-left"></font-awesome-icon>
+            <font-awesome-icon v-show="!isSidebarOpen" icon="chevron-right"></font-awesome-icon>
+          </div>
           <div v-show="isSidebarOpen" class="editor-window">
             <SubscriberEdit :subscriber-id="currentSubscriberID"> </SubscriberEdit>
           </div>

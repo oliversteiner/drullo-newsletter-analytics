@@ -44,7 +44,7 @@ export default class SubscriberModule extends VuexModule implements SubscriberMo
       // @ts-ignore
       first_name: subscriber.personal.firstName,
       // @ts-ignore
-      last_name: subscriber.personal.firstName,
+      last_name: subscriber.personal.lastName,
       // @ts-ignore
       birthday: subscriber.personal.birthday,
       // @ts-ignore

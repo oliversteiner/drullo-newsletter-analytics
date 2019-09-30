@@ -26,6 +26,7 @@ interface MolloAddress {
 
 export interface MolloMember {
   id?: number
+  transfer_id?: string
   changed?: number
   created?: number
   contact?: MolloContact

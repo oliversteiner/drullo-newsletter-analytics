@@ -26,6 +26,7 @@ interface SubscriberAddress {
 
 export interface Subscriber {
   id: number
+  transferId?: string
   changed?: Date
   created?: Date
   changedTs?: number
@@ -87,7 +88,9 @@ export default class SubscriberClass {
             duplicate = true
           }
         })
+
         let personal: SubscriberPersonal = {}
+
         if (member.personal) {
           personal = {
             gender: member.personal.gender,
@@ -125,13 +128,20 @@ export default class SubscriberClass {
         if (!member.telemetry) {
           member.telemetry = []
         }
+
         let id = 0
         if (member.id) {
           id = member.id
         }
 
+        let transferId = ''
+        if (member.transfer_id) {
+          transferId = member.transfer_id
+        }
+
         const subscriber: Subscriber = {
           id: id,
+          transferId: transferId,
           personal: personal,
           contact: contact,
           address: address,

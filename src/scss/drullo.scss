@@ -43,6 +43,18 @@ h2 {
   }
 }
 
+.btn-icon {
+  &:hover {
+    color: white;
+  }
+
+  &:active {
+    background-color: #6d6d6d;
+    color: #201e33;
+  }
+}
+
+
 .btn-outline {
   border: 1px solid #9d9d9d;
   background-color: transparent;

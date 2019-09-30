@@ -23,6 +23,18 @@ import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons/faExclama
 
 // Moment
 import moment from 'moment'
+import { faEnvelope } from '@fortawesome/free-solid-svg-icons/faEnvelope'
+import { faMobile } from '@fortawesome/free-solid-svg-icons/faMobile'
+import { faMobileAlt } from '@fortawesome/free-solid-svg-icons/faMobileAlt'
+import { faPhoneSquareAlt } from '@fortawesome/free-solid-svg-icons/faPhoneSquareAlt'
+import { faToggleOn } from '@fortawesome/free-solid-svg-icons/faToggleOn'
+import { faToggleOff } from '@fortawesome/free-solid-svg-icons/faToggleOff'
+import { faChevronCircleLeft } from '@fortawesome/free-solid-svg-icons/faChevronCircleLeft'
+import { faChevronRight } from '@fortawesome/free-solid-svg-icons/faChevronRight'
+import { faSearch } from '@fortawesome/free-solid-svg-icons/faSearch'
+import { faChevronLeft } from '@fortawesome/free-solid-svg-icons/faChevronLeft'
+import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus'
+import { faPlusCircle } from '@fortawesome/free-solid-svg-icons/faPlusCircle'
 
 library.add(
   faCaretDown,
@@ -39,10 +51,18 @@ library.add(
   faMoon,
   faCircle,
   faTimesCircle,
+  faEnvelope,
+  faMobileAlt,
+  faPhoneSquareAlt,
+  faToggleOn,
+  faToggleOff,
+  faChevronLeft,
+  faChevronRight,
+  faSearch,
+  faPlus,
+  faPlusCircle,
 )
 Vue.component('font-awesome-icon', FontAwesomeIcon)
-
-
 
 // Config
 Vue.config.performance = true
@@ -59,6 +79,12 @@ require('moment/locale/de-ch')
 
 // Global Events / Emits
 export const eventBus = new Vue()
+
+// Filters
+Vue.filter('formatAsPhoneNumber', (value: string) => {
+  if (!value) return ''
+  return value
+})
 
 // App
 new Vue({
