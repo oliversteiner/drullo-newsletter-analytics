@@ -378,7 +378,7 @@ import { SubscriberGroupTerm } from '@/_models/mollo'
 export default class SubscriberEdit extends Vue {
   @Prop() subscriberId!: number
 
-  edit: boolean = true
+  edit: boolean = false
   isSave: boolean = true
   private subscriber: Subscriber | null = null
 

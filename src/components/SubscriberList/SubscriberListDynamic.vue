@@ -2,40 +2,44 @@
   <div class="subscriber-list-dynamic">
     <scroll-fixed-header :fixed.sync="fixed" :threshold="100" user-class="fixed-table-header">
       <div class="toolbar">
-        <div>
-          <!-- Filter Test -->
-          <button @click="setFilter('test', '')">
-            Filtertest
-          </button>
+        <!-- Number of Subscribers-->
+        <div class="toolbar-info">{{ subscribersFiltered.length }} von {{ numberOfAllSubscribers }} Empfänger</div>
 
-          <!-- Status Test -->
-          <button @click="setFilter('status', ['open'])">
-            Status, send
-          </button>
-
-          <!-- Filter Group  -->
-          <button @click="setFilter('groups', [22])">
-            Filter Group 64, 22
-          </button>
-
-          <!-- Clear all filters  -->
-          <button @click="setFilter('clear')">
-            Clear all Filters
-          </button>
-
+        <div class="search-box">
           <!-- fulltext  -->
+          <label for="search-box" style="display: none">Volltext Suche</label>
           <input
+            id="search-box"
             v-model="fullText"
             type="text"
+            size="30"
             @keyup.enter="setFilter('fulltext')"
             placeholder="Suche Name, Adresse"
           />
           <span class="btn btn-icon" @click="setFilter('fulltext')">
             <font-awesome-icon icon="search"></font-awesome-icon>
           </span>
+
+          <!-- Clear all filters  -->
+          <span class="btn btn-icon" @click="setFilter('clear')">
+            <font-awesome-icon icon="times-circle"></font-awesome-icon>
+          </span>
         </div>
-        <!-- Number of Subscribers-->
-        <div class="toolbar-info">{{ subscribersFiltered.length }} von {{ numberOfAllSubscribers }} Empfänger</div>
+
+        <div class="filter-group" :key="componentKey">
+          <div
+            v-for="group in filterGroups"
+            :key="'group-filter-' + group.id + group.active"
+            @click="toggleGroupFilter(group.id)"
+            class="btn-groups"
+            :class="{ active: group.active }"
+          >
+            <div>
+              <span class="label">{{ group.name }} </span>
+              <span class="batch">{{ group.subscribers }}</span>
+            </div>
+          </div>
+        </div>
       </div>
     </scroll-fixed-header>
 
@@ -48,7 +52,7 @@
             <font-awesome-icon v-show="!isSidebarOpen" icon="chevron-right"></font-awesome-icon>
           </div>
           <div v-show="isSidebarOpen" class="editor-window">
-            <SubscriberEdit :subscriber-id="currentSubscriberID"> </SubscriberEdit>
+            <SubscriberEdit :subscriber-id="currentSubscriberID"></SubscriberEdit>
           </div>
         </scroll-fixed-header>
       </div>
@@ -100,6 +104,7 @@ import { SubscriberGroupTerm } from '@/_models/mollo'
 })
 export default class SubscriberListDynamic extends Vue {
   private debug = true
+  private componentKey = 0
 
   private fullSubscriberList: Subscriber[] = []
   private subscribersFiltered: Subscriber[] = []
@@ -112,6 +117,7 @@ export default class SubscriberListDynamic extends Vue {
   private fullText: string = ''
   private status: string[] = []
   private isSidebarOpen = false
+  private filterGroups: SubscriberGroupTerm[] = []
 
   // fixed header
   private fixed = false
@@ -170,7 +176,7 @@ export default class SubscriberListDynamic extends Vue {
 
     if (this.groups.length > 0) {
       console.log('-- Filter Group:', this.groups)
-      subscriberList = subscriberList.filter(subscriber => this.filterGroups(subscriber.groups))
+      subscriberList = subscriberList.filter(subscriber => this.filterGroupsAction(subscriber.groups))
     }
 
     if (this.fullText != '') {
@@ -195,6 +201,10 @@ export default class SubscriberListDynamic extends Vue {
     return SubscriberStore.count
   }
 
+  get subscriberGroups() {
+    return this.filterGroups
+  }
+
   // --------- Filters ----------------------
 
   /**
@@ -210,7 +220,7 @@ export default class SubscriberListDynamic extends Vue {
    *
    * @param groups
    */
-  private filterGroups(groups: SubscriberGroupTerm[]) {
+  private filterGroupsAction(groups: SubscriberGroupTerm[]) {
     const groupIDs = groups.map(group => {
       return group.id
     })
@@ -218,6 +228,34 @@ export default class SubscriberListDynamic extends Vue {
     return this.groups.map(groupId => {
       return groupIDs.includes(groupId)
     })[0]
+  }
+
+  private toggleGroupFilter(id: number) {
+    const ids: number[] = []
+    this.filterGroups.forEach(group => {
+      if (group.id === id) {
+        group.active = !group.active
+      }
+
+      if (group.active === true) {
+        ids.push(group.id)
+      }
+    })
+    console.log('this.filterGroups', this.filterGroups)
+    this.forceRerender()
+
+    console.log(ids)
+    this.setFilter('groups', ids)
+  }
+
+  isGroupFilterActive(id: number) {
+    return this.filterGroups.map(group => {
+      if (group.id == id) {
+        if (group.active) {
+          return true
+        }
+      }
+    })
   }
 
   /**
@@ -268,11 +306,20 @@ export default class SubscriberListDynamic extends Vue {
     return result
   }
 
+  private forceRerender() {
+    this.componentKey += 1
+  }
+
   created() {
     const subList = SubscriberStore.list
     this.fullSubscriberList = subList
     this.subscribersFiltered = subList
     // this.currentSubscriber = subList[0]
+    const filterGroups = SubscriberStore.groups
+    this.filterGroups = filterGroups.map(group => {
+      group.active = false
+      return group
+    })
   }
 }
 </script>

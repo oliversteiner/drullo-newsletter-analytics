@@ -58,9 +58,9 @@
     height: 45px;
     margin-right: 10px;
     border-bottom: 1px #383838 solid;
-&-status{
-  padding-left: 15px;
-}
+    &-status {
+      padding-left: 15px;
+    }
 
     &-id {
       padding-right: 20px;
@@ -80,10 +80,27 @@
   .toolbar {
     background-color: #1f1f1f;
     padding: 10px;
+    display: flex;
+  }
+  .search-box {
+    min-width: 350px;
+    input {
+      font-size: 1rem;
+      padding: 5px 7px;
+      border-radius: 5px;
+      border: none;
+      background-color: #3e3e3e;
+      color: white;
+    }
   }
 
   .toolbar-info {
     padding: 10px;
+    font-size: 0.8rem;
+    width: 300px;
+  }
+
+  .filter-group {
     font-size: 0.8rem;
   }
 
@@ -99,7 +116,6 @@
   }
   .layout-sidebar.open {
     width: 320px;
-
   }
   .layout-list {
     flex-grow: 1;
@@ -126,8 +142,31 @@
     width: 100%;
     left: 0;
     right: 0;
-    box-shadow: -5px 36px 39px -14px rgba(0,0,0,0.43);
+    box-shadow: -5px 36px 39px -14px rgba(0, 0, 0, 0.43);
+  }
 
+  .btn-groups {
+    display: inline-block;
+    padding: 5px 20px;
+    border: 1px solid #383838;
+
+    &:hover {
+      cursor: pointer;
+      background-color: rgba(0, 0, 0, 0.3);
+    }
+    &:active,
+    &.active {
+      background-color: rgba(0, 0, 0, 0.9);
+    }
+    &.active:hover {
+      background-color: rgba(0, 0, 0, 0.3);
+    }
+  }
+
+  .batch {
+    display: inline-block;
+    margin-left: 10px;
+    color: #3e3e3e;
   }
 
   @media screen and (max-width: 992px) {
@@ -140,8 +179,7 @@
       top: 50px;
       left: 0;
       width: 100%;
-      box-shadow: -5px 36px 39px -14px rgba(0,0,0,0.43);
-
+      box-shadow: -5px 36px 39px -14px rgba(0, 0, 0, 0.43);
     }
 
     .layout-sidebar {

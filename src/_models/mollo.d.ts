@@ -14,30 +14,36 @@ export interface MolloResponse {
 export interface Taxonomy {
   id: number
   name: string
+  active?: boolean
 }
 
 interface CategoryTerm extends Taxonomy {
   id: number
   name: string
+  active?: boolean
 }
 
 interface GenderTerm extends Taxonomy {
   id: number
   name: string
+  active?: boolean
 }
 
 interface CountryTerm extends Taxonomy {
   id: number
   name: string
+  active?: boolean
 }
 
 interface OriginTerm extends Taxonomy {
   id: number
   name: string
+  active?: boolean
 }
 
 export interface SubscriberGroupTerm extends Taxonomy {
   id: number
   name: string
   subscribers?: number
+  active?: boolean
 }
