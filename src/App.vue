@@ -4,8 +4,8 @@
       <div style="display: flex;justify-content: space-between">
         <AppNavbar></AppNavbar>
         <div class="settings-icons">
-        <ThemeSwitcher></ThemeSwitcher>
-        <AppSettings></AppSettings>
+          <ThemeSwitcher></ThemeSwitcher>
+          <AppSettings></AppSettings>
         </div>
       </div>
       <StatusMessages></StatusMessages>
@@ -21,10 +21,9 @@ import AppFooter from './components/AppFooter.vue'
 import AppNavbar from './components/AppNavbar.vue'
 import ThemeSwitcher from '@/components/ThemeSwitcher/ThemeSwitcher.vue'
 import { eventBus } from '@/main'
-import store, { NewsletterStore, SubscriberStore, TasksStore, TermsStore } from '@/store'
+import { NewsletterStore, SubscriberStore, TasksStore, TermsStore } from '@/store'
 import StatusMessages from '@/components/StatusMesages/StatusMessages.vue'
-import * as api from '@/store/api'
-import AppSettings from '@/components/AppSettings/AppSettings.vue';
+import AppSettings from '@/components/AppSettings/AppSettings.vue'
 
 @Component({
   components: {
@@ -84,9 +83,9 @@ export default class App extends Vue {
   }
 }
 
-  .settings-icons{
-    display: flex;
-    margin-right: 10px;
-    margin-left: 20px;
-  }
+.settings-icons {
+  display: flex;
+  margin-right: 10px;
+  margin-left: 20px;
+}
 </style>

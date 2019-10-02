@@ -1,18 +1,112 @@
-.app-settings{
+.app-settings {
   margin: 10px 10px 0;
 
-  .icon {
+
+  .settings-modal {
+    position: absolute;
+    top: 50px;
+    right: 50px;
+    width: 300px;
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    box-shadow: 11px 10px 25px -8px rgba(0,0,0,0.55);
+
+  }
+
+  .label {
+    min-width: 50px;
+    margin-right: 10px;
+    vertical-align: center;
+    flex-direction: column;
+  }
+
+  h2 {
+    font-size: 1rem;
+    color: gray !important;
+    padding: 0;
+    margin: 0 10px;
+  }
+
+  ul {
+    margin: 0;
+    padding: 0;
+  }
+
+  li {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .language {
+    ul {
+      display: flex;
+    }
+    li {
+      padding: 5px;
+      margin-right: 20px;
+    }
+
+    .label {
+      display: none;
+    }
+  }
+
+  .content {
+    font-size: 0.8rem;
+  }
+
+  .row {
+    padding: 10px 0 10px 20px;
+    display: flex;
+    border-bottom: 1px solid #3a3a3a;
+    align-items: center;
+  }
+  .last-row {
+    border-bottom: none;
+  }
+
+  .toolbar {
+    display: flex;
+    justify-content: space-between;
+    background-color: rgba(0, 0, 0, 0.3);
+    padding: 10px 5px;
+  }
+
+  .close-icon {
+    margin: 0 10px;
+    padding: 2px;
+  }
+
+  .btn-icon-open {
     display: inline-block;
     min-width: 20px;
     min-height: 20px;
     cursor: pointer;
     color: gray;
-  }
-  .icon:hover {
-    color: white;
-  }
-  .icon:active {
-    color: #7e77c8;
+
+    &:hover {
+      color: white;
+    }
+    &.active,
+    &:active {
+      color: #7e77c8;
+    }
   }
 
+  .btn-settings {
+    display: inline-block;
+    cursor: pointer;
+    color: gray;
+
+    &:hover {
+      color: white;
+      background-color: rgba(0, 0, 0, 0.3);
+      border-radius: 5px;
+    }
+    &.active,
+    &:active {
+      color: #7e77c8;
+    }
+  }
 }

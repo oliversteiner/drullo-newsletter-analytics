@@ -1,7 +1,60 @@
 <template>
   <div class="app-settings">
-    <div class="icon">
+    <!-- Icon -->
+    <div class="btn-icon-open open-trigger" @click="toggleModal()" :class="{ active: isOpen }">
       <font-awesome-icon icon="cog"></font-awesome-icon>
+    </div>
+
+    <!-- Modale -->
+    <div v-show="isOpen" class="settings-modal">
+      <div class="toolbar">
+        <h2>{{ $t('Settings') }}</h2>
+        <div class="close-icon close-trigger btn-settings" @click="closeModal()">
+          <font-awesome-icon icon="times-circle"></font-awesome-icon>
+        </div>
+      </div>
+      <div class="content">
+        <!-- Lang -->
+        <div class="row language">
+          <div class="label">Language</div>
+          <div class="value">
+            <ul>
+              <li
+                v-for="language in languages"
+                :key="language.id"
+                class="btn-settings"
+                :class="{ active: currentLanguage === language.id }"
+                @click="changeLang(language.id)"
+              >
+                {{ language.name }}
+              </li>
+            </ul>
+          </div>
+        </div>
+        <!-- Other Setting -->
+        <div class="row">
+          <div class="label">Label</div>
+          <div class="value">
+            Value
+          </div>
+        </div>
+
+        <!-- Other Setting -->
+        <div class="row">
+          <div class="label">Label</div>
+          <div class="value">
+            Value
+          </div>
+        </div>
+
+        <!-- last Setting -->
+        <div class="row last-row">
+          <div class="label">Label</div>
+          <div class="value">
+            Value
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -10,7 +63,38 @@
 import { Vue, Component, Prop } from 'vue-property-decorator'
 
 @Component({})
-export default class AppSettings extends Vue {}
+export default class AppSettings extends Vue {
+  public isOpen = false
+  public currentLanguage = 'en'
+
+  public languages = [
+    {
+      id: 'en',
+      name: 'English',
+    },
+    {
+      id: 'de',
+      name: 'Deutsch',
+    },
+  ]
+
+  closeModal() {
+    this.isOpen = false
+  }
+
+  openModal() {
+    this.isOpen = true
+  }
+
+  toggleModal() {
+    this.isOpen = !this.isOpen
+  }
+
+  changeLang(id: string) {
+    this.currentLanguage = id
+    console.log('change Language to', id)
+  }
+}
 </script>
 
 <style lang="scss">
