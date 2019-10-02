@@ -332,7 +332,7 @@ export default class Analytics extends Vue {
     })
   }
 
-  private async created() {
+  private created() {
     // Response
     this.loading = false
 

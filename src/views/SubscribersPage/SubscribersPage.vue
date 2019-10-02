@@ -11,7 +11,7 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator'
 import SubscriberTable from '@/components/SubscriberTable/SubscriberTable.vue'
-import { SubscriberStore } from '@/store'
+import { SubscriberStore, TermsStore } from '@/store'
 
 @Component({
   components: { SubscriberTable },
@@ -27,7 +27,9 @@ export default class SubscribersPage extends Vue {
     return SubscriberStore.count
   }
 
-  async created() {}
+
+  created() {
+  }
 }
 </script>
 <style lang="scss" scoped>

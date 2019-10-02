@@ -1,7 +1,8 @@
 // Mollo Member
 // ---------------------------------------------- //
 
-import { CountryTerm, GenderTerm, OriginTerm, SubscriberGroupTerm } from '@/_models/mollo'
+import { CountryTerm, GenderTerm, OriginTerm } from '@/store/modules/TermsModule'
+import { SubscriberGroupTerm } from '@/store/modules/SubscriberModule'
 
 export interface MolloContact {
   email?: string

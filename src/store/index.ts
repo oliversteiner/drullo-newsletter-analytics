@@ -2,13 +2,13 @@ import Vue from 'vue'
 import Vuex, { Payload } from 'vuex'
 import VuexPersistence from 'vuex-persist'
 import { getModule } from 'vuex-module-decorators'
-import SubscriberModule from '@/store/modules/SubscriberModule'
+import SubscriberModule, { SubscriberGroupTerm } from '@/store/modules/SubscriberModule'
 import TasksModule from '@/store/modules/TasksModule'
 import NewslettersModule from '@/store/modules/NewslettersModule'
 import { Newsletter } from '@/_models/NewsletterClass'
 import { Task, TaskRelated } from '@/_models/TaskClass'
 import { Subscriber } from '@/_models/SubscriberClass'
-import { SubscriberGroupTerm } from '@/_models/mollo'
+import TermsModule, { CategoryTerm, CountryTerm, GenderTerm, OriginTerm } from '@/store/modules/TermsModule'
 
 Vue.use(Vuex)
 
@@ -29,10 +29,18 @@ interface NewsletterState {
   count: number
 }
 
+interface TermsState {
+  gender: GenderTerm[]
+  country: CountryTerm[]
+  origin: OriginTerm[]
+  category: CategoryTerm[]
+}
+
 export interface State {
   subscriber: SubscriberState
   tasks: TasksState
   newsletter: NewsletterState
+  terms: TermsState
 }
 
 const vuexLocal = new VuexPersistence<State>({
@@ -51,6 +59,7 @@ const store = new Vuex.Store<State>({
     subscriber: SubscriberModule,
     tasks: TasksModule,
     newsletter: NewslettersModule,
+    terms: TermsModule,
   },
   plugins: [vuexLocal.plugin],
 })
@@ -59,3 +68,4 @@ export default store
 export const SubscriberStore = getModule(SubscriberModule, store)
 export const TasksStore = getModule(TasksModule, store)
 export const NewsletterStore = getModule(NewslettersModule, store)
+export const TermsStore = getModule(TermsModule, store)

@@ -19,7 +19,7 @@
 
           <h3>Adresse</h3>
           <div class="item">
-            {{ subscriber.personal.gender[0].name }}
+            {{ gender }}
           </div>
           <div class="item">{{ subscriber.personal.firstName }} {{ subscriber.personal.lastName }}</div>
           <div class="item">
@@ -27,7 +27,7 @@
           </div>
           <div class="item">{{ subscriber.address.zipCode }} {{ subscriber.address.city }}</div>
           <div class="item">
-            {{ subscriber.address.country }}
+            {{ country }}
           </div>
         </fieldset>
 
@@ -176,7 +176,11 @@
 
           <h3>Adresse</h3>
           <div class="item">
-            {{ subscriber.personal.gender[0].name }}
+            <select v-model="subscriber.personal.gender">
+              <option v-for="option in genderList" :value="option.id" :key="option.id">
+                {{ option.name }}
+              </option>
+            </select>
           </div>
 
           <div class="item">
@@ -216,7 +220,11 @@
             <input id="city" v-model="subscriber.address.city" placeholder="Ort" size="28" autocomplete="off" />
           </div>
           <div class="item">
-            {{ subscriber.address.country }}
+            <select v-model="subscriber.address.country">
+              <option v-for="option in countryList" :value="option.id" :key="option.id">
+                {{ option.name }}
+              </option>
+            </select>
           </div>
         </fieldset>
 
@@ -354,7 +362,12 @@
           <!-- Herkunft -->
           <div class="item">
             <label class="label">Herkunft</label>
-            <span class="deactivated"> {{ origin }}</span>
+
+            <select v-model="subscriber.origin">
+              <option v-for="option in originList" :value="option.id" :key="option.id">
+                {{ option.name }}
+              </option>
+            </select>
           </div>
           <!-- Status -->
           <div class="item">
@@ -371,8 +384,8 @@
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
 import { Subscriber } from '@/_models/SubscriberClass'
-import { SubscriberStore } from '@/store'
-import { SubscriberGroupTerm } from '@/_models/mollo'
+import { SubscriberStore, TermsStore } from '@/store'
+import { SubscriberGroupTerm } from '@/store/modules/SubscriberModule'
 
 @Component({})
 export default class SubscriberEdit extends Vue {
@@ -400,10 +413,54 @@ export default class SubscriberEdit extends Vue {
     }
   }
 
+  get originList() {
+    console.log('TermsStore.origin', TermsStore.origin)
+
+    return TermsStore.origin
+  }
+
   get origin() {
-    if (this.subscriber && this.subscriber.origin && this.subscriber.origin[0]) {
-      return this.subscriber.origin[0].name
+    let name = ''
+    if (this.subscriber && this.subscriber.origin) {
+      const id = this.subscriber.origin
+      const term = TermsStore.origin.filter(term => term.id === id)
+      if (term.length != 0) {
+        name = term[0].name
+      }
     }
+    return name
+  }
+
+  get gender() {
+    let name = ''
+    if (this.subscriber && this.subscriber.personal && this.subscriber.personal.gender) {
+      const id = this.subscriber.personal.gender
+      const term = TermsStore.gender.filter(term => term.id === id)
+      if (term.length != 0) {
+        name = term[0].name
+      }
+    }
+    return name
+  }
+
+  get country() {
+    let name = ''
+    if (this.subscriber && this.subscriber.address && this.subscriber.address.country) {
+      const id = this.subscriber.address.country
+      const term = TermsStore.country.filter(term => term.id === id)
+      if (term.length != 0) {
+        name = term[0].name
+      }
+    }
+    return name
+  }
+
+  get genderList() {
+    return TermsStore.gender
+  }
+
+  get countryList() {
+    return TermsStore.country
   }
 
   async save(id: number) {

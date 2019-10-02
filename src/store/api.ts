@@ -4,10 +4,10 @@ import { eventBus } from '@/main'
 import { SubscriberStore } from '@/store/index'
 import { TasksResponse } from '@/_models/TaskClass'
 import { MolloMessageResponse } from '@/_models/NewsletterClass'
-import { SubscriberCountResponse, SubscriberGroupsResponse } from '@/_models/SubscriberClass'
+import { SubscriberCountResponse } from '@/_models/SubscriberClass'
 import { Profile, ProfileResponse, User, UserForUpdate, UserResponse, UserSubmit } from '@/_models/models'
 import { StatusMessage } from '@/_models/MessageClass'
-import { MolloResponse } from '@/_models/mollo'
+import { MolloResponse, MolloTermResponse } from '@/_models/mollo'
 import { MolloMember, MolloMemberResponse } from '@/_models/MolloMember'
 
 export const smmgApi = axios.create({
@@ -39,8 +39,28 @@ export async function getSubscriberCount() {
 }
 
 export async function getSubscriberGroups() {
-  const response = await smmgApi.get('/api/subscriberGroups')
-  return response.data as SubscriberGroupsResponse
+  const response = await smmgApi.get('/api/terms/subscriber-group')
+  return response.data as MolloTermResponse
+}
+
+export async function getGenderTerms() {
+  const response = await smmgApi.get('/api/terms/gender')
+  return response.data as MolloTermResponse
+}
+
+export async function getCountryTerms() {
+  const response = await smmgApi.get('/api/terms/country')
+  return response.data as MolloTermResponse
+}
+
+export async function getOriginTerms() {
+  const response = await smmgApi.get('/api/terms/origin')
+  return response.data as MolloTermResponse
+}
+
+export async function getCategoryTerms() {
+  const response = await smmgApi.get('/api/terms/category')
+  return response.data as MolloTermResponse
 }
 
 export async function updateSubscriber(data: MolloMember) {

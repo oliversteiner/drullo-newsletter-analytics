@@ -3,9 +3,17 @@ import store, { SubscriberStore } from '@/store'
 import * as api from '@/store/api'
 import { AxiosResponse } from 'axios'
 
-import { MolloResponse, SubscriberGroupTerm } from '@/_models/mollo'
+import { MolloResponse } from '@/_models/mollo'
 import SubscriberClass, { Subscriber } from '@/_models/SubscriberClass'
 import { MolloAddress, MolloContact, MolloMember, MolloPersonal } from '@/_models/MolloMember'
+import { CountryTerm, GenderTerm, OriginTerm, TaxonomyTerm } from '@/store/modules/TermsModule'
+
+export interface SubscriberGroupTerm extends TaxonomyTerm {
+  id: number
+  name: string
+  subscribers?: number
+  active?: boolean
+}
 
 export interface SubscriberModuleInterface {
   list: Subscriber[]
@@ -38,9 +46,16 @@ export default class SubscriberModule extends VuexModule implements SubscriberMo
     // remove Observer
     const subscriber: Subscriber = JSON.parse(JSON.stringify(_subscriber))
 
+    // Gender
+    let gender: GenderTerm[] = []
+    if (subscriber.personal && subscriber.personal.gender != 0) {
+      // @ts-ignore
+      gender = [{ id: subscriber.personal.gender }]
+    }
+
     const personal: MolloPersonal = {
       // @ts-ignore
-      gender: subscriber.personal.gender,
+      gender: gender,
       // @ts-ignore
       first_name: subscriber.personal.firstName,
       // @ts-ignore
@@ -51,6 +66,13 @@ export default class SubscriberModule extends VuexModule implements SubscriberMo
       newsletter: subscriber.personal.newsletter,
     }
 
+    // Country
+    let country: CountryTerm[] = []
+    if (subscriber.address && subscriber.address.country != 0) {
+      // @ts-ignore
+      country = [{ id: subscriber.address.country }]
+    }
+
     const address: MolloAddress = {
       // @ts-ignore
       street_and_number: subscriber.address.streetAndNumber,
@@ -58,6 +80,7 @@ export default class SubscriberModule extends VuexModule implements SubscriberMo
       zip_code: subscriber.address.zipCode,
       // @ts-ignore
       city: subscriber.address.city,
+      country: country,
     }
 
     const contact: MolloContact = {
@@ -71,6 +94,13 @@ export default class SubscriberModule extends VuexModule implements SubscriberMo
       mobile: subscriber.contact.mobile,
     }
 
+    // Origin
+    let origin: OriginTerm[] = []
+    if (subscriber.origin != 0) {
+      // @ts-ignore
+      origin = [{ id: subscriber.origin }]
+    }
+
     const postData: MolloMember = {
       id: id,
       personal: personal,
@@ -79,7 +109,7 @@ export default class SubscriberModule extends VuexModule implements SubscriberMo
       error: subscriber.error,
       read: subscriber.read,
       groups: subscriber.groups,
-      origin: subscriber.origin,
+      origin: origin,
       telemetry: subscriber.telemetry,
     }
 
@@ -106,6 +136,16 @@ export default class SubscriberModule extends VuexModule implements SubscriberMo
 
   @Mutation
   public async refresh(): Promise<void> {
+    // ------------------  Subscriber Groups  ------------------
+    const groupResponse = await api.getSubscriberGroups()
+    const groups = groupResponse.terms.map(group => {
+      group.active = false
+      return group
+    })
+    console.log('Subscriber Groups', groups)
+
+    this.groups = groups
+
     // ------------------  Subscribers  ------------------
 
     const update = await api.getUpdatedSubscribers()
@@ -121,10 +161,6 @@ export default class SubscriberModule extends VuexModule implements SubscriberMo
       const subscribers = SubscriberClass.convertMemberToSubscribers(members)
       this.list = subscribers
       this.count = subscribers.length
-
-      // ------------------  Subscriber Groups  ------------------
-      const groupResponse = await api.getSubscriberGroups()
-      this.groups = groupResponse.subscriberGroups
     }
   }
 }

@@ -14,7 +14,14 @@ import SubscriberListDynamic from '@/components/SubscriberList/SubscriberListDyn
 @Component({
   components: { SubscriberListDynamic },
 })
-export default class DeveloperPage extends Vue {}
+export default class DeveloperPage extends Vue {
+
+
+  create(){
+
+  }
+
+}
 </script>
 
 <style lang="scss">

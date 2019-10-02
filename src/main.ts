@@ -24,12 +24,10 @@ import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons/faExclama
 // Moment
 import moment from 'moment'
 import { faEnvelope } from '@fortawesome/free-solid-svg-icons/faEnvelope'
-import { faMobile } from '@fortawesome/free-solid-svg-icons/faMobile'
 import { faMobileAlt } from '@fortawesome/free-solid-svg-icons/faMobileAlt'
 import { faPhoneSquareAlt } from '@fortawesome/free-solid-svg-icons/faPhoneSquareAlt'
 import { faToggleOn } from '@fortawesome/free-solid-svg-icons/faToggleOn'
 import { faToggleOff } from '@fortawesome/free-solid-svg-icons/faToggleOff'
-import { faChevronCircleLeft } from '@fortawesome/free-solid-svg-icons/faChevronCircleLeft'
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons/faChevronRight'
 import { faSearch } from '@fortawesome/free-solid-svg-icons/faSearch'
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons/faChevronLeft'
@@ -73,9 +71,6 @@ require('moment/locale/de-ch')
 Vue.use(require('vue-moment'), {
   moment,
 })
-
-// fixed header in Subscriber list
-require('moment/locale/de-ch')
 
 // Global Events / Emits
 export const eventBus = new Vue()

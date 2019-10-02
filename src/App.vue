@@ -18,8 +18,9 @@ import AppFooter from './components/AppFooter.vue'
 import AppNavbar from './components/AppNavbar.vue'
 import ThemeSwitcher from '@/components/ThemeSwitcher/ThemeSwitcher.vue'
 import { eventBus } from '@/main'
-import {NewsletterStore, SubscriberStore} from '@/store'
+import store, { NewsletterStore, SubscriberStore, TasksStore, TermsStore } from '@/store'
 import StatusMessages from '@/components/StatusMesages/StatusMessages.vue'
+import * as api from '@/store/api'
 
 @Component({
   components: {
@@ -32,16 +33,29 @@ import StatusMessages from '@/components/StatusMesages/StatusMessages.vue'
 export default class App extends Vue {
   private theme: string = 'dark'
 
-  async created() {
-    eventBus.$on('theme', (themeID: string) => {
-      this.theme = themeID
-    })
+  async refreshStore() {
+    console.log('refresh Store')
+
+    // Terms
+    await TermsStore.refresh()
+
+    // Tasks
+    await TasksStore.refresh()
 
     // Newsletter
     await NewsletterStore.refresh()
 
     // Subscribers
     await SubscriberStore.refresh()
+
+  }
+
+  created() {
+    eventBus.$on('theme', (themeID: string) => {
+      this.theme = themeID
+    })
+
+    this.refreshStore()
   }
 }
 </script>
@@ -52,11 +66,14 @@ export default class App extends Vue {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
 #nav {
   padding: 30px;
+
   a {
     font-weight: bold;
     color: #2c3e50;
+
     &.router-link-exact-active {
       color: #42b983;
     }

@@ -36,7 +36,7 @@
           >
             <div>
               <span class="label">{{ group.name }} </span>
-              <span class="batch">{{ group.subscribers }}</span>
+              <span class="batch">{{ group.count }}</span>
             </div>
           </div>
         </div>
@@ -91,13 +91,13 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue, Watch } from 'vue-property-decorator'
 import { SubscriberStore } from '@/store'
 import { Subscriber, SubscriberStatus } from '@/_models/SubscriberClass'
 import { EnumsSubscriberStatus } from '@/enums'
 import ScrollFixedHeader from '@/components/ScrollFixedHeader/scrollFixedHeader.vue'
 import SubscriberEdit from '@/components/SubscriberEdit/SubscriberEdit.vue'
-import { SubscriberGroupTerm } from '@/_models/mollo'
+import { SubscriberGroupTerm } from '@/store/modules/SubscriberModule'
 
 @Component({
   components: { ScrollFixedHeader, SubscriberEdit },
@@ -110,6 +110,7 @@ export default class SubscriberListDynamic extends Vue {
   private subscribersFiltered: Subscriber[] = []
   private currentSubscriber: Subscriber | null = null
   private currentSubscriberID: number = 0
+  private filterGroups: SubscriberGroupTerm[] = SubscriberStore.groups
 
   private clear = false
   private test = false
@@ -117,7 +118,6 @@ export default class SubscriberListDynamic extends Vue {
   private fullText: string = ''
   private status: string[] = []
   private isSidebarOpen = false
-  private filterGroups: SubscriberGroupTerm[] = []
 
   // fixed header
   private fixed = false
@@ -129,11 +129,7 @@ export default class SubscriberListDynamic extends Vue {
     this.currentSubscriberID = subscriber.id
   }
 
-  private toggleTag(subscriber: Subscriber, group: SubscriberGroupTerm) {
-    alert('toggleTag')
-  }
-
-  checkActive(subscriber: Subscriber) {
+  private checkActive(subscriber: Subscriber) {
     if (this.currentSubscriber && this.currentSubscriber.id == subscriber.id) {
       return 'active'
     }
@@ -211,7 +207,7 @@ export default class SubscriberListDynamic extends Vue {
    *
    * @param email
    */
-  private filterTest(email: string) {
+  private filterInValidEmail(email: string) {
     const mailformat = /\S+@\S+\.\S+/
     if (!email.match(mailformat)) return true
   }
@@ -241,10 +237,8 @@ export default class SubscriberListDynamic extends Vue {
         ids.push(group.id)
       }
     })
-    console.log('this.filterGroups', this.filterGroups)
-    this.forceRerender()
 
-    console.log(ids)
+    this.forceRerender()
     this.setFilter('groups', ids)
   }
 
@@ -310,16 +304,16 @@ export default class SubscriberListDynamic extends Vue {
     this.componentKey += 1
   }
 
+  mounted() {
+      this.filterGroups = SubscriberStore.groups
+
+  }
+
   created() {
     const subList = SubscriberStore.list
     this.fullSubscriberList = subList
     this.subscribersFiltered = subList
-    // this.currentSubscriber = subList[0]
-    const filterGroups = SubscriberStore.groups
-    this.filterGroups = filterGroups.map(group => {
-      group.active = false
-      return group
-    })
+    this.filterGroups = SubscriberStore.groups
   }
 }
 </script>

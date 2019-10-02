@@ -1,4 +1,5 @@
-import { CategoryTerm, SubscriberGroupTerm } from '@/_models/mollo'
+import { SubscriberGroupTerm } from '@/store/modules/SubscriberModule'
+import { CategoryTerm } from '@/store/modules/TermsModule'
 
 export interface Newsletter {
   id: number

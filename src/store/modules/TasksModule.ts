@@ -1,7 +1,6 @@
 import { Module, Mutation, VuexModule } from 'vuex-module-decorators'
 import store from '@/store'
 import * as api from '@/store/api'
-import 'moment/locale/de-ch'
 import TaskClass, { Task, TaskRelated } from '@/_models/TaskClass'
 
 export interface TaskModuleInterface {

@@ -27,8 +27,7 @@ export default class Tasks extends Vue {
     return TasksStore.relatedList
   }
 
-  async created() {
-    await TasksStore.refresh()
+   created() {
   }
 }
 </script>

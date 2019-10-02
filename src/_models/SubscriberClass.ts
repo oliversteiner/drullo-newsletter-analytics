@@ -1,7 +1,9 @@
 import getSubscriberStatus from '@/_helper/subscriberStatus'
 import { EnumsSubscriberStatus } from '@/enums'
-import { CountryTerm, GenderTerm, OriginTerm, SubscriberGroupTerm } from '@/_models/mollo'
 import { MolloMember, MolloMemberTelemetry } from '@/_models/MolloMember'
+import { SubscriberGroupTerm } from '@/store/modules/SubscriberModule'
+import { CountryTerm, GenderTerm, OriginTerm } from '@/store/modules/TermsModule'
+import { MolloTermResponse } from '@/_models/mollo'
 
 export interface SubscriberContact {
   email?: string
@@ -9,19 +11,19 @@ export interface SubscriberContact {
   phone?: string
   phone2?: string
 }
-interface SubscriberPersonal {
-  gender?: GenderTerm[]
+export interface SubscriberPersonal {
+  gender?: number
   firstName?: string
   lastName?: string
   birthday?: string
   newsletter?: boolean
 }
 
-interface SubscriberAddress {
+export interface SubscriberAddress {
   streetAndNumber?: string
   zipCode?: string
   city?: string
-  country?: CountryTerm[]
+  country?: number
 }
 
 export interface Subscriber {
@@ -37,7 +39,7 @@ export interface Subscriber {
   error?: boolean
   read?: boolean
   groups: SubscriberGroupTerm[]
-  origin?: OriginTerm[]
+  origin?: number
   telemetry?: MolloMemberTelemetry[]
   status: SubscriberStatus[]
   currentStatus?: EnumsSubscriberStatus
@@ -50,10 +52,6 @@ export interface Subscribers {
   read?: number
   unsubscribe?: number
   subscribers: Subscriber[]
-}
-
-export interface SubscriberGroupsResponse {
-  subscriberGroups: SubscriberGroupTerm[]
 }
 
 export interface SubscriberStatus {
@@ -93,11 +91,16 @@ export default class SubscriberClass {
 
         if (member.personal) {
           personal = {
-            gender: member.personal.gender,
             firstName: member.personal.first_name,
             lastName: member.personal.last_name,
             birthday: member.personal.birthday,
             newsletter: member.personal.newsletter,
+          }
+
+          // Gender
+          personal.gender = 0
+          if (member.personal.gender && member.personal.gender[0] && member.personal.gender[0].id) {
+            personal.gender = member.personal.gender[0].id
           }
         }
 
@@ -107,7 +110,12 @@ export default class SubscriberClass {
             streetAndNumber: member.address.street_and_number,
             zipCode: member.address.zip_code,
             city: member.address.city,
-            country: member.address.country,
+          }
+
+          // country
+          address.country = 0
+          if (member.address.country && member.address.country[0] && member.address.country[0].id) {
+            address.country = member.address.country[0].id
           }
         }
 
@@ -123,7 +131,6 @@ export default class SubscriberClass {
         if (!member.groups) {
           member.groups = []
         }
-
 
         if (!member.telemetry) {
           member.telemetry = []
@@ -148,9 +155,13 @@ export default class SubscriberClass {
           error: false,
           read: false,
           groups: member.groups,
-          origin: member.origin,
           telemetry: member.telemetry,
           status: getSubscriberStatus(member.telemetry),
+        }
+
+        subscriber.origin = 0
+        if (member.origin && member.origin[0] && member.origin[0].id) {
+          subscriber.origin = member.origin[0].id
         }
 
         if (member.created) {
