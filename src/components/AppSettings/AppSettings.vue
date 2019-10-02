@@ -8,14 +8,14 @@
     <!-- Modale -->
     <div v-show="isOpen" class="settings-modal">
       <div class="toolbar">
-        <h2>{{ $t('Settings') }}</h2>
+        <h2>{{ $t('settings') }}</h2>
         <div class="close-icon close-trigger btn-settings" @click="closeModal()">
           <font-awesome-icon icon="times-circle"></font-awesome-icon>
         </div>
       </div>
       <div class="content">
         <!-- Lang -->
-        <div class="row language">
+        <div class="row language last-row">
           <div class="label">Language</div>
           <div class="value">
             <ul>
@@ -32,7 +32,7 @@
           </div>
         </div>
         <!-- Other Setting -->
-        <div class="row">
+        <div class="row inactive">
           <div class="label">Label</div>
           <div class="value">
             Value
@@ -40,7 +40,7 @@
         </div>
 
         <!-- Other Setting -->
-        <div class="row">
+        <div class="row inactive">
           <div class="label">Label</div>
           <div class="value">
             Value
@@ -48,7 +48,7 @@
         </div>
 
         <!-- last Setting -->
-        <div class="row last-row">
+        <div class="row inactive">
           <div class="label">Label</div>
           <div class="value">
             Value
@@ -61,6 +61,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator'
+import { SettingsStore } from '@/store'
 
 @Component({})
 export default class AppSettings extends Vue {
@@ -91,8 +92,13 @@ export default class AppSettings extends Vue {
   }
 
   changeLang(id: string) {
+    SettingsStore.changeLanguage(id)
     this.currentLanguage = id
     console.log('change Language to', id)
+  }
+
+  mounted() {
+    this.currentLanguage = SettingsStore.language
   }
 }
 </script>
