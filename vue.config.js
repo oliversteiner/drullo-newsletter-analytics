@@ -36,4 +36,12 @@ module.exports = {
     //  types.forEach(type => addStyleResource(config.module.rule('stylus').oneOf(type)))
   },
   filenameHashing: false,
+  pluginOptions: {
+    i18n: {
+      locale: 'en',
+      fallbackLocale: 'en',
+      localeDir: 'locales',
+      enableInSFC: true,
+    },
+  },
 }

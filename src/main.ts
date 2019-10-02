@@ -33,6 +33,8 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons/faSearch'
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons/faChevronLeft'
 import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus'
 import { faPlusCircle } from '@fortawesome/free-solid-svg-icons/faPlusCircle'
+import i18n from '@/i18n'
+import { faUserCog } from '@fortawesome/free-solid-svg-icons/faUserCog'
 
 library.add(
   faCaretDown,
@@ -59,6 +61,8 @@ library.add(
   faSearch,
   faPlus,
   faPlusCircle,
+  faCog,
+  faUserCog,
 )
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 
@@ -83,6 +87,7 @@ Vue.filter('formatAsPhoneNumber', (value: string) => {
 
 // App
 new Vue({
+  i18n,
   router,
   store,
   render: h => h(App),
