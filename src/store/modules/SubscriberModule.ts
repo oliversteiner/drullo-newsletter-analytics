@@ -14,6 +14,7 @@ export interface SubscriberGroupTerm extends TaxonomyTerm {
   name: string
   subscribers?: number
   active?: boolean
+  invalidAddresses: string[]
 }
 
 export interface SubscriberModuleInterface {
@@ -31,6 +32,7 @@ export default class SubscriberModule extends VuexModule implements SubscriberMo
   public list: Subscriber[] = []
   public groups: SubscriberGroupTerm[] = []
   public count: number = 0
+  public invalidAddresses: string[] = []
 
   @Action
   public getSubscriberByID(id: number): Subscriber | undefined {
@@ -137,6 +139,13 @@ export default class SubscriberModule extends VuexModule implements SubscriberMo
 
   @Mutation
   public async refresh(): Promise<void> {
+    // ------------------  Invalid Email Addresses  ------------------
+    const invalidAddressesResponse = await api.getInvalidAddresses()
+    const invalidAddresses = invalidAddressesResponse.addresses
+    console.log('invalidAddresses', invalidAddresses)
+
+    this.invalidAddresses = invalidAddresses
+
     // ------------------  Subscriber Groups  ------------------
     const groupResponse = await api.getSubscriberGroups()
     const groups = groupResponse.terms.map(group => {
@@ -166,7 +175,7 @@ export default class SubscriberModule extends VuexModule implements SubscriberMo
         }
 
         // set Status
-        if(subscriber.error){
+        if (subscriber.error) {
           subscriber.currentStatus = EnumsSubscriberStatus.ERROR
         }
       })

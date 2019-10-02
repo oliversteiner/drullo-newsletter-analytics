@@ -22,3 +22,9 @@ export interface MolloTermResponse {
   version: string
   terms: MolloTerm[]
 }
+
+export interface MolloInvalidEmailResponse {
+  name: string
+  version: string
+  addresses: string[]
+}

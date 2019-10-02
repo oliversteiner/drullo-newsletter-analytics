@@ -7,16 +7,25 @@ import { MolloMessageResponse } from '@/_models/NewsletterClass'
 import { SubscriberCountResponse } from '@/_models/SubscriberClass'
 import { Profile, ProfileResponse, User, UserForUpdate, UserResponse, UserSubmit } from '@/_models/models'
 import { StatusMessage } from '@/_models/MessageClass'
-import { MolloResponse, MolloTermResponse } from '@/_models/mollo'
+import { MolloInvalidEmailResponse, MolloResponse, MolloTermResponse } from '@/_models/mollo'
 import { MolloMember, MolloMemberResponse } from '@/_models/MolloMember'
 
 export const smmgApi = axios.create({
   baseURL: process.env.VUE_APP_HOST + '/smmg',
 })
 
+export const molloApi = axios.create({
+  baseURL: process.env.VUE_APP_HOST + '/mollo',
+})
+
 export const drupalApi = axios.create({
   baseURL: process.env.VUE_APP_HOST,
 })
+
+export async function getInvalidAddresses() {
+  const response = await molloApi.get('/api/email/invalid')
+  return response.data as MolloInvalidEmailResponse
+}
 
 export async function getTaskList() {
   const response = await smmgApi.get('/api/tasks')

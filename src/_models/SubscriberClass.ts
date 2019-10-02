@@ -4,6 +4,7 @@ import { MolloMember, MolloMemberTelemetry } from '@/_models/MolloMember'
 import { SubscriberGroupTerm } from '@/store/modules/SubscriberModule'
 import { CountryTerm, GenderTerm, OriginTerm } from '@/store/modules/TermsModule'
 import { MolloTermResponse } from '@/_models/mollo'
+import { SubscriberStore } from '@/store'
 
 export interface SubscriberContact {
   email?: string
@@ -11,6 +12,7 @@ export interface SubscriberContact {
   phone?: string
   phone2?: string
 }
+
 export interface SubscriberPersonal {
   gender?: number
   firstName?: string
@@ -174,8 +176,6 @@ export default class SubscriberClass {
           subscriber.changed = new Date(member.changed * 1000)
         }
 
-
-
         // Add new Subscriber to list
         if (!duplicate) {
           subscribers.push(subscriber)
@@ -191,6 +191,12 @@ export default class SubscriberClass {
 
     const mailformat = /\S+@\S+\.\S+/
     if (!email.match(mailformat)) {
+      error = true
+    }
+
+    const invalidAdresses = SubscriberStore.invalidAddresses
+
+    if (invalidAdresses.includes(email)) {
       error = true
     }
 
