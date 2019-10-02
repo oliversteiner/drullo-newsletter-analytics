@@ -5,6 +5,17 @@
         <!-- Number of Subscribers-->
         <div class="toolbar-info">{{ subscribersFiltered.length }} von {{ numberOfAllSubscribers }} Empfänger</div>
 
+        <div />
+
+        <div class="error-box" @click="setErrorFilter">
+          <div class="error-box-icon">
+            <font-awesome-icon icon="exclamation-triangle" />
+          </div>
+          <div class="error-box-number">
+            {{ countSubscibersWithError }}
+          </div>
+        </div>
+
         <div class="search-box">
           <!-- fulltext  -->
           <label for="search-box" style="display: none">Volltext Suche</label>
@@ -13,26 +24,26 @@
             v-model="fullText"
             type="text"
             size="30"
-            @keyup.enter="setFilter('fulltext')"
             placeholder="Suche Name, Adresse"
+            @keyup.enter="setFilter('fulltext')"
           />
           <span class="btn btn-icon" @click="setFilter('fulltext')">
-            <font-awesome-icon icon="search"></font-awesome-icon>
+            <font-awesome-icon icon="search" />
           </span>
 
           <!-- Clear all filters  -->
           <span class="btn btn-icon" @click="setFilter('clear')">
-            <font-awesome-icon icon="times-circle"></font-awesome-icon>
+            <font-awesome-icon icon="times-circle" />
           </span>
         </div>
 
-        <div class="filter-group" :key="componentKey">
+        <div :key="componentKey" class="filter-group">
           <div
             v-for="group in filterGroups"
             :key="'group-filter-' + group.id + group.active"
-            @click="toggleGroupFilter(group.id)"
             class="btn-groups"
             :class="{ active: group.active }"
+            @click="toggleGroupFilter(group.id)"
           >
             <div>
               <span class="label">{{ group.name }} </span>
@@ -48,11 +59,11 @@
       <div class="layout-sidebar" :class="{ open: isSidebarOpen }">
         <scroll-fixed-header :fixed.sync="fixed" :threshold="100" user-class="fixed-sidebar">
           <div class="btn btn-icon" @click="isSidebarOpen = !isSidebarOpen">
-            <font-awesome-icon v-show="isSidebarOpen" icon="chevron-left"></font-awesome-icon>
-            <font-awesome-icon v-show="!isSidebarOpen" icon="chevron-right"></font-awesome-icon>
+            <font-awesome-icon v-show="isSidebarOpen" icon="chevron-left" />
+            <font-awesome-icon v-show="!isSidebarOpen" icon="chevron-right" />
           </div>
           <div v-show="isSidebarOpen" class="editor-window">
-            <SubscriberEdit :subscriber-id="currentSubscriberID"></SubscriberEdit>
+            <SubscriberEdit :subscriber-id="currentSubscriberID" />
           </div>
         </scroll-fixed-header>
       </div>
@@ -68,19 +79,43 @@
             <td class="list-item list-item-status">
               <div class=" subscriber-status" :class="subscriber.currentStatus" />
             </td>
-            <td v-if="debug" class="list-item list-item-id">{{ subscriber.id }}</td>
+            <td v-if="debug" class="list-item list-item-id">
+              {{ subscriber.id }}
+            </td>
             <td class="list-item list-item-first-name" @click="editSubscriber(subscriber)">
               {{ subscriber.personal.firstName }}
             </td>
             <td class="list-item list-item-last-name" @click="editSubscriber(subscriber)">
               {{ subscriber.personal.lastName }}
             </td>
-            <td class="list-item list-item-email" @click="editSubscriber(subscriber)">
+            <td
+              class="list-item list-item-email"
+              :class="{ error: subscriber.error }"
+              @click="editSubscriber(subscriber)"
+            >
               {{ subscriber.contact.email }}
             </td>
+
+            <!-- Error -->
+            <td class="list-item list-item-error">
+              {{ subscriber.error }}
+            </td>
+
+            <!-- Status -->
+            <td class="list-item list-item-status">
+              {{ subscriber.status }}
+            </td>
+
+            <!-- CurrentStatus  -->
+            <td class="list-item list-item-currentStatus">
+              {{ subscriber.currentStatus }}
+            </td>
+
             <td class="list-item list-item-groups">
               <ul v-for="group in subscriber.groups" :key="subscriber.id + '-' + group.id">
-                <li @click="toggleTag(subscriber, group)">{{ group.name }}</li>
+                <li @click="toggleTag(subscriber, group)">
+                  {{ group.name }}
+                </li>
               </ul>
             </td>
           </tr>
@@ -91,7 +126,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Watch } from 'vue-property-decorator'
+import { Component, Vue } from 'vue-property-decorator'
 import { SubscriberStore } from '@/store'
 import { Subscriber, SubscriberStatus } from '@/_models/SubscriberClass'
 import { EnumsSubscriberStatus } from '@/enums'
@@ -189,8 +224,17 @@ export default class SubscriberListDynamic extends Vue {
     this.subscribersFiltered = subscriberList
   }
 
+  setErrorFilter() {
+    this.subscribersFiltered = this.fullSubscriberList.filter(subscriber => subscriber.error === true)
+  }
+
   get subscriberList() {
     return this.subscribersFiltered
+  }
+
+  get countSubscibersWithError() {
+    const subscriberList = this.fullSubscriberList.filter(subscriber => subscriber.error === true)
+    return subscriberList.length
   }
 
   get numberOfAllSubscribers() {
@@ -202,15 +246,6 @@ export default class SubscriberListDynamic extends Vue {
   }
 
   // --------- Filters ----------------------
-
-  /**
-   *
-   * @param email
-   */
-  private filterInValidEmail(email: string) {
-    const mailformat = /\S+@\S+\.\S+/
-    if (!email.match(mailformat)) return true
-  }
 
   /**
    *
@@ -305,8 +340,7 @@ export default class SubscriberListDynamic extends Vue {
   }
 
   mounted() {
-      this.filterGroups = SubscriberStore.groups
-
+    this.filterGroups = SubscriberStore.groups
   }
 
   created() {

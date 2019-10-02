@@ -174,6 +174,8 @@ export default class SubscriberClass {
           subscriber.changed = new Date(member.changed * 1000)
         }
 
+
+
         // Add new Subscriber to list
         if (!duplicate) {
           subscribers.push(subscriber)
@@ -181,5 +183,17 @@ export default class SubscriberClass {
       })
     }
     return subscribers
+  }
+
+  public static checkEmail(email: string) {
+    let error = false
+    let message = ''
+
+    const mailformat = /\S+@\S+\.\S+/
+    if (!email.match(mailformat)) {
+      error = true
+    }
+
+    return { error: error, message: message }
   }
 }

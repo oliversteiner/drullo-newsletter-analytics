@@ -7,6 +7,7 @@ import { MolloResponse } from '@/_models/mollo'
 import SubscriberClass, { Subscriber } from '@/_models/SubscriberClass'
 import { MolloAddress, MolloContact, MolloMember, MolloPersonal } from '@/_models/MolloMember'
 import { CountryTerm, GenderTerm, OriginTerm, TaxonomyTerm } from '@/store/modules/TermsModule'
+import { EnumsSubscriberStatus } from '@/enums'
 
 export interface SubscriberGroupTerm extends TaxonomyTerm {
   id: number
@@ -152,6 +153,24 @@ export default class SubscriberModule extends VuexModule implements SubscriberMo
 
     console.log('Subscriber Changes From Server:', update.data.count)
     console.log('Subscribers in LocalStore:', SubscriberStore.count)
+
+    // ckeck Status
+    if (SubscriberStore.count != 0) {
+      SubscriberStore.list.forEach(subscriber => {
+        // check email
+        if (subscriber.contact && subscriber.contact.email) {
+          const result = SubscriberClass.checkEmail(subscriber.contact.email)
+          if (result && result.error) {
+            subscriber.error = true
+          }
+        }
+
+        // set Status
+        if(subscriber.error){
+          subscriber.currentStatus = EnumsSubscriberStatus.ERROR
+        }
+      })
+    }
 
     if (SubscriberStore.count == 0 || update.data.count > 0) {
       const listFromServer = await api.getAllSubscribers()
