@@ -1,4 +1,10 @@
 {
-  "message": "Hallo i18n",
-  "settings": "Einstellungen"
+	"Analytics": "Auswertung",
+	"Development": "Development",
+	"Subscriber": "Empfänger",
+	"Subscribers": "Empfänger",
+	"Task": "Aufgabe",
+	"Tasks": "Aufgaben",
+	"message": "Hallo",
+	"settings": "Einstellungen"
 }
