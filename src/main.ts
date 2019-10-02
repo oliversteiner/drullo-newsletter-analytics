@@ -33,6 +33,11 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons/faSearch'
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons/faChevronLeft'
 import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus'
 import { faPlusCircle } from '@fortawesome/free-solid-svg-icons/faPlusCircle'
+import { faUserCog } from '@fortawesome/free-solid-svg-icons/faUserCog'
+import { loadLocaleMessages } from '@/i18n'
+import VueI18n from 'vue-i18n'
+import en from '@/locales/en.json'
+import de from '@/locales/de.json'
 
 library.add(
   faCaretDown,
@@ -59,6 +64,8 @@ library.add(
   faSearch,
   faPlus,
   faPlusCircle,
+  faCog,
+  faUserCog,
 )
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 
@@ -81,8 +88,17 @@ Vue.filter('formatAsPhoneNumber', (value: string) => {
   return value
 })
 
+// i18n
+Vue.use(VueI18n)
+const i18n = new VueI18n({
+  locale: 'en',
+  fallbackLocale: 'en',
+  messages: { en, de },
+})
+
 // App
 new Vue({
+  i18n,
   router,
   store,
   render: h => h(App),

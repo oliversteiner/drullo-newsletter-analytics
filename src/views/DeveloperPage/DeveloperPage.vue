@@ -2,6 +2,9 @@
   <div class="developer-page">
     <h1>Develop</h1>
 
+    <h2>i18n Test</h2>
+
+    <p>{{ $t('message') }}</p>
   </div>
 </template>
 
@@ -13,12 +16,7 @@ import SubscriberListDynamic from '@/components/SubscriberList/SubscriberListDyn
   components: { SubscriberListDynamic },
 })
 export default class DeveloperPage extends Vue {
-
-
-  create(){
-
-  }
-
+  create() {}
 }
 </script>
 

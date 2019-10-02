@@ -3,7 +3,10 @@
     <div class="main-theme" :class="theme">
       <div style="display: flex;justify-content: space-between">
         <AppNavbar></AppNavbar>
-        <ThemeSwitcher></ThemeSwitcher>
+        <div class="settings-icons">
+          <ThemeSwitcher></ThemeSwitcher>
+          <AppSettings></AppSettings>
+        </div>
       </div>
       <StatusMessages></StatusMessages>
       <router-view></router-view>
@@ -18,9 +21,9 @@ import AppFooter from './components/AppFooter.vue'
 import AppNavbar from './components/AppNavbar.vue'
 import ThemeSwitcher from '@/components/ThemeSwitcher/ThemeSwitcher.vue'
 import { eventBus } from '@/main'
-import store, { NewsletterStore, SubscriberStore, TasksStore, TermsStore } from '@/store'
+import { NewsletterStore, SettingsStore, SubscriberStore, TasksStore, TermsStore } from '@/store'
 import StatusMessages from '@/components/StatusMesages/StatusMessages.vue'
-import * as api from '@/store/api'
+import AppSettings from '@/components/AppSettings/AppSettings.vue'
 
 @Component({
   components: {
@@ -28,6 +31,7 @@ import * as api from '@/store/api'
     AppNavbar,
     ThemeSwitcher,
     StatusMessages,
+    AppSettings,
   },
 })
 export default class App extends Vue {
@@ -47,7 +51,6 @@ export default class App extends Vue {
 
     // Subscribers
     await SubscriberStore.refresh()
-
   }
 
   created() {
@@ -56,6 +59,11 @@ export default class App extends Vue {
     })
 
     this.refreshStore()
+
+    // set Language
+    if (!SettingsStore.language) {
+      this.$i18n.locale = SettingsStore.language
+    }
   }
 }
 </script>
@@ -78,5 +86,11 @@ export default class App extends Vue {
       color: #42b983;
     }
   }
+}
+
+.settings-icons {
+  display: flex;
+  margin-right: 10px;
+  margin-left: 20px;
 }
 </style>

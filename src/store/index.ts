@@ -9,8 +9,13 @@ import { Newsletter } from '@/_models/NewsletterClass'
 import { Task, TaskRelated } from '@/_models/TaskClass'
 import { Subscriber } from '@/_models/SubscriberClass'
 import TermsModule, { CategoryTerm, CountryTerm, GenderTerm, OriginTerm } from '@/store/modules/TermsModule'
+import SettingsModule from '@/store/modules/SettingsModule'
 
 Vue.use(Vuex)
+
+interface SettingsState {
+  language: string
+}
 
 interface SubscriberState {
   list: Subscriber[]
@@ -56,6 +61,7 @@ const vuexLocal = new VuexPersistence<State>({
 
 const store = new Vuex.Store<State>({
   modules: {
+    settings: SettingsModule,
     subscriber: SubscriberModule,
     tasks: TasksModule,
     newsletter: NewslettersModule,
@@ -65,6 +71,7 @@ const store = new Vuex.Store<State>({
 })
 
 export default store
+export const SettingsStore = getModule(SettingsModule, store)
 export const SubscriberStore = getModule(SubscriberModule, store)
 export const TasksStore = getModule(TasksModule, store)
 export const NewsletterStore = getModule(NewslettersModule, store)

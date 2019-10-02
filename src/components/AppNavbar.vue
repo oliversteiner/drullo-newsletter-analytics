@@ -6,14 +6,14 @@
           <!-- Tasks-->
           <li class="nav-item">
             <router-link to="/" exact class="nav-link">
-              <i class="">Tasks</i>
+              <i class="">{{ $t('Tasks') }}</i>
             </router-link>
           </li>
 
           <!-- Analytics-->
           <li class="nav-item">
             <router-link to="/analytics" class="nav-link">
-              <i class="">Analytics</i>
+              <i class="">{{ $t('Analytics') }}</i>
             </router-link>
 
             <!-- Subscribers-->
@@ -21,13 +21,13 @@
 
           <li class="nav-item">
             <router-link to="/subscribers" class="nav-link">
-              <i class="">Subscribers</i>
+              <i class="">{{ $t('Subscribers') }}</i>
             </router-link>
           </li>
           <!-- Developer-->
           <li class="nav-item">
             <router-link to="/develop" class="nav-link">
-              <i class="">Develop</i>
+              <i class="">{{ $t('Development') }}</i>
             </router-link>
           </li>
         </ul>
@@ -37,10 +37,10 @@
 </template>
 
 <script>
-  import { Component, Vue } from 'vue-property-decorator'
-  import users from '@/store/modules/UsersModule'
+import { Component, Vue } from 'vue-property-decorator'
+import users from '@/store/modules/UsersModule'
 
-  @Component
+@Component
 export default class AppNavbar extends Vue {
   get username() {
     return users.username
@@ -52,14 +52,14 @@ export default class AppNavbar extends Vue {
 .app-navbar {
   .fixed-header {
     position: fixed;
-    /* fixing the position takes it out of html flow - knows
-                   nothing about where to locate itself except by browser
-                   coordinates */
-    left: 0; /* top left corner should start at leftmost spot */
-    top: 0; /* top left corner should start at topmost spot */
-    width: 100vw; /* take up the full browser width */
-    z-index: 300; /* high z index so other content scrolls underneath */
-    height: 50px; /* define height for content */
+    // fixing the position takes it out of html flow - knows
+    // nothing about where to locate itself except by browser
+    // coordinates
+    left: 0; // top left corner should start at leftmost spot
+    top: 0; // top left corner should start at topmost spot
+    width: 100vw; // take up the full browser width
+    z-index: 300; // high z index so other content scrolls underneath
+    height: 50px; // define height for content
     background-color: #3e3e3e;
   }
 
