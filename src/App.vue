@@ -21,7 +21,7 @@ import AppFooter from './components/AppFooter.vue'
 import AppNavbar from './components/AppNavbar.vue'
 import ThemeSwitcher from '@/components/ThemeSwitcher/ThemeSwitcher.vue'
 import { eventBus } from '@/main'
-import { NewsletterStore, SubscriberStore, TasksStore, TermsStore } from '@/store'
+import { NewsletterStore, SettingsStore, SubscriberStore, TasksStore, TermsStore } from '@/store'
 import StatusMessages from '@/components/StatusMesages/StatusMessages.vue'
 import AppSettings from '@/components/AppSettings/AppSettings.vue'
 
@@ -59,6 +59,11 @@ export default class App extends Vue {
     })
 
     this.refreshStore()
+
+    // set Language
+    if (!SettingsStore.language) {
+      this.$i18n.locale = SettingsStore.language
+    }
   }
 }
 </script>

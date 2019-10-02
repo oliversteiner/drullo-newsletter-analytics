@@ -33,8 +33,11 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons/faSearch'
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons/faChevronLeft'
 import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus'
 import { faPlusCircle } from '@fortawesome/free-solid-svg-icons/faPlusCircle'
-import i18n from '@/i18n'
 import { faUserCog } from '@fortawesome/free-solid-svg-icons/faUserCog'
+import { loadLocaleMessages } from '@/i18n'
+import VueI18n from 'vue-i18n'
+import en from '@/locales/en.json'
+import de from '@/locales/de.json'
 
 library.add(
   faCaretDown,
@@ -83,6 +86,14 @@ export const eventBus = new Vue()
 Vue.filter('formatAsPhoneNumber', (value: string) => {
   if (!value) return ''
   return value
+})
+
+// i18n
+Vue.use(VueI18n)
+const i18n = new VueI18n({
+  locale: 'en',
+  fallbackLocale: 'en',
+  messages: { en, de },
 })
 
 // App

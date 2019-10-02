@@ -65,8 +65,7 @@ import { SettingsStore } from '@/store'
 
 @Component({})
 export default class AppSettings extends Vue {
-  public isOpen = false
-  public currentLanguage = 'en'
+  private isOpen = false
 
   public languages = [
     {
@@ -78,6 +77,10 @@ export default class AppSettings extends Vue {
       name: 'Deutsch',
     },
   ]
+
+  get currentLanguage() {
+    return SettingsStore.language
+  }
 
   closeModal() {
     this.isOpen = false
@@ -93,12 +96,8 @@ export default class AppSettings extends Vue {
 
   changeLang(id: string) {
     SettingsStore.changeLanguage(id)
-    this.currentLanguage = id
+    this.$i18n.locale = id
     console.log('change Language to', id)
-  }
-
-  mounted() {
-    this.currentLanguage = SettingsStore.language
   }
 }
 </script>
