@@ -1,35 +1,18 @@
 <template>
   <div class="subscriber-view">
-    <div class="raw-data">
-      <div>{{ numberOfSubscribers }} Empfänger</div>
-
-      <!-- List -->
-      <subscriberTable :subscriber-list="subscriberList"></subscriberTable>
-    </div>
+    <!--  All Subscribers -->
+    <SubscriberListDynamic></SubscriberListDynamic>
   </div>
 </template>
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator'
-import SubscriberTable from '@/components/SubscriberTable/SubscriberTable.vue'
-import { SubscriberStore, TermsStore } from '@/store'
+import SubscriberListDynamic from '@/components/SubscriberList/SubscriberListDynamic.vue'
 
 @Component({
-  components: { SubscriberTable },
+  components: { SubscriberListDynamic },
 })
 export default class SubscribersPage extends Vue {
-  private loading: boolean = true
-
-  get subscriberList() {
-    return SubscriberStore.list
-  }
-
-  get numberOfSubscribers() {
-    return SubscriberStore.count
-  }
-
-
-  created() {
-  }
+  created() {}
 }
 </script>
 <style lang="scss" scoped>

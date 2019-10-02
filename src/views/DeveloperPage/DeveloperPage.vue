@@ -2,8 +2,6 @@
   <div class="developer-page">
     <h1>Develop</h1>
 
-    <!--  All Subscribers -->
-    <SubscriberListDynamic></SubscriberListDynamic>
   </div>
 </template>
 
