@@ -20,9 +20,6 @@ import { faSun } from '@fortawesome/free-solid-svg-icons/faSun'
 import { faMoon } from '@fortawesome/free-solid-svg-icons/faMoon'
 import { faCircleNotch } from '@fortawesome/free-solid-svg-icons/faCircleNotch'
 import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons/faExclamationCircle'
-
-// Moment
-import moment from 'moment'
 import { faEnvelope } from '@fortawesome/free-solid-svg-icons/faEnvelope'
 import { faMobileAlt } from '@fortawesome/free-solid-svg-icons/faMobileAlt'
 import { faPhoneSquareAlt } from '@fortawesome/free-solid-svg-icons/faPhoneSquareAlt'
@@ -34,37 +31,45 @@ import { faChevronLeft } from '@fortawesome/free-solid-svg-icons/faChevronLeft'
 import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus'
 import { faPlusCircle } from '@fortawesome/free-solid-svg-icons/faPlusCircle'
 import { faUserCog } from '@fortawesome/free-solid-svg-icons/faUserCog'
-import { loadLocaleMessages } from '@/i18n'
+import { faCaretUp } from '@fortawesome/free-solid-svg-icons/faCaretUp'
+
+// Moment
+import moment from 'moment'
+
+// i18n
 import VueI18n from 'vue-i18n'
 import en from '@/locales/en.json'
 import de from '@/locales/de.json'
 
+// Fontawesome Icons
 library.add(
   faCaretDown,
+  faCaretDown,
   faCaretRight,
-  faCheck,
-  faCog,
-  faExclamationTriangle,
-  faExclamationCircle,
-  faClock,
+  faCaretUp,
   faChartBar,
-  faTh,
-  faCircleNotch,
-  faSun,
-  faMoon,
-  faCircle,
-  faTimesCircle,
-  faEnvelope,
-  faMobileAlt,
-  faPhoneSquareAlt,
-  faToggleOn,
-  faToggleOff,
+  faCheck,
   faChevronLeft,
   faChevronRight,
-  faSearch,
+  faCircle,
+  faCircleNotch,
+  faClock,
+  faCog,
+  faCog,
+  faEnvelope,
+  faExclamationCircle,
+  faExclamationTriangle,
+  faMobileAlt,
+  faMoon,
+  faPhoneSquareAlt,
   faPlus,
   faPlusCircle,
-  faCog,
+  faSearch,
+  faSun,
+  faTh,
+  faTimesCircle,
+  faToggleOff,
+  faToggleOn,
   faUserCog,
 )
 Vue.component('font-awesome-icon', FontAwesomeIcon)
