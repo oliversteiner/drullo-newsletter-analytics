@@ -9,8 +9,19 @@
         <span v-if="!edit" class="btn btn-link btn-plus"> <font-awesome-icon icon="plus" /> </span>
       </div>
 
+      <!-- Deleted -->
+      <div v-show="isDeleted">
+        {{ $t('Data deleted')}}
+      </div>
+
+      <!-- Deleted -->
+      <div v-show="isDeleting">
+        <font-awesome-icon icon="circle-notch" spin size="lg" />
+        {{ $t('Data delete...')}}
+      </div>
+
       <!-- Read -->
-      <div v-show="!edit" class="read">
+      <div v-show="!edit && !isDeleted" class="read">
         <!-- Address -->
         <fieldset class="fieldset-address">
           <div class="item">
@@ -162,7 +173,7 @@
       <!-- ############################################## -->
 
       <!-- Edit -->
-      <div v-show="edit" class="read">
+      <div v-show="edit && !isDeleted " class="read">
         <fieldset class="fieldset-name">
           <!-- Header -->
           <div class="fieldset-header" />
@@ -255,7 +266,7 @@
               <input
                 id="zip-code"
                 v-model="subscriber.address.zipCode"
-                :placeholder="$t('ZIP Code ')"
+                :placeholder="$t('ZIP Code')"
                 size="6"
                 autocomplete="off"
               />
@@ -518,17 +529,21 @@
         <fieldset class="fieldset-delete">
           <!-- Header -->
           <div class="fieldset-header ">
-            <div class="btn btn-outline btn-delete" @click="toggleFieldset('delete')">
-              {{ $t('delete...') }}
+            <div class="row-between">
+              <!-- Button Save-->
+              <div class="btn btn-outline" @click="save(subscriber.id)">{{ $t('Save') }}</div>
+
+              <!-- Button Delete-->
+              <div class="btn btn-link btn-delete" @click="toggleFieldset('delete')">
+                {{ $t('Delete...') }}
+              </div>
             </div>
           </div>
 
           <!-- Content -->
           <div class="fieldset-content">
             <div v-show="fieldset.delete.isOpen">
-              <p>
-                {{ $t('Delete Data for ') }} {{ subscriber.personal.firstName }} {{ subscriber.personal.lastName }}?
-              </p>
+              <p>{{ $t('Delete Data for') }} {{ subscriber.personal.firstName }} {{ subscriber.personal.lastName }}?</p>
               <div class="row-between">
                 <!-- Button Cancel -->
                 <div class="btn btn-outline btn-delete" @click="fieldset.delete.isOpen = false">
@@ -601,6 +616,8 @@ export default class SubscriberEdit extends Vue {
       isOpen: false,
     },
   }
+  private isDeleting: boolean = false
+  private isDeleted: boolean = false
 
   toggleEdit() {
     this.edit = !this.edit
@@ -729,16 +746,30 @@ export default class SubscriberEdit extends Vue {
     }
   }
 
-  deleteSubscriber() {
-    alert('deleted')
+  async deleteSubscriber() {
+    if (this.subscriber) {
+      const id = this.subscriber.id
+      this.isDeleting = true
+      await SubscriberStore.deleteSubscriber(id)
+      this.edit = false
+      this.isDeleting = false
+      this.isDeleted = true
+    }
   }
 
   @Watch('subscriberId')
   updateCurrentSubscriber() {
     const subscriber = SubscriberStore.list.find(sub => sub.id === this.subscriberId)
     if (subscriber) {
+      this.isDeleting = false
+      this.isDeleted = false
       this.subscriber = subscriber
     }
+  }
+
+  mount(){
+    this.isDeleting = false
+    this.isDeleted = false
   }
 
   created() {

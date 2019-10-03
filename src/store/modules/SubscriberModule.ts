@@ -14,7 +14,7 @@ export interface SubscriberGroupTerm extends TaxonomyTerm {
   name: string
   subscribers?: number
   active?: boolean
-  invalidAddresses: string[]
+  invalidAddresses?: string[]
 }
 
 export interface SubscriberModuleInterface {
@@ -37,6 +37,27 @@ export default class SubscriberModule extends VuexModule implements SubscriberMo
   @Action
   public getSubscriberByID(id: number): Subscriber | undefined {
     return this.list.find((sub: Subscriber) => sub.id === id)
+  }
+
+  @Mutation
+  public async deleteSubscriber(id:number):Promise<MolloResponse> {
+
+    // check if Subscriber exists
+    const _subscriber = this.list.find(sub => sub.id === id)
+    if (!_subscriber) {
+      return { status: false }
+    }
+
+    // Delete in Store
+    const index = this.list.findIndex(sub => sub.id === id)
+    this.list.splice(index, 1)
+
+    // Delete on Server
+    const result = await api.deleteSubscriber(id)
+    console.log('result', result)
+
+    return result
+
   }
 
   @Mutation

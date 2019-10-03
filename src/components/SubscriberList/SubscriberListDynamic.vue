@@ -27,7 +27,7 @@
             v-model="fullText"
             type="text"
             size="30"
-            :placeholder="$t(textFindNameAddress)"
+            :placeholder="$t('find name, address')"
             @keyup.enter="setFilter('fulltext')"
           />
           <span class="btn btn-toolbar" @click="setFilter('fulltext')">
@@ -263,8 +263,8 @@ export default class SubscriberListDynamic extends Vue {
   private componentKey = 0
 
   // Show Columns
-  private showColumnError = false
-  private showColumnStatus = false
+  private showColumnError = true
+  private showColumnStatus = true
   private showColumnCurrentStatus = false
 
   // Sort
@@ -401,7 +401,7 @@ export default class SubscriberListDynamic extends Vue {
   }
 
   // Filter
-  private setFilter(filter: string, items: any) {
+  private setFilter(filter: string, items: any|undefined=[]) {
     switch (filter) {
       case 'clear':
         this.debug = false

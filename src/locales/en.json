@@ -13,6 +13,11 @@
 	"First Name": "First Name",
 	"Fulltext Search": "Fulltext Search",
 	"ID": "ID",
+
+
+"Data delete...": "Data delete...",
+	"Delete Data for": "Delete Data for",
+
 	"Invalid Data found": "Invalid Data found",
 	"Last Name": "Last Name",
 	"Meta": "Meta",
@@ -30,6 +35,8 @@
 	"Subscriber": "Subscriber",
 	"Subscriber Groups": "Subscriber Groups",
 	"Subscribers": "Subscribers",
+	"Street and Nr": "Street and Nr",
+	"Delete...": "Delete...",
 	"Task": "Task",
 	"Tasks": "Tasks",
 	"Transfer ID": "Transfer ID",

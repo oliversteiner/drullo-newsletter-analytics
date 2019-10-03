@@ -77,6 +77,11 @@ export async function updateSubscriber(data: MolloMember) {
   return response.data as MolloResponse
 }
 
+export async function deleteSubscriber(id: number) {
+  const response = await smmgApi.delete('/api/member/' + id)
+  return response.data as MolloResponse
+}
+
 export async function getUpdatedSubscribers() {
   // search in localstorage for latest updated item
   const allChangedTS: number[] = SubscriberStore.list.map(subscribers => {
