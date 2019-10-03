@@ -3,6 +3,7 @@ import { EnumsSubscriberStatus } from '@/enums'
 import { MolloMember, MolloMemberTelemetry } from '@/_models/MolloMember'
 import { SubscriberGroupTerm } from '@/store/modules/SubscriberModule'
 import { SubscriberStore } from '@/store'
+import uuid from '@/_helper/uuid'
 
 export interface SubscriberContact {
   email?: string
@@ -27,7 +28,7 @@ export interface SubscriberAddress {
 }
 
 export interface Subscriber {
-  id: number
+  id?: number
   transferId?: string
   changed?: Date
   created?: Date
@@ -38,10 +39,10 @@ export interface Subscriber {
   address?: SubscriberAddress
   error?: boolean
   read?: boolean
-  groups: SubscriberGroupTerm[]
+  groups?: SubscriberGroupTerm[]
   origin?: number
   telemetry?: MolloMemberTelemetry[]
-  status: SubscriberStatus[]
+  status?: SubscriberStatus[]
   currentStatus?: EnumsSubscriberStatus
   temp?: string | number | boolean | undefined
 }
@@ -200,5 +201,25 @@ export default class SubscriberClass {
     }
 
     return { error: error, message: message }
+  }
+
+  public static async create() {
+    const now = new Date()
+    const created = new Date().getTime()
+
+    const subscriber: Subscriber = {
+      id: 0,
+      error: false,
+      changedTs: created,
+      createdTs: created,
+      changed: now,
+      created: now,
+      contact: {},
+      personal: {},
+      address: {},
+      groups: [],
+    }
+    await SubscriberStore.addSubscriber(subscriber)
+    return true
   }
 }

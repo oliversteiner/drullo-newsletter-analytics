@@ -6,18 +6,20 @@
         <span v-if="!edit" class="btn btn-link" @click="openEdit">{{ $t('Edit') }}</span>
         <span v-if="edit" class="btn btn-link" @click="closeEdit">{{ $t('Cancel') }}</span>
         <span v-if="edit" class="btn btn-link" @click="save(subscriber.id)">{{ $t('Save') }}</span>
-        <span v-if="!edit" class="btn btn-link btn-plus"> <font-awesome-icon icon="plus" /> </span>
+        <span v-if="!edit" class="btn btn-link btn-plus" @click="newSubscriber">
+          <font-awesome-icon icon="plus" />
+        </span>
       </div>
 
       <!-- Deleted -->
       <div v-show="isDeleted">
-        {{ $t('Data deleted')}}
+        {{ $t('Data deleted') }}
       </div>
 
       <!-- Deleted -->
       <div v-show="isDeleting">
         <font-awesome-icon icon="circle-notch" spin size="lg" />
-        {{ $t('Data delete...')}}
+        {{ $t('Data delete...') }}
       </div>
 
       <!-- Read -->
@@ -173,7 +175,7 @@
       <!-- ############################################## -->
 
       <!-- Edit -->
-      <div v-show="edit && !isDeleted " class="read">
+      <div v-show="edit && !isDeleted" class="read">
         <fieldset class="fieldset-name">
           <!-- Header -->
           <div class="fieldset-header" />
@@ -187,7 +189,7 @@
                 v-model="subscriber.personal.firstName"
                 :placeholder="$t('First Name')"
                 size="15"
-                autocomplete="off"
+                autocomplete="nonono"
               />
 
               <label for="last-name" style="display: none">{{ $t('Last Name') }}</label>
@@ -196,7 +198,7 @@
                 v-model="subscriber.personal.lastName"
                 :placeholder="$t('Last Name')"
                 size="15"
-                autocomplete="off"
+                autocomplete="nonono"
               />
             </div>
           </div>
@@ -234,7 +236,7 @@
                 v-model="subscriber.personal.firstName"
                 :placeholder="$t('First Name')"
                 size="15"
-                autocomplete="off"
+                autocomplete="nonono"
               />
 
               <!-- lastName -->
@@ -244,7 +246,7 @@
                 v-model="subscriber.personal.lastName"
                 :placeholder="$t('Last Name')"
                 size="15"
-                autocomplete="off"
+                autocomplete="nonono"
               />
             </div>
 
@@ -255,7 +257,7 @@
                 id="street"
                 v-model="subscriber.address.streetAndNumber"
                 :placeholder="$t('Street and Nr')"
-                autocomplete="off"
+                autocomplete="nonono"
                 size="35"
               />
             </div>
@@ -268,7 +270,7 @@
                 v-model="subscriber.address.zipCode"
                 :placeholder="$t('ZIP Code')"
                 size="6"
-                autocomplete="off"
+                autocomplete="nonono"
               />
 
               <!-- City-->
@@ -278,7 +280,7 @@
                 v-model="subscriber.address.city"
                 :placeholder="$t('City')"
                 size="28"
-                autocomplete="off"
+                autocomplete="nonono"
               />
             </div>
 
@@ -320,7 +322,7 @@
                 v-model="subscriber.contact.email"
                 :placeholder="$t('Email')"
                 size="32"
-                autocomplete="off"
+                autocomplete="nonono"
                 :class="{ invalid: subscriber.error }"
               />
             </div>
@@ -336,7 +338,7 @@
                 v-model="subscriber.contact.mobile"
                 :placeholder="$t('Mobile')"
                 size="32"
-                autocomplete="off"
+                autocomplete="nonono"
               />
             </div>
 
@@ -351,7 +353,7 @@
                 v-model="subscriber.contact.phone"
                 :placeholder="$t('Phone Privat')"
                 size="32"
-                autocomplete="off"
+                autocomplete="nonono"
               />
             </div>
 
@@ -366,7 +368,7 @@
                 v-model="subscriber.contact.phone2"
                 :placeholder="$t('Phone Company')"
                 size="32"
-                autocomplete="off"
+                autocomplete="nonono"
               />
             </div>
           </div>
@@ -489,7 +491,7 @@
                 v-model="subscriber.transferId"
                 :placeholder="$t('Transfer ID')"
                 size="15"
-                autocomplete="off"
+                autocomplete="nonono"
               />
             </div>
 
@@ -569,7 +571,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
-import { Subscriber } from '@/_models/SubscriberClass'
+import SubscriberClass, { Subscriber } from '@/_models/SubscriberClass'
 import { SubscriberStore, TermsStore } from '@/store'
 import { SubscriberGroupTerm } from '@/store/modules/SubscriberModule'
 
@@ -632,7 +634,7 @@ export default class SubscriberEdit extends Vue {
   }
 
   get subscriberStatus() {
-    if (this.subscriber && this.subscriber.status[0]) {
+    if (this.subscriber && this.subscriber.status && this.subscriber.status[0]) {
       return this.subscriber.status[0].status
     }
   }
@@ -716,20 +718,20 @@ export default class SubscriberEdit extends Vue {
   }
 
   addGroup(id: number) {
-    if (this.subscriber) {
+    if (this.subscriber && this.subscriber.groups) {
       const term: SubscriberGroupTerm = SubscriberStore.groups.filter(_group => _group.id === id)[0]
       this.subscriber.groups.push(term)
     }
   }
 
   removeGroup(id: number) {
-    if (this.subscriber) {
+    if (this.subscriber && this.subscriber.groups) {
       this.subscriber.groups = this.subscriber.groups.filter(_group => _group.id != id)
     }
   }
 
   isGroupActive(id: number) {
-    if (this.subscriber) {
+    if (this.subscriber && this.subscriber.groups) {
       const result = this.subscriber.groups.filter(_group => _group.id === id)
       console.log('result', result)
       if (result.length === 1) {
@@ -746,14 +748,26 @@ export default class SubscriberEdit extends Vue {
     }
   }
 
+  async newSubscriber() {
+    await SubscriberClass.create()
+    const subscriber = SubscriberStore.list.find(sub => sub.id === 0)
+    if (subscriber) {
+    this.resetEditor()
+      this.subscriber = subscriber
+      this.edit = true
+    }
+  }
+
   async deleteSubscriber() {
     if (this.subscriber) {
       const id = this.subscriber.id
-      this.isDeleting = true
-      await SubscriberStore.deleteSubscriber(id)
-      this.edit = false
-      this.isDeleting = false
-      this.isDeleted = true
+      if (id) {
+        this.isDeleting = true
+        await SubscriberStore.deleteSubscriber(id)
+        this.edit = false
+        this.isDeleting = false
+        this.isDeleted = true
+      }
     }
   }
 
@@ -761,15 +775,19 @@ export default class SubscriberEdit extends Vue {
   updateCurrentSubscriber() {
     const subscriber = SubscriberStore.list.find(sub => sub.id === this.subscriberId)
     if (subscriber) {
-      this.isDeleting = false
-      this.isDeleted = false
       this.subscriber = subscriber
+      this.resetEditor()
     }
   }
 
-  mount(){
+  mount() {
+    this.resetEditor()
+  }
+
+  resetEditor(){
     this.isDeleting = false
     this.isDeleted = false
+    this.fieldset.delete.isOpen = false
   }
 
   created() {
