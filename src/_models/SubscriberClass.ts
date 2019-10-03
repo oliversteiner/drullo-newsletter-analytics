@@ -2,8 +2,6 @@ import getSubscriberStatus from '@/_helper/subscriberStatus'
 import { EnumsSubscriberStatus } from '@/enums'
 import { MolloMember, MolloMemberTelemetry } from '@/_models/MolloMember'
 import { SubscriberGroupTerm } from '@/store/modules/SubscriberModule'
-import { CountryTerm, GenderTerm, OriginTerm } from '@/store/modules/TermsModule'
-import { MolloTermResponse } from '@/_models/mollo'
 import { SubscriberStore } from '@/store'
 
 export interface SubscriberContact {
@@ -45,6 +43,7 @@ export interface Subscriber {
   telemetry?: MolloMemberTelemetry[]
   status: SubscriberStatus[]
   currentStatus?: EnumsSubscriberStatus
+  temp?: string | number | boolean | undefined
 }
 
 export interface Subscribers {

@@ -3,9 +3,9 @@
     <div v-if="subscriber">
       <!-- Toolbar -->
       <div class="edit-toolbar">
-        <span v-if="!edit" class="btn btn-link" @click="openEdit">Bearbeiten</span>
-        <span v-if="edit" class="btn btn-link" @click="closeEdit">Abbrechen</span>
-        <span v-if="edit" class="btn btn-link" @click="save(subscriber.id)">Sichern</span>
+        <span v-if="!edit" class="btn btn-link" @click="openEdit">{{ $t('Edit') }}</span>
+        <span v-if="edit" class="btn btn-link" @click="closeEdit">{{ $t('Cancel') }}</span>
+        <span v-if="edit" class="btn btn-link" @click="save(subscriber.id)">{{ $t('Save') }}</span>
         <span v-if="!edit" class="btn btn-link btn-plus"> <font-awesome-icon icon="plus" /> </span>
       </div>
 
@@ -17,7 +17,7 @@
             <h2>{{ subscriber.personal.firstName }} {{ subscriber.personal.lastName }}</h2>
           </div>
 
-          <h3>Adresse</h3>
+          <h3>{{ $t('Address') }}</h3>
           <div class="item">
             {{ gender }}
           </div>
@@ -31,16 +31,22 @@
           </div>
         </fieldset>
 
-        <!-- Kontakt -->
+        <!-- Contact -->
         <fieldset class="fieldset-contact">
-          <h3>Kontakt</h3>
+          <h3>{{ $t('Contact') }}</h3>
           <!-- mail -->
           <div v-if="subscriber.contact.email" class="item">
             <span class="label label-icon label-contact">
               <font-awesome-icon icon="envelope" />
             </span>
-            <a class="btn btn-mailto" :href="'mailto:' + subscriber.contact.email">{{ subscriber.contact.email }}</a>
+            <a
+              class="btn btn-mailto "
+              :class="{ invalid: subscriber.error }"
+              :href="'mailto:' + subscriber.contact.email"
+              >{{ subscriber.contact.email }}</a
+            >
           </div>
+
           <!-- Mobile -->
           <div v-if="subscriber.contact.mobile" class="item">
             <span class="label label-icon label-contact">
@@ -68,7 +74,7 @@
 
         <!-- Newsletter-->
         <fieldset class="fieldset-newsletter">
-          <h3>Newsletter</h3>
+          <h3>{{ $t('Newsletter') }}</h3>
 
           <div v-if="subscriber.personal.newsletter" class="item">
             <span class="label label-icon label-newsletter">
@@ -86,7 +92,7 @@
 
         <!-- Subscriber Groups -->
         <fieldset class="fieldset-subscriber-groups">
-          <h3>Empfänger Gruppen</h3>
+          <h3>{{ $t('Subscriber Groups') }}</h3>
 
           <div class="subscriber-groups">
             <div v-for="group in subscriber.groups" :key="'read-' + group.id" class="subscriber-groups-item active">
@@ -97,208 +103,308 @@
 
         <!-- Personal -->
         <fieldset v-if="subscriber.personal.birthday" class="fieldset-personal">
-          <h3>Persönlich</h3>
-          <!-- Geburtstag -->
+          <h3>{{ $t('Personal') }}</h3>
+
+          <!-- Birthday -->
           <div class="item">
-            <span class="label">Geburtstag</span>
+            <span class="label">{{ $t('Birthday') }}</span>
             {{ subscriber.personal.birthday | moment('D MMMM YYYY') }}
           </div>
         </fieldset>
 
         <!-- Meta -->
         <fieldset class="fieldset-meta">
-          <h3>Meta</h3>
+          <h3>{{ $t('Meta') }}</h3>
 
-          <!-- Fehler -->
+          <!-- Invalid Data -->
           <div v-if="subscriber.error" class="item">
-            Fehler in den diesen Daten gefunden
+            {{ $t('Invalid Data found') }}
           </div>
 
           <!-- ID-->
           <div class="item">
-            <span class="label">ID</span>
+            <span class="label">{{ $t('ID') }}</span>
             {{ subscriber.id }}
           </div>
+
           <!-- Transfer ID -->
           <div class="item">
-            <span class="label">Transfer ID</span>
+            <span class="label">{{ $t('Transfer ID') }}</span>
             {{ subscriber.transferId }}
           </div>
-          <!-- Erstellt  -->
+
+          <!-- Created  -->
           <div class="item">
-            <span class="label">Erstellt</span>
+            <span class="label">{{ $t('Created') }}</span>
             {{ subscriber.changed | moment('DD. MM. YYYY - HH:mm') }}
           </div>
-          <!-- Aktualisiert -->
+
+          <!-- Changed -->
           <div class="item">
-            <span class="label">Geändert</span>
+            <span class="label">{{ $t('Changed') }}</span>
             {{ subscriber.created | moment('DD. MM. YYYY - HH:mm') }}
           </div>
 
-          <!-- Herkunft -->
+          <!-- Origin -->
           <div class="item">
-            <span class="label">Herkunft</span>
+            <span class="label">{{ $t('Origin') }}</span>
             {{ origin }}
           </div>
+
           <!-- Status -->
           <div class="item">
-            <span class="label">Status</span>
+            <span class="label">{{ $t('Status') }}</span>
             {{ subscriberStatus }}
           </div>
         </fieldset>
       </div>
 
+      <!-- ############################################## -->
+
       <!-- Edit -->
       <div v-show="edit" class="read">
-        <!-- Address -->
-        <fieldset class="fieldset-address">
-          <div class="item">
-            <h2>
-              <label for="first-name" style="display: none">Vorname</label>
+        <fieldset class="fieldset-name">
+          <!-- Header -->
+          <div class="fieldset-header" />
+
+          <!-- Content -->
+          <div class="fieldset-content">
+            <div class="item">
+              <label for="first-name" style="display: none">{{ $t('First Name') }}</label>
               <input
                 id="first-name"
                 v-model="subscriber.personal.firstName"
-                placeholder="Vorname"
+                :placeholder="$t('First Name')"
                 size="15"
                 autocomplete="off"
               />
 
-              <label for="last-name" style="display: none">Nachname</label>
+              <label for="last-name" style="display: none">{{ $t('Last Name') }}</label>
               <input
                 id="last-name"
                 v-model="subscriber.personal.lastName"
-                placeholder="Nachname"
+                :placeholder="$t('Last Name')"
                 size="15"
                 autocomplete="off"
               />
-            </h2>
+            </div>
           </div>
 
-          <h3>Adresse</h3>
-          <div class="item">
-            <select v-model="subscriber.personal.gender">
-              <option v-for="option in genderList" :value="option.id" :key="option.id">
-                {{ option.name }}
-              </option>
-            </select>
-          </div>
-
-          <div class="item">
-            <label for="first-name-1" style="display: none">Vorname</label>
-            <input
-              id="first-name-1"
-              v-model="subscriber.personal.firstName"
-              placeholder="Vorname"
-              size="15"
-              autocomplete="off"
-            />
-
-            <label for="last-name-1" style="display: none">Nachname</label>
-            <input
-              id="last-name-1"
-              v-model="subscriber.personal.lastName"
-              placeholder="Nachname"
-              size="15"
-              autocomplete="off"
-            />
-          </div>
-          <div class="item">
-            <label for="street" style="display: none">Strasse und Nr.</label>
-            <input
-              id="street"
-              v-model="subscriber.address.streetAndNumber"
-              placeholder="Strasse und Nr."
-              autocomplete="off"
-              size="35"
-            />
-          </div>
-          <div class="item">
-            <label for="zip-code" style="display: none">PLZ</label>
-            <input id="zip-code" v-model="subscriber.address.zipCode" placeholder="PLZ" size="6" autocomplete="off" />
-
-            <label for="city" style="display: none">Ort</label>
-            <input id="city" v-model="subscriber.address.city" placeholder="Ort" size="28" autocomplete="off" />
-          </div>
-          <div class="item">
-            <select v-model="subscriber.address.country">
-              <option v-for="option in countryList" :value="option.id" :key="option.id">
-                {{ option.name }}
-              </option>
-            </select>
-          </div>
+          <!-- Footer -->
+          <div class="fieldset-footer" />
         </fieldset>
 
-        <!-- Kontakt -->
+        <!-- Address -->
+        <fieldset class="fieldset-address">
+          <!-- Header -->
+          <div class="fieldset-header interactive" @click="toggleFieldset('address')">
+            <div class="fieldset-toggle">
+              <font-awesome-icon v-if="!fieldset.address.isOpen" icon="caret-right" />
+              <font-awesome-icon v-if="fieldset.address.isOpen" icon="caret-down" />
+            </div>
+            <h3>{{ $t('Address') }}</h3>
+          </div>
+
+          <!-- gender -->
+          <div v-if="fieldset.address.isOpen" class="fieldset-content">
+            <div class="item">
+              <select v-model="subscriber.personal.gender">
+                <option v-for="option in genderList" :key="option.id" :value="option.id">
+                  {{ option.name }}
+                </option>
+              </select>
+            </div>
+
+            <!-- firstName -->
+            <div class="item">
+              <label for="first-name-1" style="display: none">{{ $t('First Name') }}</label>
+              <input
+                id="first-name-1"
+                v-model="subscriber.personal.firstName"
+                :placeholder="$t('First Name')"
+                size="15"
+                autocomplete="off"
+              />
+
+              <!-- lastName -->
+              <label for="last-name-1" style="display: none">{{ $t('Last Name') }}</label>
+              <input
+                id="last-name-1"
+                v-model="subscriber.personal.lastName"
+                :placeholder="$t('Last Name')"
+                size="15"
+                autocomplete="off"
+              />
+            </div>
+
+            <!-- streetAndNumber -->
+            <div class="item">
+              <label for="street" style="display: none">{{ $t('Street and Nr') }}</label>
+              <input
+                id="street"
+                v-model="subscriber.address.streetAndNumber"
+                :placeholder="$t('Street and Nr')"
+                autocomplete="off"
+                size="35"
+              />
+            </div>
+
+            <!-- ZIP Code -->
+            <div class="item">
+              <label for="zip-code" style="display: none">{{ $t('ZIP Code') }}</label>
+              <input
+                id="zip-code"
+                v-model="subscriber.address.zipCode"
+                :placeholder="$t('ZIP Code ')"
+                size="6"
+                autocomplete="off"
+              />
+
+              <!-- City-->
+              <label for="city" style="display: none">{{ $t('City') }}</label>
+              <input
+                id="city"
+                v-model="subscriber.address.city"
+                :placeholder="$t('City')"
+                size="28"
+                autocomplete="off"
+              />
+            </div>
+
+            <!-- Country -->
+            <div class="item">
+              <select v-model="subscriber.address.country">
+                <option v-for="option in countryList" :key="option.id" :value="option.id">
+                  {{ option.name }}
+                </option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Footer -->
+          <div class="fieldset-footer" />
+        </fieldset>
+
+        <!-- Contact -->
         <fieldset class="fieldset-contact">
-          <h3>Kontakt</h3>
-          <!-- mail -->
-          <div class="item">
-            <span class="label label-icon label-contact">
-              <font-awesome-icon icon="envelope" />
-            </span>
-            <label for="email" style="display: none">Email</label>
-            <input v-model="subscriber.contact.email" id="email" placeholder="Email" size="32" autocomplete="off" />
-          </div>
-          <!-- Mobile -->
-          <div class="item">
-            <span class="label label-icon label-contact">
-              <font-awesome-icon icon="mobile-alt" />
-            </span>
-            <label for="mobile" style="display: none">Telefon Mobile</label>
-            <input v-model="subscriber.contact.mobile" id="mobile" placeholder="Mobile" size="32" autocomplete="off" />
+          <!-- Header -->
+          <div class="fieldset-header interactive" @click="toggleFieldset('contact')">
+            <div class="fieldset-toggle">
+              <font-awesome-icon v-if="!fieldset.contact.isOpen" icon="caret-right" />
+              <font-awesome-icon v-if="fieldset.contact.isOpen" icon="caret-down" />
+            </div>
+            <h3>{{ $t('Contact') }}</h3>
           </div>
 
-          <!-- Phone 1 -->
-          <div class="item">
-            <span class="label label-icon label-contact">
-              <font-awesome-icon icon="phone-square-alt" />
-            </span>
-            <label for="phone" style="display: none">Telefon Privat</label>
-            <input
-              v-model="subscriber.contact.phone"
-              id="phone"
-              placeholder="Telefon Privat"
-              size="32"
-              autocomplete="off"
-            />
+          <!-- Email -->
+          <div v-if="fieldset.contact.isOpen" class="fieldset-content">
+            <!-- mail -->
+            <div class="item">
+              <span class="label label-icon label-contact">
+                <font-awesome-icon icon="envelope" />
+              </span>
+              <label for="email" style="display: none">{{ $t('Email') }}</label>
+              <input
+                id="email"
+                v-model="subscriber.contact.email"
+                :placeholder="$t('Email')"
+                size="32"
+                autocomplete="off"
+                :class="{ invalid: subscriber.error }"
+              />
+            </div>
+
+            <!-- Mobile -->
+            <div class="item">
+              <span class="label label-icon label-contact">
+                <font-awesome-icon icon="mobile-alt" />
+              </span>
+              <label for="mobile" style="display: none">{{ $t('Mobile') }}</label>
+              <input
+                id="mobile"
+                v-model="subscriber.contact.mobile"
+                :placeholder="$t('Mobile')"
+                size="32"
+                autocomplete="off"
+              />
+            </div>
+
+            <!-- Phone 1 -->
+            <div class="item">
+              <span class="label label-icon label-contact">
+                <font-awesome-icon icon="phone-square-alt" />
+              </span>
+              <label for="phone" style="display: none">{{ $t('Phone Privat') }}</label>
+              <input
+                id="phone"
+                v-model="subscriber.contact.phone"
+                :placeholder="$t('Phone Privat')"
+                size="32"
+                autocomplete="off"
+              />
+            </div>
+
+            <!-- Phone 2 -->
+            <div class="item">
+              <span class="label label-icon label-contact">
+                <font-awesome-icon icon="phone-square-alt" />
+              </span>
+              <label for="phone2" style="display: none">{{ $t('Phone Company') }}</label>
+              <input
+                id="phone2"
+                v-model="subscriber.contact.phone2"
+                :placeholder="$t('Phone Company')"
+                size="32"
+                autocomplete="off"
+              />
+            </div>
           </div>
 
-          <!-- Phone 2 -->
-          <div class="item">
-            <span class="label label-icon label-contact">
-              <font-awesome-icon icon="phone-square-alt" />
-            </span>
-            <label for="phone2" style="display: none">Telefon Geschäft</label>
-            <input
-              v-model="subscriber.contact.phone2"
-              id="phone2"
-              placeholder="Telefon Geschäft"
-              size="32"
-              autocomplete="off"
-            />
-          </div>
+          <!-- Footer -->
+          <div class="fieldset-footer" />
         </fieldset>
 
         <!-- Newsletter-->
         <fieldset class="fieldset-newsletter">
-          <h3>Newsletter</h3>
-
-          <div v-if="subscriber.personal.newsletter" class="item" @click="toggleNewsletter()">
-            <font-awesome-icon class="icon btn-icon toggle-on" icon="toggle-on" />
-            Ja
+          <!-- Header -->
+          <div class="fieldset-header interactive" @click="toggleFieldset('newsletter')">
+            <div class="fieldset-toggle">
+              <font-awesome-icon v-if="!fieldset.newsletter.isOpen" icon="caret-right" />
+              <font-awesome-icon v-if="fieldset.newsletter.isOpen" icon="caret-down" />
+            </div>
+            <h3>{{ $t('Newsletter') }}</h3>
           </div>
 
-          <div v-if="!subscriber.personal.newsletter" class="item" @click="toggleNewsletter()">
-            <font-awesome-icon class="icon btn-icon toggle-off" icon="toggle-off" />
-            Nein
+          <!-- Content -->
+          <div v-if="fieldset.newsletter.isOpen" class="fieldset-content">
+            <div v-if="subscriber.personal.newsletter" class="item" @click="toggleNewsletter()">
+              <font-awesome-icon class="icon btn-icon toggle-on" icon="toggle-on" />
+              {{ $t('Yes') }}
+            </div>
+
+            <div v-if="!subscriber.personal.newsletter" class="item" @click="toggleNewsletter()">
+              <font-awesome-icon class="icon btn-icon toggle-off" icon="toggle-off" />
+              {{ $t('No') }}
+            </div>
           </div>
+
+          <!-- Footer -->
+          <div class="fieldset-footer" />
         </fieldset>
 
         <!-- Subscriber Groups -->
         <fieldset class="fieldset-subscriber-groups">
-          <h3>Empfänger Gruppen</h3>
+          <!-- Header -->
+          <div class="fieldset-header interactive" @click="toggleFieldset('subscriberGroups')">
+            <div class="fieldset-toggle">
+              <font-awesome-icon v-if="!fieldset.subscriberGroups.isOpen" icon="caret-right" />
+              <font-awesome-icon v-if="fieldset.subscriberGroups.isOpen" icon="caret-down" />
+            </div>
+            <h3>{{ $t('Subscriber Groups') }}</h3>
+          </div>
 
-          <div class="subscriber-groups">
+          <!-- content -->
+          <div v-if="fieldset.subscriberGroups.isOpen" class="subscriber-groups">
             <div
               v-for="group in groups"
               :key="group.id"
@@ -311,69 +417,134 @@
               <span class="">{{ group.name }}</span>
             </div>
           </div>
+
+          <!-- Footer -->
+          <div class="fieldset-footer" />
         </fieldset>
 
         <!-- Personal -->
         <fieldset class="fieldset-personal">
-          <h3>Persönlich</h3>
-          <!-- Geburtstag -->
-          <div class="item">
-            <label for="birthday" class="label">Geburtstag</label>
-            <input v-model="subscriber.personal.birthday" type="datetime-local" id="birthday" />
+          <!-- Header -->
+          <div class="fieldset-header interactive" @click="toggleFieldset('personal')">
+            <div class="fieldset-toggle">
+              <font-awesome-icon v-if="!fieldset.personal.isOpen" icon="caret-right" />
+              <font-awesome-icon v-if="fieldset.personal.isOpen" icon="caret-down" />
+            </div>
+            <h3>{{ $t('Personal') }}</h3>
           </div>
+
+          <!-- Content -->
+          <div v-if="fieldset.personal.isOpen" class="fieldset-content">
+            <!-- Birthday -->
+            <div class="item">
+              <label for="birthday" class="label">{{ $t('Birthday') }}</label>
+              <input id="birthday" v-model="subscriber.personal.birthday" type="datetime-local" />
+            </div>
+          </div>
+
+          <!-- Footer -->
+          <div class="fieldset-footer" />
         </fieldset>
 
         <!-- Meta -->
         <fieldset class="fieldset-meta">
-          <h3>Meta</h3>
-
-          <!-- Fehler -->
-          <div v-if="subscriber.error" class="item">
-            Fehler in den diesen Daten gefunden
+          <!-- Header -->
+          <div class="fieldset-header interactive" @click="toggleFieldset('meta')">
+            <div class="fieldset-toggle">
+              <font-awesome-icon v-if="!fieldset.meta.isOpen" icon="caret-right" />
+              <font-awesome-icon v-if="fieldset.meta.isOpen" icon="caret-down" />
+            </div>
+            <h3>{{ $t('Meta') }}</h3>
           </div>
 
-          <!-- ID-->
-          <div class="item">
-            <label class="label">ID</label>
-            <span class="deactivated"> {{ subscriber.id }}</span>
+          <!-- content -->
+          <div v-if="fieldset.meta.isOpen" class="fieldset-content">
+            <!-- Invalid Data -->
+            <div v-if="subscriber.error" class="item">
+              {{ $t('Invalid Data found') }}
+            </div>
+
+            <!-- ID-->
+            <div class="item">
+              <label class="label">{{ $t('ID') }}</label>
+              <span class="deactivated"> {{ subscriber.id }}</span>
+            </div>
+
+            <!-- Transfer ID -->
+            <div class="item">
+              <label for="transfer-id" class="label">{{ $t('Transfer ID') }}</label>
+              <input
+                id="transfer-id"
+                v-model="subscriber.transferId"
+                :placeholder="$t('Transfer ID')"
+                size="15"
+                autocomplete="off"
+              />
+            </div>
+
+            <!-- Created  -->
+            <div class="item">
+              <label class="label">{{ $t('Created') }}</label>
+              <span class="deactivated"> {{ subscriber.changed | moment('DD. MM. YYYY - HH:mm') }}</span>
+            </div>
+
+            <!-- Changed -->
+            <div class="item">
+              <label class="label">{{ $t('Changed') }}</label>
+              <span class="deactivated"> {{ subscriber.created | moment('DD. MM. YYYY - HH:mm') }}</span>
+            </div>
+
+            <!-- Origin -->
+            <div class="item">
+              <label class="label">{{ $t('Origin') }}</label>
+
+              <select v-model="subscriber.origin">
+                <option v-for="option in originList" :key="option.id" :value="option.id">
+                  {{ option.name }}
+                </option>
+              </select>
+            </div>
+
+            <!-- Status -->
+            <div class="item">
+              <label class="label">{{ $t('Status') }}</label>
+              <span class="deactivated"> {{ subscriberStatus }}</span>
+            </div>
           </div>
-          <!-- Transfer ID -->
-          <div class="item">
-            <label for="transfer-id" class="label">Transfer ID</label>
-            <input
-              id="transfer-id"
-              v-model="subscriber.transferId"
-              placeholder="Transfer ID"
-              size="15"
-              autocomplete="off"
-            />
-          </div>
-          <!-- Erstellt  -->
-          <div class="item">
-            <label class="label">Erstellt</label>
-            <span class="deactivated"> {{ subscriber.changed | moment('DD. MM. YYYY - HH:mm') }}</span>
-          </div>
-          <!-- Aktualisiert -->
-          <div class="item">
-            <label class="label">Geändert</label>
-            <span class="deactivated"> {{ subscriber.created | moment('DD. MM. YYYY - HH:mm') }}</span>
+          <div class="fieldset-foot" />
+        </fieldset>
+
+        <!-- Delete -->
+        <fieldset class="fieldset-delete">
+          <!-- Header -->
+          <div class="fieldset-header ">
+            <div class="btn btn-outline btn-delete" @click="toggleFieldset('delete')">
+              {{ $t('delete...') }}
+            </div>
           </div>
 
-          <!-- Herkunft -->
-          <div class="item">
-            <label class="label">Herkunft</label>
+          <!-- Content -->
+          <div class="fieldset-content">
+            <div v-show="fieldset.delete.isOpen">
+              <p>
+                {{ $t('Delete Data for ') }} {{ subscriber.personal.firstName }} {{ subscriber.personal.lastName }}?
+              </p>
+              <div class="row-between">
+                <!-- Button Cancel -->
+                <div class="btn btn-outline btn-delete" @click="fieldset.delete.isOpen = false">
+                  {{ $t('No, Cancel') }}
+                </div>
 
-            <select v-model="subscriber.origin">
-              <option v-for="option in originList" :value="option.id" :key="option.id">
-                {{ option.name }}
-              </option>
-            </select>
+                <!-- Button Delete -->
+                <div class="btn btn-outline btn-delete" @click="deleteSubscriber">
+                  {{ $t('Yes, Delete') }}
+                </div>
+              </div>
+            </div>
           </div>
-          <!-- Status -->
-          <div class="item">
-            <label class="label">Status</label>
-            <span class="deactivated"> {{ subscriberStatus }}</span>
-          </div>
+
+          <!-- Footer -->
+          <div class="fieldset-footer" />
         </fieldset>
       </div>
     </div>
@@ -387,13 +558,49 @@ import { Subscriber } from '@/_models/SubscriberClass'
 import { SubscriberStore, TermsStore } from '@/store'
 import { SubscriberGroupTerm } from '@/store/modules/SubscriberModule'
 
+interface Fieldset {
+  personal: FieldsetOptions
+  address: FieldsetOptions
+  contact: FieldsetOptions
+  newsletter: FieldsetOptions
+  subscriberGroups: FieldsetOptions
+  meta: FieldsetOptions
+  delete: FieldsetOptions
+}
+interface FieldsetOptions {
+  isOpen: boolean
+}
+
 @Component({})
 export default class SubscriberEdit extends Vue {
   @Prop() subscriberId!: number
 
-  edit: boolean = false
+  edit: boolean = true
   isSave: boolean = true
   private subscriber: Subscriber | null = null
+  private fieldset: Fieldset = {
+    address: {
+      isOpen: true,
+    },
+    contact: {
+      isOpen: true,
+    },
+    newsletter: {
+      isOpen: false,
+    },
+    subscriberGroups: {
+      isOpen: false,
+    },
+    personal: {
+      isOpen: false,
+    },
+    meta: {
+      isOpen: false,
+    },
+    delete: {
+      isOpen: false,
+    },
+  }
 
   toggleEdit() {
     this.edit = !this.edit
@@ -513,6 +720,17 @@ export default class SubscriberEdit extends Vue {
       }
     }
     return false
+  }
+
+  toggleFieldset(name: string) {
+    if (name in this.fieldset) {
+      // @ts-ignore
+      this.fieldset[name].isOpen = !this.fieldset[name].isOpen
+    }
+  }
+
+  deleteSubscriber() {
+    alert('deleted')
   }
 
   @Watch('subscriberId')
