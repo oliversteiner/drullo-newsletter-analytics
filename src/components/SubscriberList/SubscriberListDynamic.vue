@@ -294,7 +294,9 @@ export default class SubscriberListDynamic extends Vue {
   private editSubscriber(subscriber: Subscriber) {
     this.isSidebarOpen = true
     this.currentSubscriber = subscriber
-    this.currentSubscriberID = subscriber.id
+    if (subscriber && subscriber.id) {
+      this.currentSubscriberID = subscriber.id
+    }
   }
 
   private checkActive(subscriber: Subscriber) {
@@ -344,8 +346,8 @@ export default class SubscriberListDynamic extends Vue {
     this.subscribersFiltered = listSorted
   }
 
-  private compareValues(key, order = 'asc') {
-    return function(a, b) {
+  private compareValues(key: any, order = 'asc') {
+    return function(a: any, b: any) {
       if (!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) {
         // property doesn't exist on either object
         return 0
@@ -364,7 +366,7 @@ export default class SubscriberListDynamic extends Vue {
     }
   }
 
-  isGroupActive(subscriber, id: number) {
+  isGroupActive(subscriber: Subscriber, id: number) {
     if (subscriber) {
       const result = subscriber.groups.filter(_group => _group.id === id)
       if (result.length === 1) {
@@ -374,7 +376,7 @@ export default class SubscriberListDynamic extends Vue {
     return false
   }
 
-  toggleGroup(subscriber, id: number) {
+  toggleGroup(subscriber: Subscriber, id: number) {
     if (this.isGroupActive(subscriber, id)) {
       this.removeGroup(subscriber, id)
     } else {
@@ -382,14 +384,14 @@ export default class SubscriberListDynamic extends Vue {
     }
   }
 
-  addGroup(subscriber, id: number) {
+  addGroup(subscriber: Subscriber, id: number) {
     if (subscriber) {
       const term: SubscriberGroupTerm = SubscriberStore.groups.filter(_group => _group.id === id)[0]
       subscriber.groups.push(term)
     }
   }
 
-  removeGroup(subscriber, id: number) {
+  removeGroup(subscriber: Subscriber, id: number) {
     if (subscriber) {
       subscriber.groups = subscriber.groups.filter(_group => _group.id != id)
     }
@@ -401,7 +403,7 @@ export default class SubscriberListDynamic extends Vue {
   }
 
   // Filter
-  private setFilter(filter: string, items: any|undefined=[]) {
+  private setFilter(filter: string, items: any | undefined = []) {
     switch (filter) {
       case 'clear':
         this.debug = false
@@ -565,7 +567,6 @@ export default class SubscriberListDynamic extends Vue {
     })
     return result
   }
-
 
   private forceRerender() {
     this.componentKey += 1

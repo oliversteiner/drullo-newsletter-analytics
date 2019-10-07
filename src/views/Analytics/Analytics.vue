@@ -214,12 +214,14 @@ export default class Analytics extends Vue {
       // new default status
       subscriber.currentStatus = EnumsSubscriberStatus.NONE
       // iterate over status
-      subscriber.status.forEach(message => {
-        if (message.messageId === this.newsletterId) {
-          // add status for current Newsletter
-          subscriber.currentStatus = message.status
-        }
-      })
+      if (subscriber.status) {
+        subscriber.status.forEach(message => {
+          if (message.messageId === this.newsletterId) {
+            // add status for current Newsletter
+            subscriber.currentStatus = message.status
+          }
+        })
+      }
       return subscriber
     })
 
@@ -271,7 +273,6 @@ export default class Analytics extends Vue {
       // MolloMessages send?
 
       if (subscriber.telemetry && subscriber.telemetry.length !== 0) {
-
         subscriber.telemetry.forEach((_telemetry: MolloMemberTelemetry) => {
           if (_telemetry && _telemetry.messageId && _telemetry.messageId === this.newsletterId) {
             // Send

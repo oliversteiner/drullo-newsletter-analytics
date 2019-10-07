@@ -7,11 +7,16 @@ import { NewsletterStore } from '@/store'
 import { Newsletter } from '@/_models/NewsletterClass'
 
 export interface TasksResponse {
+  tasks: (Task)[]
+  count: number
+  error?: string
+  message?: string
+}
+
+export interface RunTaskResponse {
   task?: Task
-  tasks?: (Task)[]
-  tasksCount?: number
-  error?:string
-  message?:string
+  error?: string
+  message?: string
 }
 
 export interface TaskRelated {

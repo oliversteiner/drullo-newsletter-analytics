@@ -185,16 +185,19 @@ export default class TaskItem extends Vue {
     this.taskItem.statusMessage = TaskStatusMessage.WORKING
 
     const response = await api.runTask(taskId)
-    console.log('task run: ', response)
-    if (response.error) {
-      console.error('', response.message)
+    console.log('Task run finish: ', response)
 
+    // Error
+    if (response && response.error) {
+      console.error('', response.message)
       // Set Status to Error
       this.taskItem.icon = 'Exclamation-Circle'
       this.taskItem.status = TaskStatus.ERROR
       this.taskItem.statusMessage = TaskStatusMessage.ERROR
     }
-    if (response.task && response.task.id == taskId) {
+
+    // OK
+    if (response && response.task && response.task.id == taskId) {
       // Set Status to done
       this.taskItem.icon = 'check'
       this.taskItem.status = TaskStatus.DONE

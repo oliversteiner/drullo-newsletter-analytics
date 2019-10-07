@@ -39,12 +39,15 @@ export interface Subscriber {
   address?: SubscriberAddress
   error?: boolean
   read?: boolean
-  groups?: SubscriberGroupTerm[]
+  groups: SubscriberGroupTerm[]
   origin?: number
-  telemetry?: MolloMemberTelemetry[]
-  status?: SubscriberStatus[]
+  telemetry: MolloMemberTelemetry[]
+  status: SubscriberStatus[]
   currentStatus?: EnumsSubscriberStatus
   temp?: string | number | boolean | undefined
+  firstName?: string
+  lastName?: string
+  email?: string
 }
 
 export interface Subscribers {
@@ -194,9 +197,9 @@ export default class SubscriberClass {
       error = true
     }
 
-    const invalidAdresses = SubscriberStore.invalidAddresses
+    const invalidAddresses = SubscriberStore.invalidAddresses
 
-    if (invalidAdresses.includes(email)) {
+    if (invalidAddresses.includes(email)) {
       error = true
     }
 
@@ -218,6 +221,8 @@ export default class SubscriberClass {
       personal: {},
       address: {},
       groups: [],
+      telemetry: [],
+      status: [],
     }
     await SubscriberStore.addSubscriber(subscriber)
     return true

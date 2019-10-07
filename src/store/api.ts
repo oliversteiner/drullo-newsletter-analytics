@@ -2,7 +2,7 @@ import axios from 'axios'
 
 import { eventBus } from '@/main'
 import { SubscriberStore } from '@/store/index'
-import { TasksResponse } from '@/_models/TaskClass'
+import { RunTaskResponse, TasksResponse } from '@/_models/TaskClass'
 import { MolloMessageResponse } from '@/_models/NewsletterClass'
 import { SubscriberCountResponse } from '@/_models/SubscriberClass'
 import { Profile, ProfileResponse, User, UserForUpdate, UserResponse, UserSubmit } from '@/_models/models'
@@ -34,7 +34,7 @@ export async function getTaskList() {
 
 export async function runTask(id: number) {
   const response = await smmgApi.get('/api/task/run/' + id)
-  return response.data as TasksResponse
+  return response.data as RunTaskResponse
 }
 
 export async function getNewsletterList() {
