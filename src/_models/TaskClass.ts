@@ -7,8 +7,11 @@ import { NewsletterStore } from '@/store'
 import { Newsletter } from '@/_models/NewsletterClass'
 
 export interface TasksResponse {
-  tasks: (Task)[]
-  tasksCount: number
+  task?: Task
+  tasks?: (Task)[]
+  tasksCount?: number
+  error?:string
+  message?:string
 }
 
 export interface TaskRelated {
@@ -67,23 +70,29 @@ export default class TaskClass {
     let taskList: Task[] = []
 
     const newsletterList = NewsletterStore.list
-
+    if (molloTasks.length === 0) {
+      return []
+    }
     molloTasks.forEach((task: Task) => {
       // Working
       task.working = false
 
       // Newsletter
       const newsletter = newsletterList.filter((item: Newsletter) => item.id === task.message.id)
-      task.message.sendDate = newsletter[0].send
+      console.log('Newsletter: ', newsletter)
 
-      // Date
-      task.createdMoment = moment.unix(task.created)
-      task.changedMoment = moment.unix(task.changed)
-      task.runMoment = moment.unix(task.changed)
+      if (newsletter && newsletter[0]) {
+        if (newsletter[0].send) {
+          task.message.sendDate = newsletter[0].send
+        }
+        // Date
+        task.createdMoment = moment.unix(task.created)
+        task.changedMoment = moment.unix(task.changed)
+        task.runMoment = moment.unix(task.changed)
+      }
 
       // if Task is undone change runMoment to next possible Time
       if (!task.done) {
-
         // next full hour and 5 minutes (14:05)
         const now = new Date()
         const p = 60 * 60 * 1000 // milliseconds in an hour
@@ -129,7 +138,7 @@ export default class TaskClass {
           break
         // @ts-ignore
         case TaskStatus.ERROR:
-          task.icon = 'uexclamation-circle'
+          task.icon = 'exclamation-circle'
           break
         default:
           task.icon = 'clock'

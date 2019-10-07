@@ -55,7 +55,6 @@ library.add(
   faCircleNotch,
   faClock,
   faCog,
-  faCog,
   faEnvelope,
   faExclamationCircle,
   faExclamationTriangle,

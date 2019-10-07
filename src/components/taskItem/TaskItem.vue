@@ -1,4 +1,4 @@
-import {TaskStatus} from '@/enums';
+import { TaskStatusMessage } from '@/enums';
 <template>
   <!-- <pre v-text="$attrs"/> -->
   <div class="task-item">
@@ -10,7 +10,12 @@ import {TaskStatus} from '@/enums';
           <div class="card-status-icon">
             <!-- Default -->
             <div class="status-icon">
-              <font-awesome-icon :icon="taskItem.icon" />
+              <div v-if="taskItem.status === 'working'">
+                <font-awesome-icon :icon="taskItem.icon" spin="spin" />
+              </div>
+              <div v-else>
+                <font-awesome-icon :icon="taskItem.icon" />
+              </div>
             </div>
           </div>
         </div>
@@ -45,7 +50,7 @@ import {TaskStatus} from '@/enums';
 
         <div class="detail-run-wrapper">
           <!-- Card Details Button -->
-          <div class="card-details-button">
+          <div v-if="debug" class="card-details-button">
             <!-- Trigger Open Details-->
             <a
               v-if="!isCardDetailsOpen"
@@ -71,7 +76,10 @@ import {TaskStatus} from '@/enums';
 
           <!-- Button runTask -->
           <div>
-            <a v-if="runTaskButtonStatus == 'waiting'" class="btn btn-outline run-task-button run-task-waiting"
+            <a
+              v-if="runTaskButtonStatus === 'waiting'"
+              class="btn btn-outline run-task-button run-task-waiting"
+              @click="taskRun(taskItem.id)"
               >Ausführen</a
             >
             <a
@@ -123,19 +131,7 @@ import {TaskStatus} from '@/enums';
             <td colspan="2">
               <div class="card-details-address-ids">
                 <ul>
-                  <li>1234</li>
-                  <li>1234</li>
-                  <li>1234</li>
-                  <li>1234</li>
-                  <li>1234</li>
-                  <li>1234</li>
-                  <li>1234</li>
-                  <li>1234</li>
-                  <li>1234</li>
-                  <li>1234</li>
-                  <li>1234</li>
-                  <li>1234</li>
-                  <li>1234</li>
+                  <li></li>
                 </ul>
               </div>
             </td>
@@ -148,17 +144,18 @@ import {TaskStatus} from '@/enums';
 </template>
 
 <script lang="ts">
-  import { Component, Prop, Vue } from 'vue-property-decorator'
-  import { smmgApi } from '@/store/api'
-  import { TaskStatusMessage } from '@/enums'
-  import { Task } from '@/_models/TaskClass';
+import { Component, Prop, Vue } from 'vue-property-decorator'
+import { TaskStatus, TaskStatusMessage } from '@/enums'
+import * as api from '@/store/api'
+import { Task } from '@/_models/TaskClass'
 
-  @Component
+@Component
 export default class TaskItem extends Vue {
   @Prop() taskItem!: Task
 
   isCardDetailsOpen: boolean = false
   isTimeDetailsOpen: boolean = false
+  debug = false
 
   showCardDetailsToggle() {
     return (this.isCardDetailsOpen = !this.isCardDetailsOpen)
@@ -182,8 +179,27 @@ export default class TaskItem extends Vue {
   }
 
   async taskRun(taskId: number) {
-    const response = await smmgApi.get('/api/task/run/' + taskId)
-    // TODO: Add UI Feedback
+    // set status to working
+    this.taskItem.icon = 'cog'
+    this.taskItem.status = TaskStatus.WORKING
+    this.taskItem.statusMessage = TaskStatusMessage.WORKING
+
+    const response = await api.runTask(taskId)
+    console.log('task run: ', response)
+    if (response.error) {
+      console.error('', response.message)
+
+      // Set Status to Error
+      this.taskItem.icon = 'Exclamation-Circle'
+      this.taskItem.status = TaskStatus.ERROR
+      this.taskItem.statusMessage = TaskStatusMessage.ERROR
+    }
+    if (response.task && response.task.id == taskId) {
+      // Set Status to done
+      this.taskItem.icon = 'check'
+      this.taskItem.status = TaskStatus.DONE
+      this.taskItem.statusMessage = TaskStatusMessage.DONE
+    }
   }
 
   get runTaskButtonStatus(): string {

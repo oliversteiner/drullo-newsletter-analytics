@@ -24,9 +24,10 @@ export default class TasksModule extends VuexModule implements TaskModuleInterfa
     const taskListFromServer = await api.getTaskList()
     const molloTasks = taskListFromServer.tasks
 
-
     const taskList = TaskClass.convert(molloTasks)
     const relatedList = TaskClass.related(taskList)
+
+    console.log('Get Tasks from Server', taskList)
 
     this.count = taskList.length
     this.list = taskList
