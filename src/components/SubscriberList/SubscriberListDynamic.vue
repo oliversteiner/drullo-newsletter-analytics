@@ -1,42 +1,70 @@
 <template>
   <div class="subscriber-list-dynamic">
     <scroll-fixed-header :fixed.sync="fixed" :threshold="100" user-class="fixed-table-header">
-      <div class="toolbar">
+      <div class="toolbar toolbar-main">
         <!-- Number of Subscribers-->
-        <div class="toolbar-info">{{ subscribersFiltered.length }} von {{ numberOfAllSubscribers }} Empfänger</div>
+        <div class="toolbar-item toolbar-item-info">
+          <div class="toolbar-info">{{ subscribersFiltered.length }} von {{ numberOfAllSubscribers }} Empfänger</div>
+        </div>
 
-        <div />
-
-        <div class="error-box" @click="setErrorFilter">
-          <div class="error-box-icon">
-            <font-awesome-icon icon="exclamation-triangle" />
-          </div>
-          <div class="error-box-number">
-            {{ countSubscibersWithError }}
+        <!-- Subsribers with error -->
+        <div class="toolbar-item toolbar-item-error">
+          <div class="btn btn-toolbar btn-warning" @click="setErrorFilter">
+            <span class="icon">
+              <font-awesome-icon icon="exclamation-triangle" />
+            </span>
+            <span class="label">
+              {{ countSubscibersWithError }}
+            </span>
           </div>
         </div>
 
-        <div class="search-box">
-          <!-- fulltext  -->
-          <label for="search-box" style="display: none">Volltext Suche</label>
+        <!-- Fulltext Search -->
+        <div class="toolbar-item toolbar-item-search">
+          <label for="search-box" style="display: none">{{ $t('Fulltext Search') }}</label>
           <input
             id="search-box"
             v-model="fullText"
             type="text"
             size="30"
-            placeholder="Suche Name, Adresse"
+            :placeholder="$t('find name, address')"
             @keyup.enter="setFilter('fulltext')"
           />
-          <span class="btn btn-icon" @click="setFilter('fulltext')">
+          <span class="btn btn-toolbar" @click="setFilter('fulltext')">
             <font-awesome-icon icon="search" />
           </span>
+        </div>
 
-          <!-- Clear all filters  -->
-          <span class="btn btn-icon" @click="setFilter('clear')">
+        <!-- Clear all filters  -->
+        <div class="toolbar-item toolbar-item-clear">
+          <span class="btn btn-toolbar" @click="setFilter('clear')">
             <font-awesome-icon icon="times-circle" />
           </span>
         </div>
 
+        <!-- Options -->
+        <div class="toolbar-item toolbar-item-options">
+          <!-- Blank-->
+          <div class="toolbar-item-option hidden">
+            <span class="icon" />
+            <span class="label" />
+            <span class="batch" />
+          </div>
+
+          <!-- Show Grups-->
+          <div class="toolbar-item-option btn btn-toolbar" @click="optionsShowGroups()">
+            <span class="icon">
+              <font-awesome-icon v-show="options.showGroups" icon="toggle-on" />
+              <font-awesome-icon v-show="!options.showGroups" icon="toggle-off" />
+            </span>
+            <span class="label">{{ $t('Show Groups') }}</span>
+            <span class="batch" />
+          </div>
+        </div>
+      </div>
+
+      <!-- New Row: Group Filter -->
+      <div class="toolbar toolbar-group-filter">
         <div :key="componentKey" class="filter-group">
           <div
             v-for="group in filterGroups"
@@ -70,55 +98,148 @@
 
       <div class="layout-list">
         <table class="subscriber-list-table">
-          <tr
-            v-for="subscriber in subscribersFiltered"
-            :key="subscriber.id + '-analytics'"
-            class="list-row"
-            :class="checkActive(subscriber)"
-          >
-            <td class="list-item list-item-status">
-              <div class=" subscriber-status" :class="subscriber.currentStatus" />
-            </td>
-            <td v-if="debug" class="list-item list-item-id">
-              {{ subscriber.id }}
-            </td>
-            <td class="list-item list-item-first-name" @click="editSubscriber(subscriber)">
-              {{ subscriber.personal.firstName }}
-            </td>
-            <td class="list-item list-item-last-name" @click="editSubscriber(subscriber)">
-              {{ subscriber.personal.lastName }}
-            </td>
-            <td
-              class="list-item list-item-email"
-              :class="{ error: subscriber.error }"
-              @click="editSubscriber(subscriber)"
+          <!-- Header -->
+          <thead>
+            <tr>
+              <th>
+                <div class="sort-trigger" @click="sortTable('currentStatus')">
+                  <div v-if="sortColumn === 'currentStatus'" class="icon">
+                    <font-awesome-icon v-if="order === 'asc'" icon="caret-up" />
+                    <font-awesome-icon v-if="order === 'desc'" icon="caret-down" />
+                  </div>
+                  <div class="label">
+                    O
+                  </div>
+                </div>
+              </th>
+
+              <!-- ID -->
+              <th>
+                <div class="sort-trigger" @click="sortTable('id')">
+                  <div v-if="sortColumn === 'id'" class="icon">
+                    <font-awesome-icon v-if="order === 'asc'" icon="caret-up" />
+                    <font-awesome-icon v-if="order === 'desc'" icon="caret-down" />
+                  </div>
+                  <div class="label">
+                    {{ $t('ID') }}
+                  </div>
+                </div>
+              </th>
+
+              <!-- Firstname -->
+              <th>
+                <div class="sort-trigger" @click="sortTable('firstName')">
+                  <div v-if="sortColumn === 'firstName'" class="icon">
+                    <font-awesome-icon v-if="order === 'asc'" icon="caret-up" />
+                    <font-awesome-icon v-if="order === 'desc'" icon="caret-down" />
+                  </div>
+                  <div class="label">
+                    {{ $t('First Name') }}
+                  </div>
+                </div>
+              </th>
+
+              <!-- Last Name -->
+              <th>
+                <div class="sort-trigger" @click="sortTable('lastName')">
+                  <div v-if="sortColumn === 'lastName'" class="icon">
+                    <font-awesome-icon v-if="order === 'asc'" icon="caret-up" />
+                    <font-awesome-icon v-if="order === 'desc'" icon="caret-down" />
+                  </div>
+                  <div class="label">
+                    {{ $t('Last Name') }}
+                  </div>
+                </div>
+              </th>
+
+              <!-- Email -->
+              <th>
+                <div class="sort-trigger" @click="sortTable('email')">
+                  <div v-if="sortColumn === 'email'" class="icon">
+                    <font-awesome-icon v-if="order === 'asc'" icon="caret-up" />
+                    <font-awesome-icon v-if="order === 'desc'" icon="caret-down" />
+                  </div>
+                  <div class="label">
+                    {{ $t('Email') }}
+                  </div>
+                </div>
+              </th>
+              <th>6</th>
+              <th>7</th>
+            </tr>
+          </thead>
+
+          <!-- Content -->
+          <tbody>
+            <tr
+              v-for="subscriber in subscribersFiltered"
+              :key="subscriber.id + '-analytics'"
+              class="list-row"
+              :class="checkActive(subscriber)"
             >
-              {{ subscriber.contact.email }}
-            </td>
+              <td class="list-item list-item-status">
+                <div class=" subscriber-status" :class="subscriber.currentStatus" />
+              </td>
+              <td v-if="debug" class="list-item list-item-id">
+                {{ subscriber.id }}
+              </td>
+              <td class="list-item list-item-first-name" @click="editSubscriber(subscriber)">
+                {{ subscriber.personal.firstName }}
+              </td>
+              <td class="list-item list-item-last-name" @click="editSubscriber(subscriber)">
+                {{ subscriber.personal.lastName }}
+              </td>
+              <td
+                class="list-item list-item-email"
+                :class="{ error: subscriber.error }"
+                @click="editSubscriber(subscriber)"
+              >
+                {{ subscriber.contact.email }}
+              </td>
 
-            <!-- Error -->
-            <td class="list-item list-item-error">
-              {{ subscriber.error }}
-            </td>
+              <!-- Subsriber Groups -->
+              <td v-if="!options.showGroups" class="list-item list-item-groups">
+                <div class="subscriber-groups">
+                  <div v-for="group in subscriber.groups" :key="group.id" class="subscriber-groups-item">
+                    <span class="">{{ group.name }}</span>
+                  </div>
+                </div>
+              </td>
 
-            <!-- Status -->
-            <td class="list-item list-item-status">
-              {{ subscriber.status }}
-            </td>
+              <!-- Subsriber Groups -->
+              <td v-if="options.showGroups" class="list-item list-item-groups">
+                <div class="subscriber-groups">
+                  <div
+                    v-for="group in filterGroups"
+                    :key="group.id"
+                    :class="{ active: isGroupActive(subscriber, group.id) }"
+                    class="subscriber-groups-item"
+                    @click="toggleGroup(subscriber, group.id)"
+                  >
+                    <span class="">{{ group.name }}</span>
+                  </div>
+                </div>
+              </td>
 
-            <!-- CurrentStatus  -->
-            <td class="list-item list-item-currentStatus">
-              {{ subscriber.currentStatus }}
-            </td>
+              <!-- Error -->
+              <td v-if="showColumnError" class="list-item list-item-error">
+                {{ subscriber.error }}
+              </td>
 
-            <td class="list-item list-item-groups">
-              <ul v-for="group in subscriber.groups" :key="subscriber.id + '-' + group.id">
-                <li @click="toggleTag(subscriber, group)">
-                  {{ group.name }}
-                </li>
-              </ul>
-            </td>
-          </tr>
+              <!-- Status -->
+              <td v-if="showColumnStatus" class="list-item list-item-status">
+                {{ subscriber.status }}
+              </td>
+
+              <!-- CurrentStatus  -->
+              <td v-if="showColumnCurrentStatus" class="list-item list-item-currentStatus">
+                {{ subscriber.currentStatus }}
+              </td>
+            </tr>
+          </tbody>
+
+          <!-- table footer-->
+          <tfoot />
         </table>
       </div>
     </div>
@@ -141,6 +262,15 @@ export default class SubscriberListDynamic extends Vue {
   private debug = true
   private componentKey = 0
 
+  // Show Columns
+  private showColumnError = true
+  private showColumnStatus = true
+  private showColumnCurrentStatus = false
+
+  // Sort
+  private order = 'asc'
+  private sortColumn = ''
+
   private fullSubscriberList: Subscriber[] = []
   private subscribersFiltered: Subscriber[] = []
   private currentSubscriber: Subscriber | null = null
@@ -153,6 +283,9 @@ export default class SubscriberListDynamic extends Vue {
   private fullText: string = ''
   private status: string[] = []
   private isSidebarOpen = false
+  private options = {
+    showGroups: false,
+  }
 
   // fixed header
   private fixed = false
@@ -170,7 +303,105 @@ export default class SubscriberListDynamic extends Vue {
     }
   }
 
-  private setFilter(filter: string, items: any) {
+  // Sort
+  sortTable(column: string) {
+    // reverse sort direction
+    if (column === this.sortColumn) {
+      this.order = this.order === 'asc' ? 'desc' : 'asc'
+    } else {
+      this.order = 'asc'
+    }
+    this.sortColumn = column
+    console.log('sortASC:', this.order)
+    console.log('Sort Table with: ', this.sortColumn)
+
+    this.sortTableAction()
+  }
+
+  private sortTableAction() {
+    let listSorted: Subscriber[] = []
+    const column = this.sortColumn
+    const order = this.order
+    console.log('Sort Table with: ', column)
+
+    const list = this.subscribersFiltered
+
+    // Flatten Array
+    list.forEach(sub => {
+      if (sub.personal && sub.personal.firstName) {
+        sub.firstName = sub.personal.firstName
+      }
+      if (sub.personal && sub.personal.lastName) {
+        sub.lastName = sub.personal.lastName
+      }
+      if (sub.contact && sub.contact.email) {
+        sub.email = sub.contact.email
+      }
+    })
+
+    listSorted = list.sort(this.compareValues(column, order))
+
+    this.subscribersFiltered = listSorted
+  }
+
+  private compareValues(key, order = 'asc') {
+    return function(a, b) {
+      if (!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) {
+        // property doesn't exist on either object
+        return 0
+      }
+
+      const varA = typeof a[key] === 'string' ? a[key].toUpperCase() : a[key]
+      const varB = typeof b[key] === 'string' ? b[key].toUpperCase() : b[key]
+
+      let comparison = 0
+      if (varA > varB) {
+        comparison = 1
+      } else if (varA < varB) {
+        comparison = -1
+      }
+      return order == 'desc' ? comparison * -1 : comparison
+    }
+  }
+
+  isGroupActive(subscriber, id: number) {
+    if (subscriber) {
+      const result = subscriber.groups.filter(_group => _group.id === id)
+      if (result.length === 1) {
+        return true
+      }
+    }
+    return false
+  }
+
+  toggleGroup(subscriber, id: number) {
+    if (this.isGroupActive(subscriber, id)) {
+      this.removeGroup(subscriber, id)
+    } else {
+      this.addGroup(subscriber, id)
+    }
+  }
+
+  addGroup(subscriber, id: number) {
+    if (subscriber) {
+      const term: SubscriberGroupTerm = SubscriberStore.groups.filter(_group => _group.id === id)[0]
+      subscriber.groups.push(term)
+    }
+  }
+
+  removeGroup(subscriber, id: number) {
+    if (subscriber) {
+      subscriber.groups = subscriber.groups.filter(_group => _group.id != id)
+    }
+  }
+
+  // Options
+  optionsShowGroups() {
+    this.options.showGroups = !this.options.showGroups
+  }
+
+  // Filter
+  private setFilter(filter: string, items: any|undefined=[]) {
     switch (filter) {
       case 'clear':
         this.debug = false
@@ -334,6 +565,7 @@ export default class SubscriberListDynamic extends Vue {
     })
     return result
   }
+
 
   private forceRerender() {
     this.componentKey += 1

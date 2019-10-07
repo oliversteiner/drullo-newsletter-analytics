@@ -32,6 +32,11 @@ export async function getTaskList() {
   return response.data as TasksResponse
 }
 
+export async function runTask(id: number) {
+  const response = await smmgApi.get('/api/task/run/' + id)
+  return response.data as TasksResponse
+}
+
 export async function getNewsletterList() {
   const response = await smmgApi.get('/api/newsletters')
   return response.data as MolloMessageResponse
@@ -74,6 +79,11 @@ export async function getCategoryTerms() {
 
 export async function updateSubscriber(data: MolloMember) {
   const response = await smmgApi.post('/api/member/update/', data)
+  return response.data as MolloResponse
+}
+
+export async function deleteSubscriber(id: number) {
+  const response = await smmgApi.delete('/api/member/' + id)
   return response.data as MolloResponse
 }
 

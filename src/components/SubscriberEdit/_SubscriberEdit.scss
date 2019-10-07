@@ -21,6 +21,12 @@
     padding: 0;
     //  display: inline-block;
     //  min-width: 200px;
+    div.interactive:hover {
+      color: white !important;
+    }
+    div.interactive:active {
+      color: black !important;
+    }
   }
 
   .label {
@@ -66,7 +72,7 @@
     display: block;
 
     &-item {
-    //  opacity: 0.5;
+      //  opacity: 0.5;
     }
 
     &-item.active .icon {
@@ -118,11 +124,34 @@
   .deactivated {
     color: rgba(255, 255, 255, 0.3);
   }
+  input.invalid,
+  a.invalid {
+    color: red !important;
+  }
 
   // ---------- Fieldset
 
   .fieldset-meta .label {
     display: inline-block;
     min-width: 80px;
+  }
+
+  .fieldset-header {
+    display: flex;
+    align-items: center;
+  }
+  .fieldset-header h3 {
+    align-self: center;
+    margin: 0;
+    padding: 0;
+  }
+  .fieldset-header.interactive {
+    cursor: pointer;
+  }
+
+  .fieldset-toggle {
+    align-self: center;
+    margin-right: 7px;
+    width: 10px;
   }
 }

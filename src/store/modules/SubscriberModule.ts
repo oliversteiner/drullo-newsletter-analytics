@@ -14,7 +14,7 @@ export interface SubscriberGroupTerm extends TaxonomyTerm {
   name: string
   subscribers?: number
   active?: boolean
-  invalidAddresses: string[]
+  invalidAddresses?: string[]
 }
 
 export interface SubscriberModuleInterface {
@@ -34,9 +34,40 @@ export default class SubscriberModule extends VuexModule implements SubscriberMo
   public count: number = 0
   public invalidAddresses: string[] = []
 
+  @Mutation
+  ADD_SUBSCRIBER(subscriber: Subscriber) {
+    this.list.push(subscriber)
+  }
+
+  @Action({ commit: 'ADD_SUBSCRIBER' })
+  public async addSubscriber(subscriber: Subscriber) {
+    console.log('New Subscriber')
+
+    return subscriber
+  }
+
   @Action
   public getSubscriberByID(id: number): Subscriber | undefined {
     return this.list.find((sub: Subscriber) => sub.id === id)
+  }
+
+  @Mutation
+  public async deleteSubscriber(id: number): Promise<MolloResponse> {
+    // check if Subscriber exists
+    const _subscriber = this.list.find(sub => sub.id === id)
+    if (!_subscriber) {
+      return { status: false }
+    }
+
+    // Delete in Store
+    const index = this.list.findIndex(sub => sub.id === id)
+    this.list.splice(index, 1)
+
+    // Delete on Server
+    const result = await api.deleteSubscriber(id)
+    console.log('result', result)
+
+    return result
   }
 
   @Mutation
@@ -118,10 +149,18 @@ export default class SubscriberModule extends VuexModule implements SubscriberMo
 
     console.log('postData', postData)
 
-    const testReturn: MolloResponse = { status: true }
     // return testReturn
     const result = await api.updateSubscriber(postData)
     console.log('result', result)
+
+    // if new Subscriber: update ID:
+    if (subscriber.id === 0 && result.nid) {
+      this.list.forEach((sub: Subscriber) => {
+        if (sub.id === 0) {
+          sub.id = result.nid
+        }
+      })
+    }
 
     return result
   }
