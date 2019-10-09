@@ -9,7 +9,7 @@
 
         <!-- Subsribers with error -->
         <div class="toolbar-item toolbar-item-error">
-          <div class="btn btn-toolbar btn-warning" @click="setErrorFilter">
+          <div v-if="countSubscibersWithError > 0" class="btn btn-toolbar btn-warning" @click="setErrorFilter">
             <span class="icon">
               <font-awesome-icon icon="exclamation-triangle" />
             </span>
@@ -102,6 +102,7 @@
           <thead>
             <tr>
               <th>
+                <!-- Status -->
                 <div class="sort-trigger" @click="sortTable('currentStatus')">
                   <div v-if="sortColumn === 'currentStatus'" class="icon">
                     <font-awesome-icon v-if="order === 'asc'" icon="caret-up" />
@@ -122,6 +123,19 @@
                   </div>
                   <div class="label">
                     {{ $t('ID') }}
+                  </div>
+                </div>
+              </th>
+
+              <!-- Changed -->
+              <th v-if="showColumnChanged">
+                <div class="sort-trigger" @click="sortTable('changed')">
+                  <div v-if="sortColumn === 'changed'" class="icon">
+                    <font-awesome-icon v-if="order === 'asc'" icon="caret-up" />
+                    <font-awesome-icon v-if="order === 'desc'" icon="caret-down" />
+                  </div>
+                  <div class="label">
+                    {{ $t('Changed') }}
                   </div>
                 </div>
               </th>
@@ -164,8 +178,11 @@
                   </div>
                 </div>
               </th>
-              <th>6</th>
-              <th>7</th>
+              <th>{{ $t('Groups') }}</th>
+
+              <th v-if="showColumnError">Error</th>
+              <th v-if="showColumnStatus">Status</th>
+              <th v-if="showColumnCurrentStatus">Current Status</th>
             </tr>
           </thead>
 
@@ -177,18 +194,32 @@
               class="list-row"
               :class="checkActive(subscriber)"
             >
+              <!-- Staus -->
               <td class="list-item list-item-status">
                 <div class=" subscriber-status" :class="subscriber.currentStatus" />
               </td>
+
+              <!-- ID -->
               <td v-if="debug" class="list-item list-item-id">
                 {{ subscriber.id }}
               </td>
+
+              <!-- Changed -->
+              <td v-if="showColumnChanged" class="list-item list-item-changed">
+                {{ subscriber.changed | moment('D. M. YYYY') }}
+              </td>
+
+              <!-- First Name -->
               <td class="list-item list-item-first-name" @click="editSubscriber(subscriber)">
                 {{ subscriber.personal.firstName }}
               </td>
+
+              <!-- Last Name -->
               <td class="list-item list-item-last-name" @click="editSubscriber(subscriber)">
                 {{ subscriber.personal.lastName }}
               </td>
+
+              <!-- Email-->
               <td
                 class="list-item list-item-email"
                 :class="{ error: subscriber.error }"
@@ -197,7 +228,7 @@
                 {{ subscriber.contact.email }}
               </td>
 
-              <!-- Subsriber Groups -->
+              <!-- Subscriber Groups -->
               <td v-if="!options.showGroups" class="list-item list-item-groups">
                 <div class="subscriber-groups">
                   <div v-for="group in subscriber.groups" :key="group.id" class="subscriber-groups-item">
@@ -206,7 +237,7 @@
                 </div>
               </td>
 
-              <!-- Subsriber Groups -->
+              <!-- Subscriber Groups -->
               <td v-if="options.showGroups" class="list-item list-item-groups">
                 <div class="subscriber-groups">
                   <div
@@ -263,9 +294,10 @@ export default class SubscriberListDynamic extends Vue {
   private componentKey = 0
 
   // Show Columns
-  private showColumnError = true
-  private showColumnStatus = true
+  private showColumnError = false
+  private showColumnStatus = false
   private showColumnCurrentStatus = false
+  private showColumnChanged = true
 
   // Sort
   private order = 'asc'

@@ -65,8 +65,18 @@
       padding-left: 15px;
     }
 
+    &-changed {
+      padding-right: 20px;
+    }
+
     &-id {
       padding-right: 20px;
+    }
+
+    &-first-name,
+    &-last-name{
+      color: #7e77c8;
+      font-weight: bold;
     }
 
     &-groups ul {

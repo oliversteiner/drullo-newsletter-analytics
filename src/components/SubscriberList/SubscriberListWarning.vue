@@ -66,7 +66,7 @@ function check(email: string) {
   // console.log('email', email)
   //  console.log('email', email.search('gmx'))
 
-  var mailformat = /\S+@\S+\.\S+/
+  const mailformat = /\S+@\S+\.\S+/
   if (!email.match(mailformat)) return true
 }
 </script>
