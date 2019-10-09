@@ -37,6 +37,12 @@ export async function runTask(id: number) {
   return response.data as RunTaskResponse
 }
 
+
+export async function deleteTask(id: number) {
+  const response = await smmgApi.get('/api/task/delete/' + id)
+  return response.data as MolloResponse
+}
+
 export async function getNewsletterList() {
   const response = await smmgApi.get('/api/newsletters')
   return response.data as MolloMessageResponse

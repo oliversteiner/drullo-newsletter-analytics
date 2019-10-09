@@ -705,7 +705,12 @@ export default class SubscriberEdit extends Vue {
 
   toggleNewsletter() {
     if (this.subscriber && this.subscriber.personal) {
-      this.subscriber.personal.newsletter = !this.subscriber.personal.newsletter
+      if (this.subscriber.personal.newsletter === undefined) {
+        this.subscriber.personal.newsletter = true
+      } else {
+        this.subscriber.personal.newsletter = !this.subscriber.personal.newsletter
+      }
+    console.log('Newsletter: ', this.subscriber.personal.newsletter)
     }
   }
 
@@ -752,7 +757,7 @@ export default class SubscriberEdit extends Vue {
     await SubscriberClass.create()
     const subscriber = SubscriberStore.list.find(sub => sub.id === 0)
     if (subscriber) {
-    this.resetEditor()
+      this.resetEditor()
       this.subscriber = subscriber
       this.edit = true
     }
@@ -763,7 +768,7 @@ export default class SubscriberEdit extends Vue {
       const id = this.subscriber.id
       if (id) {
         this.isDeleting = true
-        await SubscriberStore.deleteSubscriber(id)
+        const result = await SubscriberStore.deleteSubscriber(id)
         this.edit = false
         this.isDeleting = false
         this.isDeleted = true
@@ -784,7 +789,7 @@ export default class SubscriberEdit extends Vue {
     this.resetEditor()
   }
 
-  resetEditor(){
+  resetEditor() {
     this.isDeleting = false
     this.isDeleted = false
     this.fieldset.delete.isOpen = false

@@ -96,6 +96,28 @@ import { TaskStatusMessage } from '@/enums';
             >
             <a v-if="runTaskButtonStatus == 'working'" class="btn btn-outline run-task-button run-task-working" />
           </div>
+
+          <!-- Button Delete-->
+          <div class="btn btn-link btn-delete" @click="toggleFieldset('delete')">
+            <font-awesome-icon icon="times-circle"></font-awesome-icon>
+          </div>
+        </div>
+        <!-- Button delete Task -->
+        <div class="delete-task">
+          <div v-show="fieldset.delete.isOpen">
+            <p>{{ $t('Delete this Task?') }}</p>
+            <div class="row-between">
+              <!-- Button Cancel -->
+              <div class="btn btn-outline btn-delete" @click="fieldset.delete.isOpen = false">
+                {{ $t('No, Cancel') }}
+              </div>
+
+              <!-- Button Delete -->
+              <div class="btn btn-outline btn-delete" @click="deleteTask">
+                {{ $t('Yes, Delete') }}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <!-- Card Details -->
@@ -148,6 +170,14 @@ import { Component, Prop, Vue } from 'vue-property-decorator'
 import { TaskStatus, TaskStatusMessage } from '@/enums'
 import * as api from '@/store/api'
 import { Task } from '@/_models/TaskClass'
+import { TasksStore } from '@/store'
+
+interface Fieldset {
+  delete: FieldsetOptions
+}
+interface FieldsetOptions {
+  isOpen: boolean
+}
 
 @Component
 export default class TaskItem extends Vue {
@@ -156,6 +186,11 @@ export default class TaskItem extends Vue {
   isCardDetailsOpen: boolean = false
   isTimeDetailsOpen: boolean = false
   debug = false
+  private fieldset: Fieldset = {
+    delete: {
+      isOpen: false,
+    },
+  }
 
   showCardDetailsToggle() {
     return (this.isCardDetailsOpen = !this.isCardDetailsOpen)
@@ -176,6 +211,32 @@ export default class TaskItem extends Vue {
 
   get icon() {
     return this.taskItem.icon
+  }
+
+  async deleteTask() {
+    // set status to working
+    const id = this.taskItem.id
+    this.taskItem.icon = 'cog'
+    this.taskItem.status = TaskStatus.WORKING
+    this.taskItem.statusMessage = TaskStatusMessage.WORKING
+
+    const response = await TasksStore.deleteTask(id)
+    console.log('Task delete finish: ', response)
+
+    // Error
+    if (response && response.error) {
+      console.error('', response.message)
+      // Set Status to Error
+      this.taskItem.icon = 'Exclamation-Circle'
+      this.taskItem.status = TaskStatus.ERROR
+      this.taskItem.statusMessage = TaskStatusMessage.ERROR
+    }
+
+    // OK
+    if (response && response.id == id) {
+      // Set Status to done
+      this.taskItem.icon = 'check'
+    }
   }
 
   async taskRun(taskId: number) {
@@ -202,6 +263,13 @@ export default class TaskItem extends Vue {
       this.taskItem.icon = 'check'
       this.taskItem.status = TaskStatus.DONE
       this.taskItem.statusMessage = TaskStatusMessage.DONE
+    }
+  }
+
+  toggleFieldset(name: string) {
+    if (name in this.fieldset) {
+      // @ts-ignore
+      this.fieldset[name].isOpen = !this.fieldset[name].isOpen
     }
   }
 

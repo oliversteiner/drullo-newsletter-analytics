@@ -14,7 +14,8 @@ export interface MolloResponse {
   status: boolean
   action?: 'load' | 'update' | 'create' | 'delete'
   message?: string
-  nid?: number
+  id?: number
+  error?: string
 }
 
 export interface MolloTermResponse {

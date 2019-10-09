@@ -1,6 +1,6 @@
 <template>
   <div class="subscriber-list-warning">
-    <h3>Warning</h3>
+    <h3 v-if="subsribersfilterd.length < 0">Warning</h3>
     <!-- Number of Subscibers-->
     <div>{{ subsribersfilterd.length }} von {{ all }} Empfänger</div>
 
