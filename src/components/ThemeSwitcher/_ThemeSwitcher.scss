@@ -1,0 +1,22 @@
+.theme-switcher {
+  display: flex;
+  margin: 10px 10px 0;
+
+  &-icon {
+    display: inline-block;
+    min-width: 20px;
+    min-height: 20px;
+    cursor: pointer;
+    color: gray;
+  }
+  &-icon:hover {
+    color: white;
+  }
+  &-icon:active {
+    color: #7e77c8;
+  }
+
+  &-message {
+    margin-right: 20px;
+  }
+}

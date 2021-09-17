@@ -1,0 +1,48 @@
+.newsletter-selector {
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+  }
+
+  ul li {
+    font-size: 0.9rem;
+    margin: 3px;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+
+  li:hover:not(.active) {
+    background-color: rgba(0, 0, 0, 0.7);
+  }
+
+  .wrapper {
+    display: flex;
+  }
+
+  .date{
+    margin-right: 10px;
+    min-width: 50px;
+    text-align: right;
+  }
+
+  .label {
+  }
+
+  li.active {
+    opacity: 0.5;
+  }
+  .divider-un-send {
+    margin-top: 10px;
+    border-top: 1px solid #333333;
+    color: #696969;
+    font-size: 0.8rem;
+    padding: 10px 0 10px 10px;
+  }
+
+  div.main-theme.dark {
+    .label {
+      color: #7e77c8;
+    }
+  }
+}

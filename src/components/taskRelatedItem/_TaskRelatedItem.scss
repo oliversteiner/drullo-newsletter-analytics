@@ -1,0 +1,81 @@
+.task-related-item {
+  // Vars
+
+  // Support
+
+  // Module
+  border-bottom: 1px solid rgba(0,0,0,0.5);
+
+  .task-related-item-header {
+    display: flex;
+    justify-content: space-between;
+  }
+
+
+  // Toolbox
+  .toolbox-more {
+    margin-right: 30px;
+    display: flex;
+    flex-wrap: wrap;
+    width: 200px;
+    text-align: left;
+    justify-content: flex-end;
+
+    a {
+      display: inline-block;
+    }
+  }
+
+  // Facets
+
+  .wrapper {
+    padding: 20px 10px;
+    display: flex;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.16);
+    }
+  }
+
+  .wrapper.detail {
+    display: block;
+
+  }
+
+  .box-info {
+    min-width: 300px;
+    margin-right: 20px;
+    padding-left: 10px;
+    text-align: left;
+
+  }
+
+  .box-task-card-large-list,
+  .box-task-card-preview-list {
+    display: flex;
+    width: 100%;
+    flex-wrap: wrap;
+    margin-top: 30px;
+  }
+
+  .box-task-card-preview-list {
+    cursor: pointer;
+  }
+
+  .table-related-info {
+    font-size: 14px;
+    line-height: 22px;
+
+    th {
+      font-weight: lighter;
+      padding-right: 10px;
+      margin-right: 10px;
+    }
+
+    td {
+      font-weight: normal;
+    }
+  }
+
+  // States
+}

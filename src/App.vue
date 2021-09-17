@@ -1,43 +1,96 @@
 <template>
   <div id="app">
-    <!-- access root props via $root -->
-    <h1 style="text-align: center" v-if="$root.title">{{ $root.title }}</h1>
-
-    <at-menu mode="horizontal" :active-name="activeTab" @on-select="switchTab">
-      <at-menu-item name="list">
-        <i class="icon icon-list"></i>
-        List
-      </at-menu-item>
-      <at-menu-item name="edit">
-        <i class="icon icon-plus-square"></i>
-        Add new
-      </at-menu-item>
-    </at-menu>
-    <br>
-    <router-view />
+    <div class="main-theme" :class="theme">
+      <div style="display: flex;justify-content: space-between">
+        <AppNavbar></AppNavbar>
+        <div class="settings-icons">
+          <ThemeSwitcher></ThemeSwitcher>
+          <AppSettings></AppSettings>
+        </div>
+      </div>
+      <StatusMessages></StatusMessages>
+      <router-view></router-view>
+      <AppFooter></AppFooter>
+    </div>
   </div>
 </template>
 
-<script>
-export default {
-  props: ['title'],
-  data () {
-    return {
-      activeTab: ''
-    }
+<script lang="ts">
+import { Vue, Component } from 'vue-property-decorator'
+import AppFooter from './components/AppFooter.vue'
+import AppNavbar from './components/AppNavbar.vue'
+import ThemeSwitcher from '@/components/ThemeSwitcher/ThemeSwitcher.vue'
+import { eventBus } from '@/main'
+import { NewsletterStore, SettingsStore, SubscriberStore, TasksStore, TermsStore } from '@/store'
+import StatusMessages from '@/components/StatusMesages/StatusMessages.vue'
+import AppSettings from '@/components/AppSettings/AppSettings.vue'
+
+@Component({
+  components: {
+    AppFooter,
+    AppNavbar,
+    ThemeSwitcher,
+    StatusMessages,
+    AppSettings,
   },
-  created () {
-    this.activeTab = this.$route.name
-  },
-  methods: {
-    switchTab (tab) {
-      this.$router.push({ name: tab })
-    }
-  },
-  watch: {
-    '$route.name' () {
-      this.activeTab = this.$route.name
+})
+export default class App extends Vue {
+  private theme: string = 'dark'
+
+  async refreshStore() {
+    console.log('refresh Store')
+
+    // Terms
+    await TermsStore.refresh()
+
+    // Tasks
+    await TasksStore.refresh()
+
+    // Newsletter
+    await NewsletterStore.refresh()
+
+    // Subscribers
+    await SubscriberStore.refresh()
+  }
+
+  created() {
+    eventBus.$on('theme', (themeID: string) => {
+      this.theme = themeID
+    })
+
+    this.refreshStore()
+
+    // set Language
+    if (!SettingsStore.language) {
+      this.$i18n.locale = SettingsStore.language
     }
   }
 }
 </script>
+
+<style lang="scss">
+#app {
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#nav {
+  padding: 30px;
+
+  a {
+    font-weight: bold;
+    color: #2c3e50;
+
+    &.router-link-exact-active {
+      color: #42b983;
+    }
+  }
+}
+
+.settings-icons {
+  display: flex;
+  margin-right: 10px;
+  margin-left: 20px;
+}
+</style>
