@@ -16,7 +16,7 @@
     "core-js": "^3.6.5",
     "document-register-element": "1.14.3",
     "hotkeys-js": "^3.7.2",
-    "lodash": "4.17.15",
+    "lodash": "4.17.21",
     "lodash-uuid": "0.0.3",
     "moment": "2.24.0",
     "npm": "^6.11.3",
