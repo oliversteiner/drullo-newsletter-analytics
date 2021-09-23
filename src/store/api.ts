@@ -37,7 +37,6 @@ export async function runTask(id: number) {
   return response.data as RunTaskResponse
 }
 
-
 export async function deleteTask(id: number) {
   const response = await smmgApi.get('/api/task/delete/' + id)
   return response.data as MolloResponse
@@ -96,6 +95,7 @@ export async function deleteSubscriber(id: number) {
 export async function getUpdatedSubscribers() {
   // search in localstorage for latest updated item
   const allChangedTS: number[] = SubscriberStore.list.map(subscribers => {
+    console.warn('subscribers.changedTs', subscribers.changedTs)
     return subscribers.changedTs as number
   })
   const latestChanged = Math.max(...allChangedTS)
@@ -126,7 +126,6 @@ export async function getAllSubscribers() {
   }
 
   // actual request
-  // @ts-ignore url
   let loadingStatus = 0
   const getData = async (url: string) => {
     const response = await smmgApi.get(url)

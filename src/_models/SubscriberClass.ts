@@ -96,8 +96,8 @@ export default class SubscriberClass {
 
         if (member.personal) {
           personal = {
-            firstName: member.personal.first_name,
-            lastName: member.personal.last_name,
+            firstName: member.personal.firstName,
+            lastName: member.personal.lastName,
             birthday: member.personal.birthday,
             newsletter: member.personal.newsletter,
           }
@@ -112,8 +112,8 @@ export default class SubscriberClass {
         let address: SubscriberAddress = {}
         if (member.address) {
           address = {
-            streetAndNumber: member.address.street_and_number,
-            zipCode: member.address.zip_code,
+            streetAndNumber: member.address.streetAndNumber,
+            zipCode: member.address.zipCode,
             city: member.address.city,
           }
 
@@ -129,7 +129,7 @@ export default class SubscriberClass {
           contact = {
             email: member.contact.email,
             phone: member.contact.phone,
-            phone2: member.contact.phone_2,
+            phone2: member.contact.phone2,
             mobile: member.contact.mobile,
           }
         }
@@ -147,8 +147,8 @@ export default class SubscriberClass {
         }
 
         let transferId = ''
-        if (member.transfer_id) {
-          transferId = member.transfer_id
+        if (member.transferID) {
+          transferId = member.transferID
         }
 
         const subscriber: Subscriber = {

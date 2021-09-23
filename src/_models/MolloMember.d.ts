@@ -8,26 +8,26 @@ export interface MolloContact {
   email?: string
   mobile?: string
   phone?: string
-  phone_2?: string
+  phone2?: string
 }
 interface MolloPersonal {
   gender?: GenderTerm[]
-  first_name?: string
-  last_name?: string
+  firstName?: string
+  lastName?: string
   birthday?: string
   newsletter?: boolean
 }
 
 interface MolloAddress {
-  street_and_number?: string
-  zip_code?: string
+  streetAndNumber?: string
+  zipCode?: string
   city?: string
   country?: CountryTerm[]
 }
 
 export interface MolloMember {
   id?: number
-  transfer_id?: string
+  transferID?: string
   changed?: number
   created?: number
   contact?: MolloContact

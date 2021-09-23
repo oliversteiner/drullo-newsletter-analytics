@@ -35,12 +35,12 @@ export default class SubscriberModule extends VuexModule implements SubscriberMo
   public invalidAddresses: string[] = []
 
   @Mutation
-  ADD_SUBSCRIBER(subscriber: Subscriber) {
+  public ADD_SUBSCRIBER(subscriber: Subscriber): void {
     this.list.push(subscriber)
   }
 
   @Action({ commit: 'ADD_SUBSCRIBER' })
-  public async addSubscriber(subscriber: Subscriber) {
+  public addSubscriber(subscriber: Subscriber): Subscriber {
     console.log('New Subscriber')
 
     return subscriber
@@ -88,16 +88,11 @@ export default class SubscriberModule extends VuexModule implements SubscriberMo
     }
 
     const personal: MolloPersonal = {
-      // @ts-ignore
       gender: gender,
-      // @ts-ignore
-      first_name: subscriber.personal.firstName,
-      // @ts-ignore
-      last_name: subscriber.personal.lastName,
-      // @ts-ignore
-      birthday: subscriber.personal.birthday,
-      // @ts-ignore
-      newsletter: subscriber.personal.newsletter,
+      firstName: subscriber.personal?.firstName,
+      lastName: subscriber.personal?.lastName,
+      birthday: subscriber.personal?.birthday,
+      newsletter: subscriber.personal?.newsletter,
     }
 
     // Country
@@ -109,23 +104,19 @@ export default class SubscriberModule extends VuexModule implements SubscriberMo
 
     const address: MolloAddress = {
       // @ts-ignore
-      street_and_number: subscriber.address.streetAndNumber,
+      streetAndNumber: subscriber.address.streetAndNumber,
       // @ts-ignore
-      zip_code: subscriber.address.zipCode,
+      zipCode: subscriber.address.zipCode,
       // @ts-ignore
       city: subscriber.address.city,
       country: country,
     }
 
     const contact: MolloContact = {
-      // @ts-ignore
-      email: subscriber.contact.email,
-      // @ts-ignore
-      phone: subscriber.contact.phone,
-      // @ts-ignore
-      phone_2: subscriber.contact.phone2,
-      // @ts-ignore
-      mobile: subscriber.contact.mobile,
+      email: subscriber.contact?.email,
+      phone: subscriber.contact?.phone,
+      phone2: subscriber.contact?.phone2,
+      mobile: subscriber.contact?.mobile,
     }
 
     // Origin
@@ -154,10 +145,10 @@ export default class SubscriberModule extends VuexModule implements SubscriberMo
     console.log('result', result)
 
     // if new Subscriber: update ID:
-    if (subscriber.id === 0 && result.nid) {
+    if (subscriber.id === 0 && result.id) {
       this.list.forEach((sub: Subscriber) => {
         if (sub.id === 0) {
-          sub.id = result.nid
+          sub.id = result.id
         }
       })
     }
@@ -170,11 +161,10 @@ export default class SubscriberModule extends VuexModule implements SubscriberMo
     return await api.getSubscriberGroups()
   }
 
-  // @ts-ignore
-  @MutationAction
+  /*  @MutationAction
   public async updateFromServer(): Promise<AxiosResponse> {
     return await api.getUpdatedSubscribers()
-  }
+  }*/
 
   @Mutation
   public async refresh(): Promise<void> {
@@ -197,12 +187,12 @@ export default class SubscriberModule extends VuexModule implements SubscriberMo
 
     // ------------------  Subscribers  ------------------
 
-    const update = await api.getUpdatedSubscribers()
+    //  const update = await api.getUpdatedSubscribers()
 
-    console.log('Subscriber Changes From Server:', update.data.count)
+    //  console.log('Subscriber Changes From Server:', update.data.count)
     console.log('Subscribers in LocalStore:', SubscriberStore.count)
 
-    // ckeck Status
+    // check Status
     if (SubscriberStore.count != 0) {
       SubscriberStore.list.forEach(subscriber => {
         // check email
@@ -220,7 +210,8 @@ export default class SubscriberModule extends VuexModule implements SubscriberMo
       })
     }
 
-    if (SubscriberStore.count == 0 || update.data.count > 0) {
+    //  if (SubscriberStore.count == 0 || update.data.count > 0) {
+    if (SubscriberStore.count == 0) {
       const listFromServer = await api.getAllSubscribers()
 
       const members = listFromServer.members
