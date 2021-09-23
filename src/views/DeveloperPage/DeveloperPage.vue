@@ -5,18 +5,17 @@
     <h2>i18n Test</h2>
 
     <p>{{ $t('message') }}</p>
+    <p>Host: {{ getHostName }}</p>
   </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator'
-import SubscriberListDynamic from '@/components/SubscriberList/SubscriberListDynamic.vue'
+import { Vue } from 'vue-property-decorator'
 
-@Component({
-  components: { SubscriberListDynamic },
-})
 export default class DeveloperPage extends Vue {
-  create() {}
+  getHostName() {
+    return process.env.VUE_APP_HOST
+  }
 }
 </script>
 
