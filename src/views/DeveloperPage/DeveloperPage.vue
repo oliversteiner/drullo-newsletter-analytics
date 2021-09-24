@@ -1,11 +1,8 @@
 <template>
   <div class="developer-page">
     <h1>Develop</h1>
-
-    <h2>i18n Test</h2>
-
     <p>{{ $t('message') }}</p>
-    <p>Host: {{ getHostName }}</p>
+    <p>Host: {{ HostName }}</p>
   </div>
 </template>
 
@@ -13,7 +10,7 @@
 import { Vue } from 'vue-property-decorator'
 
 export default class DeveloperPage extends Vue {
-  getHostName() {
+  get HostName() {
     return process.env.VUE_APP_HOST
   }
 }
