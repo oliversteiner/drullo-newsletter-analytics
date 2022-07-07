@@ -18,7 +18,7 @@
     "hotkeys-js": "^3.7.2",
     "lodash": "4.17.15",
     "lodash-uuid": "0.0.3",
-    "moment": "2.24.0",
+    "moment": "2.29.4",
     "npm": "^6.11.3",
     "vue": "2.6.10",
     "vue-chartjs": "^3.4.2",
